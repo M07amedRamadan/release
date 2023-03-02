@@ -1,9 +1,0 @@
-accesskey            = "ENTER ACCESS ID FOR AWS"
-secretkey            = "ENTER SECRET ACCESS KEY FOR AWS"
-myregion             = "us-east-2"
-cidr                 = "10.1.7.0/24"
-tenancy              = "default"
-azs                  = ["us-east-2a", "us-east-2b"]
-public_subnet_cidrs  = ["10.1.7.0/26", "10.1.7.64/26"]
-private_subnet_cidrs = ["10.1.7.128/26", "10.1.7.192/26"]
-ports                = [22, 80, 443]
