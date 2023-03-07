@@ -6,8 +6,13 @@ resource "aws_default_route_table" "default_route_table" {
     nat_gateway_id = aws_nat_gateway.New_Customer_VPC_nat_gw.id # Replace with the ID of your NAT Gateway
   }
 
+  route {
+    cidr_block                = "10.0.0.0/16"
+    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+  }
+
   tags = {
-    Name = "Private_RT"
+    Name = "${var.vpc_name}-Private_RT"
   }
 }
 

@@ -36,3 +36,7 @@ variable "tenancy" {
 variable "ports" {
   type = list(number)
 }
+
+variable "vpc_name" {
+  type = string
+}
