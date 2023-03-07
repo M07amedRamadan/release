@@ -1,9 +1,10 @@
 resource "aws_vpc" "New_Customer_VPC" {
   cidr_block       = var.cidr
   instance_tenancy = var.tenancy
+  enable_dns_hostnames = true
 
   tags = {
-    Name = "New_Customer_VPC"
+    Name = var.vpc_name
   }
 }
 

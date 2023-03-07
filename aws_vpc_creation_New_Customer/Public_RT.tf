@@ -7,7 +7,7 @@ resource "aws_route_table" "Public_RT" {
   }
 
   tags = {
-    Name = "Public_RT"
+    Name = "${var.vpc_name}-Public_RT"
   }
 }
 

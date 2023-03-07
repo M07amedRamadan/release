@@ -1,0 +1,16 @@
+
+=> This code deploys VPC environment for New Customer.
+ 
+================================================================================================                                  
+                                              INSTRUCTIONS
+================================================================================================
+
+=> Changes needs to be done in terraform.tfvars file ONLY as per requirement.
+=> Change variables values according to requirment in terraform.tfvars file only.
+
+=================================================================================================
+                                                COMMANDS
+1) Run "terraform init"
+2) Run "terraform plan"
+3) Run "terraform apply --auto-approve"
+=================================================================================================
