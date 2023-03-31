@@ -1,6 +1,7 @@
-#Resource to create s3 bucket
+# No change required in this file
+
 resource "aws_s3_bucket" "New_Customer_Bucket" {
-  bucket = var.bucket_name
+  bucket = "${var.CUSTOMER_NAME}.vultara.com"
 }
 
 #Public Access
