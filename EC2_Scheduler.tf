@@ -8,4 +8,5 @@ resource "aws_instance" "web" {
   tags = {
     Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
   }
+  user_data = file("${path.module}/script.sh")
 }
