@@ -15,7 +15,7 @@ resource "aws_s3_bucket_public_access_block" "Permissions_Block" {
 }
 
 #ACL
-resource "aws_s3_bucket_acl" "my-bucket" {
-  bucket = aws_s3_bucket.New_Customer_Bucket.id
-  acl    = "private"
-}
+#resource "aws_s3_bucket_acl" "my-bucket" {
+ # bucket = aws_s3_bucket.New_Customer_Bucket.id
+  #acl    = "private"
+#}
