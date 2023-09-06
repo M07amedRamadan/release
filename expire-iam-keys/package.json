@@ -1,0 +1,14 @@
+{
+    "name": "expire-iam-access-keys-lambda",
+    "version": "1.0.0",
+    "description": "Lambda to remove AWS IAM access keys when they reach a certain age",
+    "main": "src/index.js",
+    "author": "keattang",
+    "license": "MIT",
+    "scripts": {
+        "dry-run": "DRY_RUN=true node -e 'require(\"./src\").handler()'"
+    },
+    "devDependencies": {
+        "aws-sdk": "^2.432.0"
+    }
+}
