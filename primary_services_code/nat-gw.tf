@@ -1,7 +1,7 @@
 # No change required in this file
 
 resource "aws_eip" "New_Customer_VPC_EIP" {
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name = "${var.CUSTOMER_NAME}-EI-nat"

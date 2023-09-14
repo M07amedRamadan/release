@@ -14,4 +14,5 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
       }
     ]
   })
+  depends_on = [aws_s3_bucket_public_access_block.Permissions_Block]
 }
