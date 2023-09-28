@@ -19,5 +19,5 @@ jobs:
       - name: Install boto3
         run: pip install boto3
       - name: VPC CIDRs already in-use
-        run: python vpc_cidr.py
+        run: python ./primary_services_code/vpc_cidr.py
 
