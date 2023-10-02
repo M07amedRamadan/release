@@ -1,0 +1,42 @@
+name: "New Customer IaC Deployment"
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'Enter Customer Name'
+        default: 'automation'
+        required: true
+
+      region:
+        description: 'Enter the Region for Deployment'
+        default: 'us-east-1'
+        required: true
+
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    environment:
+      name: Dev
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd primary_services_code
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
+          terraform state list
+    
