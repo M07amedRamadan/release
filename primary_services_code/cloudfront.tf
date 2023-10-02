@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   aliases     = ["${var.CUSTOMER_NAME}.vultara.com"]
-  price_class = "PriceClass_All"
+  price_class = "PriceClass_100"  #double check that it will be  use and canada
 
   # Geographical Restrictions
   restrictions {
