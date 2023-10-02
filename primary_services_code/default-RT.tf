@@ -1,6 +1,6 @@
 # No change required in this file
 
-resource "aws_default_route_table" "default_route_table" {
+resource "aws_route_table" "default_route_table" {
   default_route_table_id = aws_vpc.New_Customer_VPC.default_route_table_id
 
   route {
@@ -17,4 +17,12 @@ resource "aws_default_route_table" "default_route_table" {
     Name = "${var.CUSTOMER_NAME}-Private_RT"
   }
 }
+resource "aws_route_table_association" "Private_subnet_association_1" {
+  subnet_id      = aws_subnet.private_1.id
+  route_table_id = aws_route_table.default_route_table.id
+}
 
+resource "aws_route_table_association" "Private_subnet_association_2" {
+  subnet_id      = aws_subnet.private_2.id
+  route_table_id = aws_route_table.default_route_table.id
+}
