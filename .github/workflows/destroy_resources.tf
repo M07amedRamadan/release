@@ -1,4 +1,4 @@
-name: "New Customer IaC Deployment"
+name: "Destroy IAC Deployment"
 
 on:
   workflow_dispatch:
