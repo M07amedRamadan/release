@@ -48,7 +48,7 @@ resource "aws_cloudfront_distribution" "s3_distribution_1" {
   }
 
   aliases     = ["${var.SERVICE_NAME_1}.vultara.com"]
-  price_class = "PriceClass_All"
+  price_class = "PriceClass_100"
 
   # Geographical Restrictions
   restrictions {
@@ -120,7 +120,7 @@ resource "aws_cloudfront_distribution" "s3_distribution_2" {
   }
 
   aliases     = ["${var.SERVICE_NAME_2}.vultara.com"]
-  price_class = "PriceClass_All"
+  price_class = "PriceClass_100"
 
   # Geographical Restrictions
   restrictions {
@@ -192,7 +192,7 @@ resource "aws_cloudfront_distribution" "s3_distribution_3" {
   }
 
   aliases     = ["${var.SERVICE_NAME_3}.vultara.com"]
-  price_class = "PriceClass_All"
+  price_class = "PriceClass_100"
 
   # Geographical Restrictions
   restrictions {
@@ -264,7 +264,7 @@ resource "aws_cloudfront_distribution" "s3_distribution_4" {
   }
 
   aliases     = ["${var.SERVICE_NAME_4}.vultara.com"]
-  price_class = "PriceClass_All"
+  price_class = "PriceClass_100"
 
   # Geographical Restrictions
   restrictions {
