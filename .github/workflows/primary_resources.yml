@@ -68,42 +68,16 @@ on:
 
 
 jobs:
-  terraform:
-    name: "Terraform"
+  prodConsulting-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: Dev
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+    permissions:
+      deployments: write
+      contents: read
+      statuses: write
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform Init
-        id: init
-        run: |
-          cd primary_services_code
-          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
-
-      - name: Terraform Plan
-        id: plan
-        run: |
-          cd primary_services_code
-          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-
-      - name: Terraform Apply
-        run: |
-          cd primary_services_code
-          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-    
-      #- name: Terraform Destroy
-       # run: |
-        #  cd primary_services_code
-         # terraform destroy -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
