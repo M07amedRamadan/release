@@ -4,21 +4,21 @@ resource "aws_instance" "web" {
   key_name               = "${var.key_name}"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.private_1.id
-  iam_instance_profile   = "scheduler-server-role"
+  iam_instance_profile   = "fake2report"
   tags = {
-    Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
+    Name = "${var.CUSTOMER_NAME}-report-Prod"
   }
   user_data = file("${path.module}/script.sh")
 }
 
 
-resource "aws_instance" "web" {
+resource "aws_instance" "web2" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "${var.key_name}"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.public_1.id
-  iam_instance_profile   = "scheduler-server-role"
+  iam_instance_profile   = "fake2bastion"
   tags = {
     Name = "${var.CUSTOMER_NAME}-bastion-host"
   }
