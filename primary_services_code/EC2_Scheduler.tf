@@ -11,7 +11,7 @@ resource "aws_instance" "web" {
   user_data = file("${path.module}/script.sh")
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "web3" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "${var.key_name}"
