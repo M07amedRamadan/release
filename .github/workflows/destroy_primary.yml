@@ -3,7 +3,7 @@ name: "Destroy primary IAC Deployment"
 on:
   workflow_dispatch:
     # Inputs the workflow accepts.
-  pull_request:
+  push_request:
     branches:
       - TestNewCustomerVpc
   
