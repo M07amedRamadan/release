@@ -31,10 +31,10 @@ resource "aws_instance" "web3" {
 resource "aws_instance" "web2" {
   ami           = "t2.micro"
   instance_type = var.instance_type
-  key_name               = "vultara-trial-scheduler-KP"
+  key_name               = "bastion-host-ssh"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.public_1.id
-  iam_instance_profile   = "bastion-host-ssh"
+  iam_instance_profile   = "vultara-trial-scheduler-KP" 
   associate_public_ip_address = true
   tags = {
     Name = "${var.CUSTOMER_NAME}-bastion-host"
