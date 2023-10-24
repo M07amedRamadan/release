@@ -61,9 +61,19 @@ on:
           - 'ami-007855ac798b5175e' #Ubuntu 22.04
           - 'ami-06878d265978313ca' #Amazon Linux 2 
 
-      key-name:
+      bastion_key_name:
+        description: 'Enter the KeyPair Name for EC2 Instance bastion'
+        default: 'bastion-host-ssh'
+        required: true
+
+      scheduler_key_name:
         description: 'Enter the KeyPair Name for EC2 Instance Scheduler'
-        default: 'automation_test'
+        default: 'vultara-trial-scheduler-KP'
+        required: true
+
+      report_key_name:
+        description: 'Enter the KeyPair Name for EC2 Instance Scheduler'
+        default: 'vultara-report-server-KP'
         required: true
 
 
