@@ -61,19 +61,9 @@ on:
           - 'ami-007855ac798b5175e' #Ubuntu 22.04
           - 'ami-06878d265978313ca' #Amazon Linux 2 
 
-      bastion_key_name:
-        description: 'Enter the KeyPair Name for EC2 Instance bastion'
-        default: 'bastion-host-ssh'
-        required: true
-
-      scheduler_key_name:
+      key-name:
         description: 'Enter the KeyPair Name for EC2 Instance Scheduler'
-        default: 'vultara-trial-scheduler-KP'
-        required: true
-
-      report_key_name:
-        description: 'Enter the KeyPair Name for EC2 Instance Scheduler'
-        default: 'vultara-report-server-KP'
+        default: 'automation_test'
         required: true
 
 
@@ -113,8 +103,7 @@ jobs:
           terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
     
       #- name: Terraform Destroy
-        #run: |
-          #cd primary_services_code
-          #terraform destroy -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+       # run: |
+        #  cd primary_services_code
+         # terraform destroy -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
     
-
