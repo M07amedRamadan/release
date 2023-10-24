@@ -29,8 +29,8 @@ resource "aws_instance" "web3" {
 
 
 resource "aws_instance" "web2" {
-  ami           = "t2.micro"
-  instance_type = var.instance_type
+  ami           = var.ami
+  instance_type = "t2.micro"
   key_name               = "bastion-host-ssh"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.public_1.id
