@@ -34,7 +34,7 @@ resource "aws_instance" "web2" {
   key_name               = "bastion-host-ssh"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.public_1.id
-  iam_instance_profile   = "vultara-trial-scheduler-KP" 
+  iam_instance_profile   = "scheduler-server-role" 
   associate_public_ip_address = true
   tags = {
     Name = "${var.CUSTOMER_NAME}-bastion-host"
