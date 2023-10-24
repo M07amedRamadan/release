@@ -2,6 +2,7 @@
 
 resource "aws_s3_bucket" "New_Customer_Bucket" {
   bucket = "${var.CUSTOMER_NAME}.vultara.com"
+  force_destroy = true
 }
 
 #Public Access
