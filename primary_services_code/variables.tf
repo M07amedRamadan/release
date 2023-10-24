@@ -38,6 +38,17 @@ variable "CUSTOMER_NAME" {
   type = string
 }
 
-variable "key_name" {
+variable "bastion_key_name" {
+  type = string
+}
+
+
+variable "scheduler_key_name" {
+  type = string
+}
+
+
+
+variable "report_key_name" {
   type = string
 }
