@@ -28,7 +28,7 @@ resource "aws_instance" "web" {
 
 
 resource "aws_instance" "web2" {
-  ami           = var.ami
+  ami           = "t2.micro"
   instance_type = var.instance_type
   key_name               = "${var.key_name}"
   vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
