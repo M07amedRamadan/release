@@ -1,4 +1,4 @@
-resource "aws_instance" "web" {
+resource "aws_instance" "report-generator" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "report-generator-KP"
@@ -12,7 +12,7 @@ resource "aws_instance" "web" {
 }
 
 
-resource "aws_instance" "web3" {
+resource "aws_instance" "vultara-scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-trial-scheduler-KP"
@@ -28,7 +28,7 @@ resource "aws_instance" "web3" {
 
 
 
-resource "aws_instance" "web2" {
+resource "aws_instance" "bastion-host" {
   ami           = var.ami
   instance_type = "t2.micro"
   key_name               = "bastion-host-ssh"
