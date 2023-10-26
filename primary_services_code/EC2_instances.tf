@@ -6,7 +6,7 @@ resource "aws_instance" "report-generator" {
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
-    Name = "${var.CUSTOMER_NAME}-report-Prod"
+    Name = "${var.CUSTOMER_NAME}-reportgenerator-Prod"
   }
   #user_data = file("${path.module}/script.sh")
 }
