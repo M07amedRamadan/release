@@ -8,7 +8,7 @@ resource "aws_instance" "report-generator" {
   tags = {
     Name = "${var.CUSTOMER_NAME}-report-Prod"
   }
-  user_data = file("${path.module}/script.sh")
+  #user_data = file("${path.module}/script.sh")
 }
 
 
@@ -22,7 +22,7 @@ resource "aws_instance" "vultara-scheduler" {
   tags = {
     Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
   }
-  user_data = file("${path.module}/script.sh")
+  #user_data = file("${path.module}/script.sh")
 }
 
 
