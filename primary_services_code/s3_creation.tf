@@ -25,6 +25,7 @@ resource "aws_s3_bucket_public_access_block" "Permissions_Block" {
 
 resource "aws_s3_bucket" "reports-bucket" {
   bucket = "${var.CUSTOMER_NAME}-reports-bucket"
+  force_destroy = true
 }
 
 
@@ -66,6 +67,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle-reports-bucket" {
 
 resource "aws_s3_bucket" "cve-cpe-bucket" {
   bucket = "${var.CUSTOMER_NAME}-cve-cpe-bucket"
+  force_destroy = true
 }
 
 
@@ -104,6 +106,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle-cve-cpe-bucket" {
 
 resource "aws_s3_bucket" "help-doc-bucket" {
   bucket = "${var.CUSTOMER_NAME}-help-doc-bucket"
+  force_destroy = true
 }
 
 
