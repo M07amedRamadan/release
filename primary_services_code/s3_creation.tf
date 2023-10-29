@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "New_Customer_Bucket" {
 }
 
 #Public Access
-resource "aws_s3_bucket_public_access_block" "Permissions_Block" {
+resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Block" {
   bucket = aws_s3_bucket.New_Customer_Bucket.bucket
 
   block_public_acls       = false
@@ -102,7 +102,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle-cve-cpe-bucket" {
   }
 }
 
-###################################################################################################
+###############################################help-doc####################################################
 
 resource "aws_s3_bucket" "help-doc-bucket" {
   bucket = "${var.CUSTOMER_NAME}-help-doc-bucket"
@@ -110,33 +110,23 @@ resource "aws_s3_bucket" "help-doc-bucket" {
 }
 
 
-
-resource "aws_s3_bucket_ownership_controls" "ownership-help-doc-bucket" {
-  bucket = aws_s3_bucket.help-doc-bucket.id
-  rule {
-    object_ownership = "ObjectWriter"
-  }
-}
-
-resource "aws_s3_bucket_acl" "acl-help-doc-bucket" {
-  depends_on = [aws_s3_bucket_ownership_controls.ownership-help-doc-bucket]
-
-  bucket = aws_s3_bucket.help-doc-bucket.id
-  acl    = "private"
+#Public Access
+resource "aws_s3_bucket_public_access_block" "Permissions_Block" {
+  bucket = aws_s3_bucket.New_Customer_Bucket.bucket
 }
 
 
-resource "aws_s3_bucket_lifecycle_configuration" "lifecycle-help-doc-bucket" {
-   
-  bucket = aws_s3_bucket.help-doc-bucket.id
-  rule {
-    id      = "Expire current versions of objects After 7 Days"
-    status  = "Enabled"
+resource "aws_s3_bucket_public_access_block" "help-doc-bucket-Permissions_Block" {
+  bucket = aws_s3_bucket.help-doc-bucket.bucket
 
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
 
-
-    expiration {
-      days = 7
-    }
-  }
+######################################Production File Storage######################################
+resource "aws_s3_bucket" "production-file-bucket" {
+  bucket = "${var.CUSTOMER_NAME}-production-file-bucket"
+  force_destroy = true
 }
