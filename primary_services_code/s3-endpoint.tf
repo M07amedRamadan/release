@@ -28,7 +28,8 @@ resource "aws_vpc_endpoint_policy" "s3-private-policy" {
                     "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
                     "arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket",
                     "arn:aws:s3:::${var.CUSTOMER_NAME}-help-doc-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-help-doc-bucket" ,
-                     "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod"],
+                     "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
+                     "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket"],
       "Principal": "*"
     }
   ]
@@ -45,7 +46,8 @@ resource "aws_vpc_endpoint_policy" "s3-public-policy" {
       "Action": "s3:*",
       "Effect": "Allow",
       "Resource": [ "arn:aws:s3:::${var.CUSTOMER_NAME}-production-file-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-production-file-bucket",
-                     "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod" ],
+                     "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
+                     "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket" ],
       "Principal": "*"
     }
   ]
