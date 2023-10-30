@@ -51,7 +51,8 @@ resource "aws_vpc_endpoint_policy" "s3-public-policy" {
       "Effect": "Allow",
       "Resource": [ "arn:aws:s3:::${var.CUSTOMER_NAME}-production-file-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-production-file-bucket",
                      "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
-                     "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket" ],
+                     "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket",
+                     "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket" ],
       "Principal": "*"
     }
   ]
