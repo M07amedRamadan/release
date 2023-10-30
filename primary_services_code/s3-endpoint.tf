@@ -20,6 +20,14 @@ resource "aws_vpc_endpoint" "s3-public" {
 }
 
 
+#####################################################important note##################################################################
+# the two buckets docker-images-prod and prod-us-east-1-starport-layer-bucket are user by docker and ECR repectilvly
+# to pull and push the image in case you will change the reigon change prod-us-east-1-starport-layer-bucket 
+# to prod-<reigon>-starport-layer-bucket
+# you can remove the docker-images-prod because we push and pull only from ECR but let's keep it just in case we needed to
+# use an image on docker hub
+######################################################################################################################################
+
 resource "aws_vpc_endpoint_policy" "s3-private-policy" {
   vpc_endpoint_id = aws_vpc_endpoint.s3-private.id
   policy = jsonencode({
