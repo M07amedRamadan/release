@@ -1,1 +1,4 @@
+name: "Destroy primary IAC Deployment"
 
+on:
+  workflow_dispatch:
