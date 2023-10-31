@@ -2,11 +2,6 @@ name: Run Python script
 
 on:
   workflow_dispatch:
-    branches:
-    - TestNewCustomerVpc
-  push:
-    branches:
-    - TestNewCustomerVpc
     
     inputs:
       name:
