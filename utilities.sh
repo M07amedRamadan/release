@@ -3,7 +3,7 @@
 # Function to add CNAME record to Route53 hosted zone
 add_cname_record() {
     # Variables
-    HOSTED_ZONE_ID="Z02974533BJX63MWJBI2W"
+    HOSTED_ZONE_ID="Z06434181KVJ88LDEYYII"
     RECORD_NAME="$1"
     CNAME_VALUE="$2"
 
@@ -41,7 +41,7 @@ add_cname_record() {
 
 delete_cname_record() {
     # Variables
-    HOSTED_ZONE_ID="Z02974533BJX63MWJBI2W"
+    HOSTED_ZONE_ID="Z06434181KVJ88LDEYYII"
     RECORD_NAME="$1"
     CNAME_VALUE="$2"
     RECORD_DOT="${RECORD_NAME}."
