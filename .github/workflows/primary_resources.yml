@@ -87,10 +87,8 @@ jobs:
         run: |
           cd primary_services_code
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
-          domain-name="${{ github.event.inputs.name }}.vultara.com"
-          value=$(terraform output cloudfront_url)
-          echo $domain-name
-          echo $value
+          echo "${{ github.event.inputs.name }}.vultara.com"
+          echo $(terraform output cloudfront_url)
           
       #- name: Terraform Plan
         #id: plan
