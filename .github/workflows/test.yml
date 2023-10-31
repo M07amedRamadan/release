@@ -2,7 +2,9 @@ name: "testing route53 bash script"
 
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
+    branches:
+    - TestNewCustomerVpc
+    
     inputs:
       name:
         description: 'Enter Customer Name'
