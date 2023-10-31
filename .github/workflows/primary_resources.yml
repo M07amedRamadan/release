@@ -102,6 +102,7 @@ jobs:
 
       - name: Adding CNAME
         run: |
+          cd primary_services_code
           terraform output cloudfront_url
           #./utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com $(terraform output cloudfront_url)
 
