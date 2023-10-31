@@ -1,4 +1,4 @@
-name: "Destroy primary IAC Deployment"
+name: "testing route53"
 
 on:
   workflow_dispatch:
