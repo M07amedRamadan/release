@@ -6,8 +6,8 @@ add_cname_record() {
     HOSTED_ZONE_ID="Z06434181KVJ88LDEYYII"
     RECORD_NAME="$1"
     CNAME_VALUE="$2"
-    echo "the record named is ${ RECORD_NAME }"
-    echo "the CNAME named is ${ CNAME_VALUE }"
+    echo "the record named is $RECORD_NAME "
+    echo "the CNAME named is $CNAME_VALUE "
     # Check if the record already exists
     RECORD_DOT="${RECORD_NAME}."
     existing_record=$(aws route53 list-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --query "ResourceRecordSets[?Name == '$RECORD_DOT'].Name" --output text)
