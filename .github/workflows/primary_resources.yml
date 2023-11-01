@@ -111,6 +111,7 @@ jobs:
       - name: Extract Domain Name
         id: extract_domain
         run: |
+          echo $($(terraform output cloudfront_url) | awk -F'"' '{print $2}')
           domain=$(echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}')
           echo "::set-output name=cloudfront_domain::$domain"
 
