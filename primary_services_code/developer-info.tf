@@ -15,7 +15,7 @@ output "private-2-id" {
 }
 
 output "security-group-id" {
-  value = aws_security_group.New_Customer_VPC_SG.id
+  value = aws_default_security_group.New_Customer_VPC_SG.id
 }
 
 output "cloudfront_id" {
