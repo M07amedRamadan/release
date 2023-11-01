@@ -2,7 +2,7 @@ resource "aws_vpc_endpoint" "s3-private" {
   vpc_id       = aws_vpc.New_Customer_VPC.id
   vpc_endpoint_type = "Gateway"
   service_name = "com.amazonaws.us-east-1.s3"
-  route_table_ids = [ aws_route_table.Private_RT.id ]
+  route_table_ids = [ aws_default_route_table.Private_RT.id ]
   tags = {
     Name = "${var.CUSTOMER_NAME}-s3-private"
   }
