@@ -110,8 +110,7 @@ jobs:
       - name: Retrieve CloudFront Domain Name
         id: get_cloudfront_domain
         run: |
-          echo "::set-output name=domain_name::$(terraform output -raw cloudfront_url)"
-
+          echo "::set-output name=domain_name::$(terraform output -json cloudfront_url | jq -r '.value')"
       
       - name: Adding CNAME
         run: |
