@@ -102,27 +102,20 @@ jobs:
           #terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
-      #- name: Terraform Apply
-        #run: |
-          #cd primary_services_code
-          #terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+      - name: Terraform Apply
+        run: |
+          cd primary_services_code
+          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
       - name: Extract Domain Name
         id: extract_domain
         run: |
           cd primary_services_code
-          echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}'
           domain=$(echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}')
           echo "::set-output name=cloudfront_domain::$domain"
-          echo $(terraform output cloudfront_url)
 
-      - name: Another Step
-        run: |
-          # Access the value of the cloudfront_domain variable from the previous step      
-          echo "CloudFront Domain: ${{ steps.extract_domain.outputs.cloudfront_domain }}"
 
-      
       - name: Adding CNAME
         run: |
           cd primary_services_code
