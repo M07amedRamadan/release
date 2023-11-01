@@ -1,8 +1,6 @@
 # No change required in this file
 
-resource "aws_security_group" "New_Customer_VPC_SG" {
-  name        = "${var.CUSTOMER_NAME}-Prod-SG"
-  description = "security group for New Customer production environment lambda"
+resource "aws_default_security_group" "New_Customer_VPC_SG" {
   vpc_id      = aws_vpc.New_Customer_VPC.id 
 
   ingress {
