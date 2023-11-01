@@ -110,10 +110,8 @@ jobs:
       - name: Adding CNAME
         run: |
           cd primary_services_code
-          aws route53 list-resource-record-sets --hosted-zone-id Z06434181KVJ88LDEYYII
-          #terraform output cloudfront_url
-          #chmod 777 ./../utilities.sh
-          #./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com $(terraform output cloudfront_url)
+          chmod 777 ./../utilities.sh
+          ./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com $(terraform output cloudfront_url)
 
     
       #- name: Terraform Destroy
