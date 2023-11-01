@@ -111,7 +111,8 @@ jobs:
       - name: Retrieve CloudFront Domain Name
         id: get_cloudfront_domain
         run: |
-          echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}'
+          echo "::set-output name=domain_name::$(terraform output cloudfront_url | awk -F'\"' '{print $2}')"
+
 
       
       - name: Adding CNAME
