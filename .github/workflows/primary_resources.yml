@@ -119,7 +119,8 @@ jobs:
         run: |
           cd primary_services_code
           chmod 777 ./../utilities.sh
-          ./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com ${{ steps.get_cloudfront_domain.outputs.domain_name }}
+          echo ${{ steps.get_cloudfront_domain.outputs.domain_name }}
+          #./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com ${{ steps.get_cloudfront_domain.outputs.domain_name }}
 
     
       #- name: Terraform Destroy
