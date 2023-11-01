@@ -107,15 +107,11 @@ jobs:
           #cd primary_services_code
           #terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
-      - name: Retrieve CloudFront Domain Name
-        id: get_cloudfront_domain
-        run: |
-          echo "::set-output name=domain_name::$(terraform output -json cloudfront_url | jq -r '.value')"
       
       - name: Adding CNAME
         run: |
           cd primary_services_code
-          echo ${{ steps.get_cloudfront_domain.outputs.domain_name }}
+          echo $(terraform output cloudfront_url)
           chmod 777 ./../utilities.sh
           ./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com $(terraform output -raw cloudfront_url)
 
