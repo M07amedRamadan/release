@@ -108,18 +108,23 @@ jobs:
           #terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
-      - name: Retrieve CloudFront Domain Name
-        id: get_cloudfront_domain
+      - name: Extract Domain Name
+        id: extract_domain
         run: |
-          echo "::set-output name=domain_name::$(terraform output cloudfront_url | awk -F'"' '{print $2}')"
+          domain=$(echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}')
+          echo "::set-output name=cloudfront_domain::$domain"
 
+      - name: Another Step
+        run: |
+          # Access the value of the cloudfront_domain variable from the previous step      
+          echo "CloudFront Domain: ${{ steps.extract_domain.outputs.cloudfront_domain }}"
 
       
       - name: Adding CNAME
         run: |
           cd primary_services_code
           chmod 777 ./../utilities.sh
-          echo ${{ steps.get_cloudfront_domain.outputs.domain_name }}
+          #echo ${{ steps.get_cloudfront_domain.outputs.domain_name }}
           #./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com ${{ steps.get_cloudfront_domain.outputs.domain_name }}
 
     
