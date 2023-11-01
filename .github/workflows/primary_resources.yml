@@ -116,6 +116,7 @@ jobs:
       - name: Adding CNAME
         run: |
           cd primary_services_code
+          echo ${{ steps.get_cloudfront_domain.outputs.domain_name }}
           chmod 777 ./../utilities.sh
           ./../utilities.sh add_cname_record ${{ github.event.inputs.name }}.vultara.com $(terraform output -raw cloudfront_url)
 
