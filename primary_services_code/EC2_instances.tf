@@ -2,7 +2,7 @@ resource "aws_instance" "report-generator" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "report-generator-KP"
-  vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
+  vpc_security_group_ids = [aws_default_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
@@ -16,7 +16,7 @@ resource "aws_instance" "vultara-scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-trial-scheduler-KP"
-  vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
+  vpc_security_group_ids = [aws_default_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.private_2.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
@@ -32,7 +32,7 @@ resource "aws_instance" "bastion-host" {
   ami           = var.ami
   instance_type = "t2.micro"
   key_name               = "bastion-host-ssh"
-  vpc_security_group_ids = [aws_security_group.New_Customer_VPC_SG.id]
+  vpc_security_group_ids = [aws_default_security_group.New_Customer_VPC_SG.id]
   subnet_id              = aws_subnet.public_1.id
   iam_instance_profile   = "scheduler-server-role" 
   associate_public_ip_address = true
