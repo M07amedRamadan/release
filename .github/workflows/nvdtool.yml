@@ -73,7 +73,7 @@ jobs:
         #!bin/bash
         cd ./nvdtools/cmd/nvdsync
         sudo ./nvdsync -cve_feed cve-1.1.json.gz downloadedCveFeed/
-        downloadedCveFeed
+        cd ./downloadedCveFeed
         ls -la
 
 
