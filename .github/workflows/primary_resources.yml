@@ -11,7 +11,7 @@ on:
 
       vpc-cidr:
         description: 'Enter the VPC CIDR'
-        default: '10.1.7.0/24'
+        default: '10.1.0.0/24'
         required: true
 
       region:
@@ -21,22 +21,22 @@ on:
       
       public_subnet-1:
         description: 'Enter the CIDRs for Public Subnet 1'
-        default: '10.1.7.0/26'
+        default: '10.1.0.0/26'
         required: true
 
       public_subnet-2:
         description: 'Enter the CIDRs for Public Subnet 2'
-        default: '10.1.7.64/26'
+        default: '10.1.0.64/26'
         required: true
 
       private_subnet-1:
         description: 'Enter the CIDRs for Private Subnet 1'
-        default: '10.1.7.128/26'
+        default: '10.1.0.128/26'
         required: true
 
       private_subnet-2:
         description: 'Enter the CIDRs for Private Subnet 2'
-        default: '10.1.7.192/26'
+        default: '10.1.0.192/26'
         required: true
 
       instance-type:
