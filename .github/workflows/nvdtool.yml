@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get git output names
-      id: git
       shell: bash
       run: |
         if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
