@@ -70,8 +70,10 @@ jobs:
 
     - name: run nvd on the database
       run: |
+        #!bin/bash
         cd ./nvdtools/cmd/nvdsync
         sudo ./nvdsync -cve_feed cve-1.1.json.gz downloadedCveFeed/
+        ls -la
 
 
 
