@@ -64,8 +64,11 @@ jobs:
 
     - name: changing ownership
       run: |
+        sudo chown -R root:root ./nvdtools/cmd/nvdsync
+        sudo chmod +x ./nvdtools/cmd/nvdsync
         sudo chown -R root:root ./nvdtools/cmd/nvdsync/downloadedCveFeed
         sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
+        sudo chown -R root:root ./nvdtools
 
 
     - name: run nvd on the database
