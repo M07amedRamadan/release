@@ -1,18 +1,16 @@
-name: Deploy App to AWS
-
+name: nvdtools-nvdsync
 on:
   push:
     branches:
-    - TestNewCustomerVpc
+      - TestNewCustomerVpc
+  schedule:
+    - cron: '20 2 * * *'
+    - cron: '20 3 * * *'
 
 jobs:
   # Run unit and integration tests
   nvd-db:
     runs-on: ubuntu-latest
-    permissions:
-      deployments: write
-      contents: read
-      statuses: write
     steps:
     - name: Get git output names
       id: git
@@ -93,4 +91,4 @@ jobs:
     - name: sync upload to bucket
       run: |
         cd ./nvdtools/cmd/nvdsync
-        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
+        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data/downloadedCveFeed --delete
