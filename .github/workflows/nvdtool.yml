@@ -73,11 +73,12 @@ jobs:
         #!bin/bash
         cd ./nvdtools/cmd/nvdsync
         sudo ./nvdsync -cve_feed cve-1.1.json.gz downloadedCveFeed/
+        downloadedCveFeed
         ls -la
 
 
 
-    - name: sync upload to bucket
-      run: |
-        cd ./nvdtools/cmd/nvdsync
-        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
+    #- name: sync upload to bucket
+      #run: |
+        #cd ./nvdtools/cmd/nvdsync
+        #aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
