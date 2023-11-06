@@ -84,4 +84,4 @@ jobs:
     - name: sync upload to bucket
       run: |
         cd ./nvdtools/cmd/nvdsync
-        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
+        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed
