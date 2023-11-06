@@ -82,9 +82,15 @@ jobs:
         cd ./downloadedCveFeed
         ls -la
 
+    - name: changing ownership
+      run: |
+        sudo chown -R runner:docker ./nvdtools/cmd/nvdsync
+        sudo chmod +x ./nvdtools/cmd/nvdsync
+        sudo chown -R runner:docker ./nvdtools/cmd/nvdsync/downloadedCveFeed
+        sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
 
 
     - name: sync upload to bucket
       run: |
         cd ./nvdtools/cmd/nvdsync
-        sudo aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
+        aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data-3/downloadedCveFeed --delete
