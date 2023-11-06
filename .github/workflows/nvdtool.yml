@@ -60,6 +60,9 @@ jobs:
       run: |
         cd ./nvdtools/cmd/nvdsync
         aws s3 sync s3://vultara-nvdsync-data/downloadedCveFeed downloadedCveFeed
+        ls -la
+        cd downloadedCveFeed
+        ls -la
 
 
     - name: changing ownership
@@ -68,8 +71,7 @@ jobs:
         sudo chmod +x ./nvdtools/cmd/nvdsync
         sudo chown -R root:root ./nvdtools/cmd/nvdsync/downloadedCveFeed
         sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
-        sudo chown -R root:root ./nvdtools
-        sudo chmod -R +r ./nvdtools/cmd/nvdsync/downloadedCveFeed
+
 
 
     - name: run nvd on the database
