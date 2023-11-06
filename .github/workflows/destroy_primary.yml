@@ -1,4 +1,4 @@
-name: "Destroy primary IAC Deployment"
+name: "Destroy New Customer IaC Deployment"
 
 on:
   workflow_dispatch:
@@ -54,17 +54,14 @@ on:
 
       ami-type:
         description: 'Enter the AMI Type for EC2 Instance Scheduler'
-        default: 'ami-007855ac798b5175e'
+        default: 'ami-0fc5d935ebf8bc3bc'
         required: true
         type: choice
         options:
-          - 'ami-007855ac798b5175e' #Ubuntu 22.04
+          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
           - 'ami-06878d265978313ca' #Amazon Linux 2 
 
-      key-name:
-        description: 'Enter the KeyPair Name for EC2 Instance Scheduler'
-        default: 'automation_test'
-        required: true
+
 
 
 jobs:
@@ -85,13 +82,44 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Terraform Init
         id: init
         run: |
           cd primary_services_code
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
+          
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd primary_services_code
+          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
+
+      - name: Extract Domain Name
+        id: extract_domain
+        run: |
+          cd primary_services_code
+          domain=$(echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}')
+          echo "::set-output name=cloudfront_domain::$domain"
+
+
+
+      - name: deleting CNAME
+        run: |
+          cd primary_services_code
+          chmod 777 ./../utilities.sh
+          echo ${{ steps.extract_domain.outputs.cloudfront_domain }}
+          ./../utilities.sh delete_cname_record ${{ github.event.inputs.name }}.vultara.com ${{ steps.extract_domain.outputs.cloudfront_domain }}
+
+    
       - name: Terraform Destroy
         run: |
           cd primary_services_code
