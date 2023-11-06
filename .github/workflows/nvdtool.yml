@@ -69,6 +69,7 @@ jobs:
         sudo chown -R root:root ./nvdtools/cmd/nvdsync/downloadedCveFeed
         sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
         sudo chown -R root:root ./nvdtools
+        chmod -R +r ./nvdtools/cmd/nvdsync/downloadedCveFeed
 
 
     - name: run nvd on the database
