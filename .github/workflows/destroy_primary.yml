@@ -11,7 +11,7 @@ on:
 
       vpc-cidr:
         description: 'Enter the VPC CIDR'
-        default: '10.1.7.0/24'
+        default: '10.1.0.0/24'
         required: true
 
       region:
@@ -21,22 +21,22 @@ on:
       
       public_subnet-1:
         description: 'Enter the CIDRs for Public Subnet 1'
-        default: '10.1.7.0/26'
+        default: '10.1.0.0/26'
         required: true
 
       public_subnet-2:
         description: 'Enter the CIDRs for Public Subnet 2'
-        default: '10.1.7.64/26'
+        default: '10.1.0.64/26'
         required: true
 
       private_subnet-1:
         description: 'Enter the CIDRs for Private Subnet 1'
-        default: '10.1.7.128/26'
+        default: '10.1.0.128/26'
         required: true
 
       private_subnet-2:
         description: 'Enter the CIDRs for Private Subnet 2'
-        default: '10.1.7.192/26'
+        default: '10.1.0.192/26'
         required: true
 
       instance-type:
@@ -59,7 +59,22 @@ on:
         type: choice
         options:
           - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
-          - 'ami-06878d265978313ca' #Amazon Linux 2 
+          - 'ami-06878d265978313ca' #Amazon Linux 2
+
+      bastion-key:
+        description: 'Enter the Bastion host key'
+        default: 'fake2bastion'
+        required: true
+
+      report-key:
+        description: 'Enter the Report generator key'
+        default: 'fake2bastion'
+        required: true
+
+      scheduler-key:
+        description: 'Enter the scheduler host key'
+        default: 'fake2bastion'
+        required: true
 
 
 
@@ -99,7 +114,7 @@ jobs:
         id: plan
         run: |
           cd primary_services_code
-          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="bastion_key=${{ github.event.inputs.bastion-key }}" -var="report_key=${{ github.event.inputs.report-key }}" -var="scheduler_key=${{ github.event.inputs.scheduler-key }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
 
@@ -123,5 +138,5 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd primary_services_code
-          terraform destroy -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="key_name=${{ github.event.inputs.key-name }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+          terraform destroy -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="bastion_key=${{ github.event.inputs.bastion-key }}" -var="report_key=${{ github.event.inputs.report-key }}" -var="scheduler_key=${{ github.event.inputs.scheduler-key }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
     
