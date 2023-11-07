@@ -2,7 +2,7 @@ name: nvdtools-nvdsync
 on:
   schedule:
     - cron: '20 2 * * *'
-    - cron: '20 5 * * *'
+    - cron: '20 3 * * *'
 
 jobs:
   # Run unit and integration tests
