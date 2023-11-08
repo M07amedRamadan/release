@@ -32,9 +32,9 @@ const processUser = async ([user, accessKeys]) => {
         USER_SECOND_WARNING_MAX_AGE_SECS = SECOND_WARNING_MAX_AGE_SECS,
         USER_LAST_WARNING_MAX_AGE_SECS = LAST_WARNING_MAX_AGE_SECS;
 
-   // if not and the user name don't start with github (github actions users), make the expiry date 3 months
+    // if not, make the expiry date 3 months
     const flag = await checkSecretExistence(user);
-    if (flag == false && !user.UserName.toLowerCase().startsWith('github')) {
+    if (flag == false ) {
         console.log("this hasn't a secret secont step",user.UserName);
         USER_KEY_MAX_AGE_SECS = 3 * ONE_MONTH;
         USER_FIRST_WARNING_MAX_AGE_SECS = USER_KEY_MAX_AGE_SECS - 2 * ONE_WEEK;
