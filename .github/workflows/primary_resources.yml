@@ -61,11 +61,6 @@ on:
           - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
           - 'ami-06878d265978313ca' #Amazon Linux 2
 
-      bastion-key:
-        description: 'Enter the Bastion host key'
-        default: 'fake2bastion'
-        required: true
-
       report-key:
         description: 'Enter the Report generator key'
         default: 'fake2bastion'
