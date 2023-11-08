@@ -1,8 +1,5 @@
 name: nvdtools-nvdsync
 on:
-  push:
-    branches:
-      - "nvdtools-nvdsync"
   schedule:
     - cron: '20 2 * * *'
     - cron: '20 3 * * *'
