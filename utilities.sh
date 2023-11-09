@@ -26,7 +26,7 @@ add_cname_record() {
                     \"ResourceRecordSet\": {
                         \"Name\": \"$RECORD_NAME\",
                         \"Type\": \"CNAME\",
-                        \"TTL\": 300,
+                        \"TTL\": 3600,
                         \"ResourceRecords\": [
                             {
                                 \"Value\": \"$CNAME_VALUE\"
@@ -60,7 +60,7 @@ delete_cname_record() {
                     \"ResourceRecordSet\": {
                         \"Name\": \"$RECORD_NAME\",
                         \"Type\": \"CNAME\",
-                        \"TTL\": 300,
+                        \"TTL\": 3600,
                         \"ResourceRecords\": [
                             {
                                 \"Value\": \"$CNAME_VALUE\"
