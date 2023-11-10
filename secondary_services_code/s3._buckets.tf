@@ -3,6 +3,7 @@
 
 resource "aws_s3_bucket" "Service_Bucket_1" {
   bucket = "${var.SERVICE_NAME_1}.vultara.com"
+  force_destroy = true
 }
 
 #Public Access
@@ -25,6 +26,7 @@ resource "aws_s3_bucket_public_access_block" "Permissions_Block_1" {
 
 resource "aws_s3_bucket" "Service_Bucket_2" {
   bucket = "${var.SERVICE_NAME_2}.vultara.com"
+  force_destroy = true
 }
 
 #Public Access
@@ -41,6 +43,7 @@ resource "aws_s3_bucket_public_access_block" "Permissions_Block_2" {
 
 resource "aws_s3_bucket" "Service_Bucket_3" {
   bucket = "${var.SERVICE_NAME_3}.vultara.com"
+  force_destroy = true
 }
 
 #Public Access
@@ -57,6 +60,7 @@ resource "aws_s3_bucket_public_access_block" "Permissions_Block_3" {
 
 resource "aws_s3_bucket" "Service_Bucket_4" {
   bucket = "${var.SERVICE_NAME_4}.vultara.com"
+  force_destroy = true
 }
 
 #Public Access

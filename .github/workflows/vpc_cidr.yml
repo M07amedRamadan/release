@@ -2,22 +2,93 @@ name: Run Python script
 
 on:
   workflow_dispatch:
+    
+    inputs:
+      name:
+        description: 'Enter Customer Name'
+        default: 'automation'
+        required: true
+
+      vpc-cidr:
+        description: 'Enter the VPC CIDR'
+        default: '10.1.7.0/24'
+        required: true
+
+      region:
+        description: 'Enter the Region for Deployment'
+        default: 'us-east-1'
+        required: true
+      
+      public_subnet-1:
+        description: 'Enter the CIDRs for Public Subnet 1'
+        default: '10.1.7.0/26'
+        required: true
+
+      public_subnet-2:
+        description: 'Enter the CIDRs for Public Subnet 2'
+        default: '10.1.7.64/26'
+        required: true
+
+      private_subnet-1:
+        description: 'Enter the CIDRs for Private Subnet 1'
+        default: '10.1.7.128/26'
+        required: true
+
+      private_subnet-2:
+        description: 'Enter the CIDRs for Private Subnet 2'
+        default: '10.1.7.192/26'
+        required: true
+
+      instance-type:
+        description: 'Enter the Intance Type for EC2 Instance Scheduler'
+        default: 't2.small'
+        required: true
+        type: choice
+        options:
+          - 't2.small'
+          - 't2.medium'
+          - 't2.large'
+          - 't3.small'
+          - 't3.medium'
+          - 't3.large'
+
+      ami-type:
+        description: 'Enter the AMI Type for EC2 Instance Scheduler'
+        default: 'ami-0fc5d935ebf8bc3bc'
+        required: true
+        type: choice
+        options:
+          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
+          - 'ami-06878d265978313ca' #Amazon Linux 2 
+
+
+
 
 jobs:
-  run_script:
+  terraform:
+    name: "Terraform"
     runs-on: ubuntu-latest
+    environment:
+      name: Dev
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
     steps:
-      - name: Checkout code
+
+      - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Install boto3
-        run: pip install boto3
-      - name: VPC CIDRs already in-use
-        run: python vpc_cidr.py
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd primary_services_code
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
+          domain-name="${{ github.event.inputs.name }}.vultara.com"
+          value=$(terraform output cloudfront_url)
+          echo $domain-name
+          echo $value
 

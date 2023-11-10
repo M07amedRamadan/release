@@ -1,0 +1,57 @@
+name: "view_aws_recourses"
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name_primary:
+        description: 'Enter Customer primary Name'
+        default: 'automation'
+        required: true
+
+
+      name_secondary:
+        description: 'Enter Customer secondary Name'
+        default: 'automation'
+        required: true
+
+
+      region:
+        description: 'Enter the Region for Deployment'
+        default: 'us-east-1'
+        required: true
+
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    environment:
+      name: Dev
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: viewing primary recourses
+        run: |
+          cd primary_services_code
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name_primary }}" -backend-config="region=${{ github.event.inputs.region }}"
+          echo "------------------------------- primary recouses ---------------------------------------"
+          terraform state list
+
+
+
+      - name: viewing secondary recourses
+        run: |
+          cd secondary_services_code
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name_secondary }}" -backend-config="region=${{ github.event.inputs.region }}"
+          echo "------------------------------- secondary recouses ---------------------------------------"
+          terraform state list
