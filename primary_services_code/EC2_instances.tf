@@ -2,7 +2,7 @@ resource "aws_instance" "report-generator" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-report-server-KP"
-  vpc_security_group_ids = [aws_default_security_group.reportGenerator_SG.id]
+  vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
@@ -16,7 +16,7 @@ resource "aws_instance" "vultara-scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-trial-scheduler-KP"
-  vpc_security_group_ids = [aws_default_security_group.schedulerServer_SG.id]
+  vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
   subnet_id              = aws_subnet.private_2.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
