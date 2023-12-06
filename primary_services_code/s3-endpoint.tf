@@ -38,8 +38,9 @@ resource "aws_vpc_endpoint_policy" "s3-private-policy" {
       "Effect": "Allow",
       "Resource": [ "arn:aws:s3:::${var.CUSTOMER_NAME}.vultara.com/*","arn:aws:s3:::${var.CUSTOMER_NAME}.vultara.com",#changed to public when making the new archteture
                     "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
-                    "arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket",
+                    #"arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-cve-cpe-bucket",
                     "arn:aws:s3:::${var.CUSTOMER_NAME}-help-doc-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-help-doc-bucket" ,
+                    "arn:aws:s3:::${var.CUSTOMER_NAME}-import-bucket/*","arn:aws:s3:::${var.CUSTOMER_NAME}-import-bucket" ,
                      "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
                      "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket"],
       "Principal": "*"
