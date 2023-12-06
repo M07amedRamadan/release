@@ -2,7 +2,7 @@
 
 resource "aws_s3_bucket" "New_Customer_Bucket" {
   bucket = "${var.CUSTOMER_NAME}.vultara.com"
-  region = ${var.region}
+  region = var.region
   force_destroy = true
 }
 
@@ -26,7 +26,7 @@ resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Bl
 
 resource "aws_s3_bucket" "reports-bucket" {
   bucket = "${var.CUSTOMER_NAME}-reports-bucket"
-  region = ${var.region}
+  region = var.region
   force_destroy = true
 }
 
@@ -108,7 +108,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle-reports-bucket" {
 
 resource "aws_s3_bucket" "help-doc-bucket" {
   bucket = "${var.CUSTOMER_NAME}-help-doc-bucket"
-  region = ${var.region}
+  region = var.region
   force_destroy = true
 }
 
@@ -131,12 +131,12 @@ resource "aws_s3_bucket_public_access_block" "help-doc-bucket-Permissions_Block"
 ######################################Production File Storage######################################
 resource "aws_s3_bucket" "production-file-bucket" {
   bucket = "${var.CUSTOMER_NAME}-production-file-bucket"
-  region = ${var.region}
+  region = var.region
   force_destroy = true
 }
 #####################################import bucket##################################################
 resource "aws_s3_bucket" "import-bucket" {
   bucket = "${var.CUSTOMER_NAME}-import-bucket"
-  region = ${var.region}
+  region = var.region
   force_destroy = true
 }
