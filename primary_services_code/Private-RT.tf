@@ -13,9 +13,6 @@ resource "aws_default_route_table" "Private_RT" {
     vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
   }
 
-
-
-
   tags = {
     Name = "${var.CUSTOMER_NAME}-Private_RT"
   }
