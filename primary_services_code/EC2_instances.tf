@@ -24,19 +24,3 @@ resource "aws_instance" "vultara-scheduler" {
   }
   user_data = file("${path.module}/script.sh")
 }
-
-
-
-
-resource "aws_instance" "bastion-host" {
-  ami           = var.ami
-  instance_type = "t2.micro"
-  key_name               = "bastion-host-ssh"
-  vpc_security_group_ids = [aws_default_security_group.New_Customer_VPC_SG.id]
-  subnet_id              = aws_subnet.public_1.id
-  iam_instance_profile   = "scheduler-server-role" 
-  associate_public_ip_address = true
-  tags = {
-    Name = "${var.CUSTOMER_NAME}-bastion-host"
-  }
-}
