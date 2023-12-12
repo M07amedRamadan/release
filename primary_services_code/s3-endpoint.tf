@@ -77,7 +77,7 @@ resource "aws_vpc_endpoint_policy" "s3-public-policy" {
 }
 
 
-resource "aws_vpc_endpoint_policy" "s3-public-policy" {
+resource "aws_vpc_endpoint_policy" "s3-help-bucket-policy" {
   vpc_endpoint_id = aws_vpc_endpoint.s3-help-docs.id
   policy = jsonencode({
   "Version": "2012-10-17",
