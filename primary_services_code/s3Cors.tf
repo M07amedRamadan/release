@@ -4,7 +4,7 @@ resource "aws_s3_bucket_cors_configuration" "s3-cors" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST", "DELETE", "GET"]
-    allowed_origins = ["https://nikolamotor.vultara.com", "http://localhost:4200"]
+    allowed_origins = ["https://${var.CUSTOMER_NAME}.vultara.com", "http://localhost:4200"]
     expose_headers  = []
   }
 }
