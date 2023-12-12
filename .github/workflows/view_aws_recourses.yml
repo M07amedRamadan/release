@@ -49,9 +49,9 @@ jobs:
 
 
 
-      - name: viewing secondary recourses
-        run: |
-          cd secondary_services_code
-          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name_secondary }}" -backend-config="region=${{ github.event.inputs.region }}"
-          echo "------------------------------- secondary recouses ---------------------------------------"
-          terraform state list
+      #- name: viewing secondary recourses
+        #run: |
+          #cd secondary_services_code
+          #terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name_secondary }}" -backend-config="region=${{ github.event.inputs.region }}"
+          #echo "------------------------------- secondary recouses ---------------------------------------"
+          #terraform state list
