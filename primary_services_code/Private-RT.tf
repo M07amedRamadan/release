@@ -8,10 +8,20 @@ resource "aws_default_route_table" "Private_RT" {
     nat_gateway_id = aws_nat_gateway.New_Customer_VPC_nat_gw.id
   }
 
+<<<<<<< HEAD
   route {
     cidr_block                = "10.0.1.250/32"
     vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
   }
+=======
+##  route {
+##    cidr_block                = "10.0.0.0/16"
+##    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+##  }
+
+
+
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.CUSTOMER_NAME}-Private_RT"

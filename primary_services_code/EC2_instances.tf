@@ -1,10 +1,17 @@
 resource "aws_instance" "report-generator" {
   ami           = var.ami
   instance_type = var.instance_type
+<<<<<<< HEAD
   key_name               = "vultara-report-server-KP"
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = "aws_iam_role.report_role.name"
+=======
+  key_name               = var.report_key
+  vpc_security_group_ids = [aws_default_security_group.reportGenerator_SG.id]
+  subnet_id              = aws_subnet.private_1.id
+  iam_instance_profile   = "scheduler-server-role"
+>>>>>>> origin/main
   tags = {
     Name = "${var.CUSTOMER_NAME}-report-Prod"
   }
@@ -15,8 +22,13 @@ resource "aws_instance" "report-generator" {
 resource "aws_instance" "vultara-scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
+<<<<<<< HEAD
   key_name               = "vultara-trial-scheduler-KP"
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
+=======
+  key_name               = var.scheduler_key
+  vpc_security_group_ids = [aws_default_security_group.schedulerServer_SG.id]
+>>>>>>> origin/main
   subnet_id              = aws_subnet.private_2.id
   iam_instance_profile   = "scheduler-server-role"
   tags = {
@@ -24,3 +36,22 @@ resource "aws_instance" "vultara-scheduler" {
   }
   user_data = file("${path.module}/script.sh")
 }
+<<<<<<< HEAD
+=======
+
+
+
+
+resource "aws_instance" "bastion-host" {
+  ami           = var.ami
+  instance_type = "t2.micro"
+  key_name               = var.bastion_key
+  vpc_security_group_ids = [aws_default_security_group.New_Customer_VPC_SG.id]
+  subnet_id              = aws_subnet.public_1.id
+  iam_instance_profile   = "scheduler-server-role" 
+  associate_public_ip_address = true
+  tags = {
+    Name = "${var.CUSTOMER_NAME}-bastion-host"
+  }
+}
+>>>>>>> origin/main

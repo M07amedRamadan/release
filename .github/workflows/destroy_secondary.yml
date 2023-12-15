@@ -47,7 +47,11 @@ jobs:
         id: init
         run: |
           cd secondary_services_code
+<<<<<<< HEAD
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.service_name_1 }}" -backend-config="region=us-east-1"
+=======
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.service_name_1 }}" -backend-config="region=${{ github.event.inputs.region }}"
+>>>>>>> origin/main
 
 
       - name: Terraform Plan

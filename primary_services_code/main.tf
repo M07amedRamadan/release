@@ -23,7 +23,11 @@ resource "aws_subnet" "public_1" {
 resource "aws_subnet" "public_2" {
   vpc_id     = aws_vpc.New_Customer_VPC.id
   cidr_block = var.public_subnet_2
+<<<<<<< HEAD
   availability_zone = "${var.region}b"
+=======
+  availability_zone = "us-east-1b"
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.CUSTOMER_NAME}-public-sub-2"
@@ -44,7 +48,11 @@ resource "aws_subnet" "private_1" {
 resource "aws_subnet" "private_2" {
   vpc_id     = aws_vpc.New_Customer_VPC.id
   cidr_block = var.private_subnet_2
+<<<<<<< HEAD
   availability_zone = "${var.region}b"
+=======
+  availability_zone = "us-east-1b"
+>>>>>>> origin/main
 
   tags = {
     Name = "${var.CUSTOMER_NAME}-private-sub-2"

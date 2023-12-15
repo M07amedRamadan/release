@@ -38,3 +38,17 @@ variable "CUSTOMER_NAME" {
   type = string
 }
 
+<<<<<<< HEAD
+=======
+variable "bastion_key" {
+  type = string
+}
+
+variable "report_key" {
+  type = string
+}
+
+variable "scheduler_key" {
+  type = string
+}
+>>>>>>> origin/main
