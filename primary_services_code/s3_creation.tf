@@ -20,10 +20,6 @@ resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Bl
  # bucket = aws_s3_bucket.New_Customer_Bucket.id
   #acl    = "private"
 #}
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
 #########################################s3 report bucket#######################################
 
 
