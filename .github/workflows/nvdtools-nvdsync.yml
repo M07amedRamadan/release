@@ -1,5 +1,8 @@
 name: nvdtools-nvdsync
 on:
+  workflow_dispatch:
+    branches:
+    - nvdsync
   schedule:
     - cron: '20 2 * * *'
     - cron: '20 3 * * *'
