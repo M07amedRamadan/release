@@ -58,12 +58,8 @@ on:
         required: true
         type: choice
         options:
-<<<<<<< HEAD
           - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04 us-east-1
           - 'ami-0efcece6bed30fd98' #Ubuntu 22.04 us-west-2
-=======
-          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
->>>>>>> origin/main
           - 'ami-06878d265978313ca' #Amazon Linux 2
 
 
@@ -93,21 +89,13 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-<<<<<<< HEAD
           aws-region: ${{ github.event.inputs.region }}
-=======
-          aws-region: us-east-1
->>>>>>> origin/main
 
       - name: Terraform Init
         id: init
         run: |
           cd primary_services_code
-<<<<<<< HEAD
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
-=======
-          terraform init -reconfigure -backend-config="vultara-terraform-us-west-2" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
->>>>>>> origin/main
           
       - name: Terraform Plan
         id: plan

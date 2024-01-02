@@ -61,14 +61,6 @@ on:
           - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
           - 'ami-06878d265978313ca' #Amazon Linux 2
 
-<<<<<<< HEAD
-=======
-
-
-
-
-
->>>>>>> origin/main
 jobs:
   terraform:
     name: "Terraform"
@@ -98,19 +90,8 @@ jobs:
         id: init
         run: |
           cd primary_services_code
-<<<<<<< HEAD
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
           
-=======
-          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=${{ github.event.inputs.region }}"
-          
-      - name: Terraform Plan
-        id: plan
-        run: |
-          cd primary_services_code
-          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-
->>>>>>> origin/main
       - name: Extract Domain Name
         id: extract_domain
         run: |
