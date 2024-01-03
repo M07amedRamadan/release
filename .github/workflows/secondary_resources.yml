@@ -47,7 +47,7 @@ jobs:
         id: init
         run: |
           cd secondary_services_code
-          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.service_name_1 }}" -backend-config="region=${{ github.event.inputs.region }}"
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
 
 
       - name: Terraform Plan
@@ -64,5 +64,4 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd secondary_services_code
-          terraform destroy -auto-approve -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
-    
+          terraform apply -auto-approve -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
