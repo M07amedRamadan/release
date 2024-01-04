@@ -1,23 +1,26 @@
 resource "aws_iam_role" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
 
-  # Terraform's "jsonencode" function converts a
-  # Terraform expression result to valid JSON syntax.
   assume_role_policy  = jsonencode({
     "Version": "2012-10-17",
     "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
-            ]
-        }
+    {
+        Action = [
+          "s3:*",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+            #"Resource": [
+              #  "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
+             #   "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
+          #  ]
+      
     ]
 })
 
 }
+
 
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
