@@ -19,6 +19,21 @@ resource "aws_iam_role" "report_role" {
 
 }
 
+policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "s3:*",
+        "Resource": [
+          "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
+          "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
+        ]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
