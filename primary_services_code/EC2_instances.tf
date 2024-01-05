@@ -18,8 +18,7 @@ resource "aws_instance" "vultara-scheduler" {
   key_name               = "vultara-trial-scheduler-KP"
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
   subnet_id              = aws_subnet.private_2.id
-  #iam_instance_profile   = scheduler-server-role
-  iam_instance_profile = aws_iam_role.report_role.name
+  iam_instance_profile   = scheduler-server-role
   tags = {
     Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
   }
