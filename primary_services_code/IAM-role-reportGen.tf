@@ -1,6 +1,5 @@
 resource "aws_iam_role" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
-  #role = aws_iam_role.report_role.id
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
