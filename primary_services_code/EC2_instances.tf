@@ -1,8 +1,7 @@
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
   instance_type          =  var.instance_type
-  key_name_report              = "vultara-report-server-KP"
-  public_key = tls_private_key.report_generator.public_key_openssh
+  key_name              = "vultara-report-server-KP"
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = "aws_iam_role.report_role.name"
@@ -15,8 +14,7 @@ tags = {
 resource "aws_instance" "vultara_scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
-  key_name_scheduler             = "vultara-trial-scheduler-KP"
- public_key = tls_private_key.vultara_scheduler.public_key_openssh
+  key_name            = "vultara-trial-scheduler-KP"
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
   subnet_id              = aws_subnet.private_2.id
   iam_instance_profile   = "scheduler-server-role"
@@ -26,24 +24,6 @@ resource "aws_instance" "vultara_scheduler" {
   user_data = file("${path.module}/script.sh")
 }
 
-resource "tls_private_key" "report_generator" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-resource "tls_private_key" "vultara_scheduler" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
-output "key_name_report" {
-  value = aws_key_pair.report_generator.key_name_report
-}
-
-output "private_key_pem" {
-  value = tls_private_key.report_generator.private_key_pem
-}
-output "key_name_scheduler" {
-  value = aws_key_pair.vultara_scheduler.key_name_scheduler
-}
 
 output "private_key_pem" {
   value = tls_private_key.vultara_scheduler.private_key_pem
