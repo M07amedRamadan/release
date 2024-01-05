@@ -1,6 +1,7 @@
-resource "aws_iam_role" "report_role" {
+resource "aws_iam_role_policy" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
-  assume_role_policy = jsonencode({
+  role = aws_iam_role.report_role.id  
+policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
@@ -9,6 +10,23 @@ resource "aws_iam_role" "report_role" {
         ]
         Effect   = "Allow"
         Resource = ["arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"]
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role" "report_role" {
+  name = "${var.CUSTOMER_NAME}_report_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "s3.amazonaws.com"
+        }
       },
     ]
   })
