@@ -1,4 +1,3 @@
-##########################
 resource "aws_iam_role_policy" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
   role = aws_iam_role.report_role.id
@@ -32,7 +31,6 @@ resource "aws_iam_role" "report_role" {
     ]
   })
 }
-#############################
 
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
