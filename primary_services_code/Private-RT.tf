@@ -9,7 +9,7 @@ resource "aws_default_route_table" "Private_RT" {
   }
 
   route {
-    cidr_block                = "10.0.1.250/32"
+    cidr_block                = "10.4.1.0/24"
     vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
   }
 
