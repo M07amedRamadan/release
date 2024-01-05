@@ -23,8 +23,3 @@ resource "aws_instance" "vultara_scheduler" {
   }
   user_data = file("${path.module}/script.sh")
 }
-
-
-output "private_key_pem" {
-  value = tls_private_key.vultara_scheduler.private_key_pem
-}
