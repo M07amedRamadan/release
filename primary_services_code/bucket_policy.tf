@@ -19,8 +19,7 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
 
 
 resource "aws_s3_bucket_policy" "import-bucket-police" {
-  #bucket = aws_s3_bucket.import-bucket.id
-  bucket = aws_s3_bucket.New_Customer_Bucket.id
+  bucket = aws_s3_bucket.import-bucket.id
 
   policy = jsonencode({
     "Version": "2012-10-17",
