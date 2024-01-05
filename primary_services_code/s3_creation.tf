@@ -15,11 +15,6 @@ resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Bl
   restrict_public_buckets = false
 }
 
-#ACL
-#resource "aws_s3_bucket_acl" "my-bucket" {
- # bucket = aws_s3_bucket.New_Customer_Bucket.id
-  #acl    = "private"
-#}
 #########################################s3 report bucket#######################################
 
 
