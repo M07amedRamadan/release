@@ -1,4 +1,4 @@
-resource "aws_instance" "report-generator" {
+resource "aws_instance" "report_generator" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-report-server-KP"
@@ -12,7 +12,7 @@ resource "aws_instance" "report-generator" {
 }
 
 
-resource "aws_instance" "vultara-scheduler" {
+resource "aws_instance" "vultara_scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
   key_name               = "vultara-trial-scheduler-KP"
