@@ -1,7 +1,7 @@
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
   instance_type          =  var.instance_type
- # key_name              = "vultara-report-server-KP"
+  key_name              = "var.key_name"
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
  # iam_instance_profile   = "aws_iam_role.report_role.name"
