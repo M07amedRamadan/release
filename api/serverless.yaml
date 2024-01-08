@@ -1,33 +1,34 @@
-service: my-lambda-service
-
+service: api-server
+custom:
+  region:
+   
 provider:
   name: aws
   runtime: nodejs16.x
   region: us-west-1
-  stage: ${opt:stage, 'lambda'}
-
-plugins:
-  - serverless-domain-manager
-
+  stage: new-prod
+#########################################################
 custom:
-  customDomain:
-    domainName: newcustomer.api.vultara.com # Replace with your desired domain name
-    basePath: ''
-    stage: ${self:provider.stage}
-    createRoute53Record: true
-
+    customDomain:
+        domainName: newcustomer.vultara.com
+        basePath: ''
+        stage: ${self:provider.stage}
+        createRoute53Record: true
+        endpointType: regional
+        apiType: http
+        securityPolicy: tls_1_2
+        acmCertificateArn: YOUR_ACM_CERTIFICATE_ARN
+       
+#########################################################
 functions:
-  myFunction:
-    handler: handler.myFunction
-    events:
-      - http:
-          path: /my-endpoint
-          method: GET
-          cors: true  # Optionally enable CORS for the endpoint
+  func:
+    handler: index.handler
+    url: 
+      url:
+      cors: true  #your function URL can be called from other domains in browsers.
+    
 
-resources:
-  Resources:
-    ApiGatewayRestApi:
-      Type: AWS::ApiGateway::RestApi
-      Properties:
-        Name: MyCustomAPI  # Custom name for the API Gateway resource
+########################################## 
+plugins:
+  #- serverless-offline
+  - serverless-domain-manager
