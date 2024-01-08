@@ -1,16 +1,16 @@
 name: Deploy Serverless Service
 
-on:
-  push:
-    branches:
-      - test_New_ARC  # Adjust branch name as needed
-
 #on:
-# workflow_dispatch:
-#  inputs:
-#   name:
-    # description: "Enter the API name"
-    # default: "newcustomer"
+ # push:
+  #  branches:
+      #- test_New_ARC  # Adjust branch name as needed
+
+on:
+ workflow_dispatch:
+  inputs:
+   name:
+     description: "Enter the API name"
+     default: "newcustomer"
 
 jobs:
   deploy:
