@@ -1,15 +1,15 @@
 name: Deploying lambda with API Name
 on:
-  push:
-    branches:
-      - test_New_ARC
+#  push:
+ #   branches:
+   #   - test_New_ARC
   
-  #workflow_dispatch:
-   # inputs:
-     # name:
-      #  description: "Enter the Customer Name"
-      #  default: "Mohamed"
-      #  required: true
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Enter the Customer Name"
+        default: "Mohamed"
+        required: true
 
 jobs:
   deploy:
