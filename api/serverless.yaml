@@ -18,7 +18,7 @@ custom:
         #stage: new-prod
         createRoute53Record: true
         endpointType: regional
-        certificateArn: "YOUR_ACM_CERTIFICATE_ARN"
+        #certificateArn: "YOUR_ACM_CERTIFICATE_ARN"
         apiType: REST
           
 functions:
