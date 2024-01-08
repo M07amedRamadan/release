@@ -17,11 +17,12 @@ custom:
         securityPolicy: tls_1_2
           
 functions:
-  func:
-    handler: index.handler
-    url: 
-      url:
-      cors: true  #your function URL can be called from other domains in browsers.
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
     
 plugins:
   #- serverless-offline
