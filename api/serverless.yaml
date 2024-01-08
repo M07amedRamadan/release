@@ -1,19 +1,17 @@
-service: my-api-service
+service: my-lambda-service
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   region: us-west-1
-  #region: ${self:custom.region.${self:provider.stage},'us-east-1'}
-  memorySize: 256
-  stage: dev
+  stage: ${opt:stage, 'lambda'}
+
 plugins:
   - serverless-domain-manager
 
 custom:
   customDomain:
-    domainName: newcustomer.api.vultara.com
-   # domainName: ${api_name}.api.vultara.com
+    domainName: newcustomer.api.vultara.com # Replace with your desired domain name
     basePath: ''
     stage: ${self:provider.stage}
     createRoute53Record: true
@@ -23,15 +21,13 @@ functions:
     handler: handler.myFunction
     events:
       - http:
-          path: /fakeCustomer/{proxy+}
-          method: ANY
-          cors: true
-          #authorizer: aws_iam # or specify your authorization configuration here
+          path: /my-endpoint
+          method: GET
+          cors: true  # Optionally enable CORS for the endpoint
 
 resources:
   Resources:
     ApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       Properties:
-        Name: NewCustomerApi
-        #Name: ${api_name}
+        Name: MyCustomAPI  # Custom name for the API Gateway resource
