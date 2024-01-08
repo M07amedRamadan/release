@@ -21,8 +21,9 @@ functions:
     handler: handler.hello
     events:
       - http:
-          path: hello
-          method: get
+          path: /
+          method: ANY
+          cors: true #to enable request from diffrent domains
     
 plugins:
   #- serverless-offline
