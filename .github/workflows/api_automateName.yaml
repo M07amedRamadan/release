@@ -1,18 +1,11 @@
-name: Deploy Serverless Service
-
-#on:
- # push:
-  #  branches:
-      #- test_New_ARC  # Adjust branch name as needed
+name: Deploying lambda with API Name
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        description: 'Enter the API name'
-        default: 'newcustomer'
-        required: true
-     
+   # inputs:
+     # name:
+      #  description: "Enter the Customer Name"
+      #  default: "Mohamed"
+      #  required: true
 
 jobs:
   deploy:
@@ -22,18 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Setup Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # Adjust to the node version you need
+          node-version: '16'  # Adjust to the node version you need
 
-      - name: Install dependencies
+      - name: Install serverless
         run: npm install -g serverless
 
-      - name: Deploy to AWS
+      - name: Deploy with Serverless
         run: |
           cd api
-          serverless deploy --stage ${{ github.event_name }} --api_name ${{ github.event.inputs.name }}  # You can set your API name dynamically here
+          serverless plugin install -n serverless-domain-manager
+          serverless deploy --stage lambda  # Modify the stage as needed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
+        
