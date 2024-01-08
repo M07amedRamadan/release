@@ -8,24 +8,43 @@ provider:
   # stage: ${opt:stage, 'new-prod'}
 plugins:
   - serverless-domain-manager
+  
 custom:
+   # STAGE: ${opt:stage, 'dev'}
+    stagedCustomDomainProps:
+        domainName:
+            prod: 'newcustomer.api.vultara.com'
+            staged: 'stage-newcustomer.api.vultara.com'
+        basePath:
+            prod: ''
+            staged: ${self:custom.STAGE}
     customDomain:
-        domainName: newcustomer.api.vultara.com
-        basePath: ''
-        stage: ${self:provider.stage}
+        domainName: ${self:custom.stagedCustomDomainProps.domainName.${self:custom.STAGE}, self:custom.stagedCustomDomainProps.domainName.staged}
+        basePath: ${self:custom.stagedCustomDomainProps.basePath.${self:custom.STAGE}, self:custom.stagedCustomDomainProps.basePath.staged}
+        stage: ${self:custom.STAGE}
         createRoute53Record: true
         endpointType: regional
         apiType: REST
+        #securityPolicy: tls_1_2
+#####################################################################
+#custom:
+#    customDomain:
+#        domainName: newcustomer.api.vultara.com
+#        basePath: ''
+##        stage: ${self:provider.stage}
+ #       createRoute53Record: true
+#        endpointType: regional
+#        apiType: REST
           
-functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: /
-          method: ANY
-          cors: true #to enable request from diffrent domains
-    
+#functions:
+#  hello:
+#    handler: handler.hello
+#    events:
+#      - http:
+#          path: /
+#          method: ANY
+#          cors: true #to enable request from diffrent domains
+    ####################################################
 
 resources:
   Resources:
