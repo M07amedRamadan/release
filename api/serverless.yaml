@@ -1,6 +1,4 @@
 service: api-server
-custom:
-  region:
    
 provider:
   name: aws
