@@ -4,7 +4,8 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-west-1
-
+  #region: ${self:custom.region.${self:provider.stage},'us-east-1'}
+  memorySize: 256
 plugins:
   - serverless-domain-manager
 
@@ -24,7 +25,7 @@ functions:
           path: /fakeCustomer/{proxy+}
           method: ANY
           cors: true
-          authorizer: aws_iam # or specify your authorization configuration here
+          #authorizer: aws_iam # or specify your authorization configuration here
 
 resources:
   Resources:
@@ -32,3 +33,4 @@ resources:
       Type: AWS::ApiGateway::RestApi
       Properties:
         Name: NewCustomerApi
+        #Name: ${api_name}
