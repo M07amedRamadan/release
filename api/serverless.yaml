@@ -16,7 +16,6 @@ custom:
         createRoute53Record: true
         endpointType: regional
         apiType: REST
-        securityPolicy: tls_1_2
           
 functions:
   hello:
