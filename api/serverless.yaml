@@ -4,13 +4,13 @@ provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
-  stage: new-prod
+  #stage: new-prod
   # stage: ${opt:stage, 'new-prod'}
 plugins:
   - serverless-domain-manager
   
 custom:
-    STAGE: ${opt:stage, 'dev'}
+    STAGE: ${opt:stage, 'new-prod'}
     stagedCustomDomainProps:
         domainName:
             prod: 'newcustomer.api.vultara.com'
