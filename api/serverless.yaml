@@ -6,19 +6,18 @@ provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
- # stage: new-prod
-  stage: ${opt:stage, 'new-prod'}
+  stage: new-prod
+  # stage: ${opt:stage, 'new-prod'}
 custom:
     customDomain:
-        domainName: newcustomer.vultara.com
+        domainName: newcustomer.api.vultara.com
         basePath: ''
         stage: ${self:provider.stage}
         createRoute53Record: true
         endpointType: regional
         apiType: http
         securityPolicy: tls_1_2
-        
-       
+          
 functions:
   func:
     handler: index.handler
