@@ -4,13 +4,15 @@ name: Deploy Serverless Service
  # push:
   #  branches:
       #- test_New_ARC  # Adjust branch name as needed
-
 on:
- workflow_dispatch:
-  inputs:
-   name:
-     description: "Enter the API name"
-     default: "newcustomer"
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'Enter the API name'
+        default: 'newcustomer'
+        required: true
+     
 
 jobs:
   deploy:
@@ -30,7 +32,7 @@ jobs:
 
       - name: Deploy to AWS
         run: |
-          cd ./api
+          cd api
           serverless deploy --stage ${{ github.event_name }} --api_name ${{ github.event.inputs.name }}  # You can set your API name dynamically here
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
