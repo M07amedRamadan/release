@@ -25,6 +25,7 @@ jobs:
 
       - name: Deploy to AWS
         run: |
+          cd ./api
           serverless deploy --stage ${{ github.event_name }} --api_name ${{ github.event.inputs.name }}  # You can set your API name dynamically here
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
