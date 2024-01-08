@@ -5,9 +5,9 @@ custom:
 provider:
   name: aws
   runtime: nodejs16.x
-  region: us-west-1
-  stage: new-prod
-#########################################################
+  region: us-east-1
+ # stage: new-prod
+  stage: ${opt:stage, 'new-prod'}
 custom:
     customDomain:
         domainName: newcustomer.vultara.com
@@ -19,7 +19,6 @@ custom:
         securityPolicy: tls_1_2
         acmCertificateArn: YOUR_ACM_CERTIFICATE_ARN
        
-#########################################################
 functions:
   func:
     handler: index.handler
@@ -27,8 +26,6 @@ functions:
       url:
       cors: true  #your function URL can be called from other domains in browsers.
     
-
-########################################## 
 plugins:
   #- serverless-offline
   - serverless-domain-manager
