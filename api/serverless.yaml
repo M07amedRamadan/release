@@ -6,6 +6,7 @@ provider:
   region: us-west-1
   #region: ${self:custom.region.${self:provider.stage},'us-east-1'}
   memorySize: 256
+  stage: dev
 plugins:
   - serverless-domain-manager
 
