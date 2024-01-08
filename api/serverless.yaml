@@ -6,6 +6,8 @@ provider:
   region: us-east-1
   stage: new-prod
   # stage: ${opt:stage, 'new-prod'}
+plugins:
+  - serverless-domain-manager
 custom:
     customDomain:
         domainName: newcustomer.api.vultara.com
@@ -13,7 +15,7 @@ custom:
         stage: ${self:provider.stage}
         createRoute53Record: true
         endpointType: regional
-        apiType: http
+        apiType: REST
         securityPolicy: tls_1_2
           
 functions:
@@ -25,6 +27,10 @@ functions:
           method: ANY
           cors: true #to enable request from diffrent domains
     
-plugins:
-  #- serverless-offline
-  - serverless-domain-manager
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: NewCustomerApi
