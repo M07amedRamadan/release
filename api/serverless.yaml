@@ -10,7 +10,7 @@ plugins:
   - serverless-domain-manager
   
 custom:
-   # STAGE: ${opt:stage, 'dev'}
+    STAGE: ${opt:stage, 'dev'}
     stagedCustomDomainProps:
         domainName:
             prod: 'newcustomer.api.vultara.com'
