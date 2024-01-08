@@ -17,7 +17,7 @@ custom:
         endpointType: regional
         apiType: http
         securityPolicy: tls_1_2
-        acmCertificateArn: YOUR_ACM_CERTIFICATE_ARN
+        
        
 functions:
   func:
