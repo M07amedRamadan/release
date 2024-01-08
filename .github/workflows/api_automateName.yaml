@@ -1,6 +1,10 @@
 name: Deploying lambda with API Name
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - test_New_ARC
+  
+  #workflow_dispatch:
    # inputs:
      # name:
       #  description: "Enter the Customer Name"
