@@ -13,12 +13,13 @@ plugins:
 #####################################################################
 custom:
     customDomain:
-        domainName: newcustomer.api.vultara.com
+        domainName: newcustomer.api
         basePath: ''
         stage: new-prod
         createRoute53Record: true
         endpointType: regional
-        certificateArn: "arn:aws:acm:us-east-1:837491041518:certificate/3fe9ff25-50e3-4be8-b99b-51b6642d1098"
+        certificateArn: "arn:aws:acm:us-east-1:837491041518:certificate/3fe9ff25-50e3-4be8-b99b-51b6642d1098" #Domain name*.api.vultara.com
+        
         apiType: REST
           
 functions:
