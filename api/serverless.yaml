@@ -13,7 +13,7 @@ plugins:
 #####################################################################
 custom:
     customDomain:
-        domainName: newcustomer.api
+        domainName: newcustomer
         basePath: ''
         stage: new-prod
         createRoute53Record: true
