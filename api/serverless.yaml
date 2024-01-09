@@ -9,7 +9,7 @@ provider:
 
 plugins:
   - serverless-domain-manager
-  - serverless-offline
+ # - serverless-offline
 custom:
     customDomain:
         domainName: newcustomer.api.vultara.com
