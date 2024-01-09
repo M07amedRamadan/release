@@ -30,7 +30,6 @@ jobs:
       - name: Deploy with Serverless
         run: |
           cd api
-          npm install serverless-domain-manager --save-dev
           serverless plugin install -n serverless-domain-manager
           serverless deploy --stage new-prod  # Modify the stage as needed
         env:
