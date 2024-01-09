@@ -4,13 +4,10 @@ provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
-#  stage: new-prod
 
 plugins:
   - serverless-domain-manager
-  
 
-#####################################################################
 custom:
     customDomain:
         domainName: newcustomer.api.vultara.com
@@ -29,7 +26,6 @@ functions:
           path: /
           method: ANY
           cors: true #to enable request from diffrent domains
-    ####################################################
 
 resources:
   Resources:
