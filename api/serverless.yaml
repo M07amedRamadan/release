@@ -15,10 +15,10 @@ custom:
     customDomain:
         domainName: newcustomer.api.vultara.com
         basePath: ''
-        #stage: new-prod
+        stage: new-prod
         createRoute53Record: true
         endpointType: regional
-        #certificateArn: "YOUR_ACM_CERTIFICATE_ARN"
+        certificateArn: "arn:aws:acm:us-east-1:837491041518:certificate/abbe55ed-6623-4253-8b3e-c5ea31ef3000"
         apiType: REST
           
 functions:
