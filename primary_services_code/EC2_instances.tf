@@ -10,7 +10,7 @@ resource "aws_instance" "report-generator" {
   }
   user_data = file("${path.module}/script.sh")
 }
-#
+
 
 resource "aws_instance" "vultara-scheduler" {
   ami           = var.ami
