@@ -1,4 +1,4 @@
-service: api-server
+service: vultara-server
    
 provider:
   name: aws
