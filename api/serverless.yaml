@@ -4,8 +4,8 @@ provider:
   name: aws
   runtime: nodejs16.x
   region: us-east-1
-  stage: new-prod
-  # stage: ${opt:stage, 'new-prod'}
+#  stage: new-prod
+
 plugins:
   - serverless-domain-manager
   
