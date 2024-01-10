@@ -1,13 +1,15 @@
-# No change required in this file
-# Create a VPC peering connection between the Vultara VPC and the new Customer VPC
-
-
 resource "aws_vpc_peering_connection" "peering_connection" {
-  vpc_id      = aws_vpc.New_Customer_VPC.id     # ID of the existing VPC
-  peer_vpc_id = "vpc-01ff5914b2252b003" # ID of the new VPC
+  vpc_id      = "vpc-01ff5914b2252b003"              # ID of the existing VPC in us-east-1
+  peer_vpc_id = aws_vpc.New_Customer_VPC.id          # ID of the new VPC in another region
+  peer_region = "us-west-1"                          # Region of the peer VPC
   auto_accept = true
 
   tags = {
-    Name = "${var.CUSTOMER_NAME}-vpc-vultara-vpc-peering"
+    Name = "${var.CUSTOMER_NAME}-vpc-vultara-vpc-peering-us-east-1-to-us-west-1"
   }
+}
+
+resource "aws_vpc_peering_connection_accepter" "accepter_us_west_1" {
+  provider               = aws.us-west-1
+  vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
 }
