@@ -1,3 +1,5 @@
+#this file is a test only, it helped me to Automate the Lambda function with API.
+
 service: lambda-api-server
    
 provider:
