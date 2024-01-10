@@ -6,11 +6,11 @@ on:
  #     - test_New_ARC
   
  workflow_dispatch:
-#    inputs:
-#      name:
-   #     description: "Enter the Customer Name"
-    #    default: "Mohamed"
-       # required: true
+    inputs:
+      domainName:
+        description: 'Enter the domain name'
+        default: "Mohamed"
+        required: true
 
 jobs:
   deploy:
@@ -24,6 +24,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'  # Adjust to the node version you need
+          
+      - name: Set domainName in serverless.yml
+        run: sed -i "s|{{customerName}}|${{ github.event.inputs.domainName }}|g" serverless.yml
+
 
       - name: Install serverless
         run: npm install -g serverless
