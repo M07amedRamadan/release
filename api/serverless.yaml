@@ -12,11 +12,13 @@ plugins:
   - serverless-domain-manager
 
 custom:
+    stage: ${opt:stage, 'prod'}
     customDomain:
-        domainName: '{{customerName}}'.api.vultara.com
+        domainName: '${self:custom.stage}'.api.vultara.com
         basePath: ''
         stage: newcustomer
         createRoute53Record: true
+        createRoute53IPv6Record: false
         endpointType: regional
         certificateArn: "arn:aws:acm:us-east-1:837491041518:certificate/3fe9ff25-50e3-4be8-b99b-51b6642d1098" #Domain name*.api.vultara.com
         securityPolicy: tls_1_2
