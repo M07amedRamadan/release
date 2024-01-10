@@ -13,7 +13,7 @@ plugins:
 
 custom:
     customDomain:
-        domainName: newcustomer.api.vultara.com
+        domainName: '{{customerName}}'.api.vultara.com
         basePath: ''
         stage: newcustomer
         createRoute53Record: true
