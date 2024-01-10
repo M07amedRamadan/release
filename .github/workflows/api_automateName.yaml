@@ -1,16 +1,12 @@
 #this file is a test only, it helped me to Automate the Lambda function with API.
 name: Deploying lambda with API Name
 on:
-  #push:
- #   branches:
- #     - test_New_ARC
-  
- workflow_dispatch:
+  workflow_dispatch:
     inputs:
       domainName:
         description: 'Enter the domain name'
-        default: "Mohamed"
         required: true
+        default: "Mohamed"
 
 jobs:
   deploy:
