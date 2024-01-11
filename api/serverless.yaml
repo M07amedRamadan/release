@@ -5,7 +5,7 @@ service: lambda-api-server
 provider:
   name: aws
   runtime: nodejs16.x
-  stage: ${opt:stage, 'newcustomer'}
+  #stage: ${opt:stage, 'newcustomer'}
   region: us-east-1
 
 plugins:
