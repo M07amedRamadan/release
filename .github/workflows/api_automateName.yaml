@@ -1,12 +1,15 @@
 #this file is a test only, it helped me to Automate the Lambda function with API.
 name: Deploying lambda with API Name
 on:
-  workflow_dispatch:
-    inputs:
-      domainName:
-        description: 'Enter the domain name'
-        required: true
-        default: "Mohamed"
+  push:
+    branches:
+      - test_New_ARC
+  #workflow_dispatch:
+   # inputs:
+   #   domainName:
+    #    description: 'Enter the domain name'
+     #   required: true
+     #   default: "Mohamed"
 
 jobs:
   deploy:
@@ -20,10 +23,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'  # Adjust to the node version you need
-          
-      - name: Set domainName in serverless.yml
-        run: sed -i "s|{{customerName}}|${{ github.event.inputs.domainName }}|g" serverless.yml
-
+        
 
       - name: Install serverless
         run: npm install -g serverless
