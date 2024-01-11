@@ -2,7 +2,7 @@
 name: Deploying lambda with API Name
 on:
 
- # push:
+  push:
    # branches:
     # - test_New_ARC
   workflow_dispatch:
