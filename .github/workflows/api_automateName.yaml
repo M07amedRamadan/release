@@ -2,7 +2,7 @@
 name: Deploying lambda with API Name
 on:
 
-  push:
+ # push:
    # branches:
     # - test_New_ARC
   workflow_dispatch:
@@ -33,8 +33,9 @@ jobs:
         run: |
           cd api
           serverless plugin install -n serverless-domain-manager
+          export API_NAME=customerName
           sls create_domain --stage newcustomer
-          sls deploy --stage newcustomer --apiName=customerName  # Modify the stage as needed
+          sls deploy --stage newcustomer   # Modify the stage as needed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
