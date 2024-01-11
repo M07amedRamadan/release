@@ -12,11 +12,12 @@ plugins:
   - serverless-domain-manager
 
 custom:
-    stage: ${opt:stage, 'prod'}
+    #stage: ${opt:stage, 'prod'}
+    stage: ${opt:apiname, self:custom.stage}
     customDomain:
         domainName: ${self:custom.stage}.api.vultara.com
         basePath: ''
-        stage: newcustomer
+        stage: ${self:custom.stage}
         createRoute53Record: true
         createRoute53IPv6Record: false
         endpointType: regional
@@ -37,4 +38,4 @@ resources:
     ApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       Properties:
-        Name: fakecustomer-api
+        Name:  ${self:custom.stage}-API
