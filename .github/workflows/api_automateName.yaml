@@ -32,8 +32,8 @@ jobs:
         run: |
           cd api
           serverless plugin install -n serverless-domain-manager
-          serverless create_domain --apiname newcustomer
-          serverless deploy --apiname newcustomer  # Modify the stage as needed
+          serverless create_domain --stage newcustomer
+          serverless deploy --stage newcustomer --apiname=customerName  # Modify the stage as needed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
