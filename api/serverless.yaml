@@ -7,16 +7,15 @@ provider:
   runtime: nodejs16.x
   stage: ${opt:stage, 'newcustomer'}
   region: us-east-1
-  environment:
-    CUSTOMER_NAME: ${param:apiName}
+  
 
 plugins:
   - serverless-domain-manager
 
 custom:
-    #stage: ${opt:apiname, self:provider.stage}
+    stage: ${opt:apiName, self:provider.stage}
     customDomain:
-        domainName: ${self:provider.environment.CUSTOMER_NAME}.api.vultara.com
+        domainName: ${self:custom.stage}.api.vultara.com
         basePath: ''
         stage: ${self:provider.stage}
         createRoute53Record: true
@@ -39,4 +38,4 @@ resources:
     ApiGatewayRestApi:
       Type: AWS::ApiGateway::RestApi
       Properties:
-        Name: ${self:provider.environment.CUSTOMER_NAME}-API
+        Name: ${self:custom.stage}-API
