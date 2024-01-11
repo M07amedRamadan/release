@@ -14,7 +14,7 @@ plugins:
 custom:
     stage: ${opt:stage, 'prod'}
     customDomain:
-        domainName: '${self:custom.stage}'.api.vultara.com
+        domainName: ${self:custom.stage}.api.vultara.com
         basePath: ''
         stage: newcustomer
         createRoute53Record: true
