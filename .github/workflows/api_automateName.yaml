@@ -1,9 +1,9 @@
 #this file is a test only, it helped me to Automate the Lambda function with API.
 name: Deploying lambda with API Name
 on:
-#  push:
-  #  branches:
-   #   - test_New_ARC
+  push:
+    branches:
+     - test_New_ARC
   #workflow_dispatch:
    # inputs:
    #   domainName:
@@ -32,8 +32,8 @@ jobs:
         run: |
           cd api
           serverless plugin install -n serverless-domain-manager
-          serverless create_domain --stage newcustomer
-          serverless deploy --stage newcustomer  # Modify the stage as needed
+          serverless create_domain --apiname newcustomer
+          serverless deploy --apiname newcustomer  # Modify the stage as needed
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
