@@ -5,19 +5,18 @@ service: lambda-api-server
 provider:
   name: aws
   runtime: nodejs16.x
-  #stage: ${opt:stage, 'newcustomer'}
+  stage: ${opt:stage, 'newcustomer'}
   region: us-east-1
 
 plugins:
   - serverless-domain-manager
 
 custom:
-    #stage: ${opt:stage, 'prod'}
     stage: ${opt:apiname, self:custom.stage}
     customDomain:
         domainName: ${self:custom.stage}.api.vultara.com
         basePath: ''
-        stage: ${self:custom.stage}
+        stage: ${self:provider.stage}
         createRoute53Record: true
         createRoute53IPv6Record: false
         endpointType: regional
