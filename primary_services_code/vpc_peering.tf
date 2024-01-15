@@ -5,7 +5,7 @@ resource "aws_vpc_peering_connection" "peering_connection" {
   auto_accept = true
 
 tags = {
-    Name = "VPC-Peering-Vultara-vpc-to-${aws_vpc.New_Customer_VPC.name}"
+    Name = "VPC-Peering-Vultara-fakecustomer-vpc"
   }
 }
 
