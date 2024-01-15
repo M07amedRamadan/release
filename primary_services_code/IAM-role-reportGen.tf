@@ -13,23 +13,31 @@ resource "aws_iam_role" "report_role" {
       }
     ]
   })
+}
 
- policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
-            ]
-        }
+resource "aws_iam_policy" "s3_access_policy" {
+  name        = "S3AccessPolicy"
+  description = "Policy to grant S3 access"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = "s3:*",
+        Resource = [
+          "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
+          "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
+        ]
+      }
     ]
   })
 }
 
-
+resource "aws_iam_role_policy_attachment" "s3_access_attachment" {
+  role       = aws_iam_role.report_role.name
+  policy_arn = aws_iam_policy.s3_access_policy.arn
+}
 
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
