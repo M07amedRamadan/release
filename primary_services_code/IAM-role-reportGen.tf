@@ -3,7 +3,7 @@ resource "aws_iam_role" "report_role" {
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
-  policy  = jsonencode({
+ assume_role_policy  = jsonencode({
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -18,6 +18,8 @@ resource "aws_iam_role" "report_role" {
 })
 
 }
+
+
 
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
