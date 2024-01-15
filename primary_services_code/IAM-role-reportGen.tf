@@ -1,37 +1,37 @@
-resource "aws_iam_role_policy" "report_role" {
-  name = "${var.CUSTOMER_NAME}_report_role"
-  role = aws_iam_role.report_role.id  
-policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "s3:*",
-        ]
-        Effect   = "Allow"
-        Resource = ["arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"]
-      },
-    ]
-  })
-}
-
 resource "aws_iam_role" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Principal = {
-          Service = "s3.amazonaws.com"
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy  = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
+                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
+            ]
         }
-      },
     ]
-  })
-}
+})
 
+  policy  = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
+                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
+            ]
+        }
+    ]
+})
+
+}
 
 resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.report_role.name
