@@ -1,8 +1,3 @@
-                      "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket",
-                "arn:aws:s3:::${var.CUSTOMER_NAME}-reports-bucket/*"
- 
 resource "aws_iam_role" "report_role" {
   name = "${var.CUSTOMER_NAME}_report_role"
 
