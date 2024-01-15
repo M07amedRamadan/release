@@ -4,12 +4,8 @@ resource "aws_vpc_peering_connection" "peering_connection" {
   peer_region = "us-west-1"                          # Region of the peer VPC
   auto_accept = true
 
-  tags = {
-    Name = "${var.CUSTOMER_NAME}-vpc-vultara-vpc-peering-us-east-1-to-us-west-1"
+tags = {
+    Name = "VPC-Peering-Vultara-vpc-to-${aws_vpc.New_Customer_VPC.name}"
   }
 }
 
-resource "aws_vpc_peering_connection_accepter" "accepter_us_west_1" {
-  provider               = aws.us-west-1
-  vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
-}
