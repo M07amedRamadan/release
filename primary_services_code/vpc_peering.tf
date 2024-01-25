@@ -1,13 +1,13 @@
 provider "aws" {
   alias  = "peer"
-  region = "us-east-1"
+  region = "us-east-1" #vultara vpc region
 }
 
 resource "aws_vpc_peering_connection" "peering_connection" {
   vpc_id      = "vpc-01ff5914b2252b003"              # ID of the vultara_vpc in us-east-1
   peer_vpc_id = aws_vpc.New_Customer_VPC.id          # ID of the new VPC in another region
   peer_region = "us-east-1"                          # Region of the peer VPC
-  auto_accept = true
+  
 
 tags = {
     Name = "VPC-Peering-Vultara-fakecustomer-vpc"
@@ -40,7 +40,7 @@ tags = {
 #Retreiving the vultara VPC data.
 data "aws_vpc" "vultara_vpc" {
   provider = aws.peer
-  id = "vpc-01ff5914b2252b003"  # Replace with the ID of your VPC
+  id = "vpc-01ff5914b2252b003"  # vultara vpc_id, Replace with the ID of your VPC
 }
 
 
