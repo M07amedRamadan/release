@@ -10,7 +10,7 @@ resource "aws_vpc_peering_connection" "peering_connection" {
   
 
 tags = {
-    Name = "VPC-Peering-Vultara-fakecustomer-vpc"
+    Name = "VPC-Peering-Vultara-${var.CUSTOMER_NAME}-vpc"
   }
 }
 
