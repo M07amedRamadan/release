@@ -22,18 +22,18 @@ tags = {
 
 }
 
-# Create a route in our VPC's route table to the  VPC via the peering connection
- resource "aws_route" "route_to_vultara_vpc" {
+# Create a route in New_Customer VPC's route table to the Vultara VPC via the peering connection
+ resource "aws_route" "route_from_New_Customer_to_vultara_vpc" {
    route_table_id         = aws_vpc.New_Customer_VPC.main_route_table_id
-   destination_cidr_block = data.aws_vpc.vultara_vpc.cidr_block # the cidr_block of the Existing VPC
+   destination_cidr_block = data.aws_vpc.vultara_vpc.cidr_block # the cidr_block of the Vultara VPC
    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
  }
 
- # Create a route in the VPC's route table to the our VPC via the peering connection
- resource "aws_route" "route_to_New_Customer_VPC" {
+ # Create a route in the Vultara VPC's route table to New_Customer VPC via the peering connection
+ resource "aws_route" "route_from_vultara_to_New_Customer_VPC" {
    provider               = aws.peer
    route_table_id         = data.aws_vpc.vultara_vpc.main_route_table_id
-   destination_cidr_block = aws_vpc.New_Customer_VPC.cidr_block # the cidr_block of Main VPC
+   destination_cidr_block = aws_vpc.New_Customer_VPC.cidr_block # the cidr_block of New_Customer VPC
    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
  }
  
