@@ -24,8 +24,8 @@ resource "aws_vpc_peering_connection" "my_peering_connection_mongo" {
     Name = "MyVPCPeeringConnection-MongoDB"
   }
 }
-# if auto accept for peering not work use the peering_connection_accpter
-# to auto accept as the vpc in another region
+# If auto-accept for peering does not work use the peering_connection_accpter
+# To auto-accept as the VPC in another region
 #  resource "aws_vpc_peering_connection_accepter" "peer" {
 #   provider                  = aws.mongo-peer #provide the peer region
 #   vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection_mongo.id
@@ -36,8 +36,8 @@ resource "aws_vpc_peering_connection" "my_peering_connection_mongo" {
 #   }
 # }
 
-# Update route tables in your AWS VPC
-resource "aws_route" "my_route" {
+#Add route from NewCustomer to MongoDB
+resource "aws_route" "route_from_NewCustomer_to_MongoDB" {
   route_table_id         = aws_vpc.New_Customer_VPC.main_route_table_id  # Replace with your AWS route table ID
   destination_cidr_block = var.mongodb_atlas_cidr
   vpc_peering_connection_id = aws_vpc_peering_connection.my_peering_connection_mongo.id
