@@ -7,7 +7,7 @@ resource "aws_vpc_endpoint" "s3-private" {
   }
 }
 resource "aws_vpc_endpoint_route_table_association" "s3-private-association" {
-  vpc_endpoint_id =  aws_vpc_endpoint.s3-private.id # Replace with your actual subnet ID
+  vpc_endpoint_id =  aws_vpc_endpoint.s3-private.id 
   route_table_id = aws_default_route_table.Private_RT.id # Replace with your actual route table ID
 }
 
@@ -21,7 +21,7 @@ resource "aws_vpc_endpoint" "s3-help-docs" {
   }
 }
 resource "aws_vpc_endpoint_route_table_association" "s3-help-docs-association" {
-  vpc_endpoint_id =  aws_vpc_endpoint.s3-help-docs.id # Replace with your actual subnet ID
+  vpc_endpoint_id =  aws_vpc_endpoint.s3-help-docs.id 
   route_table_id = aws_route_table.Public_RT.id # Replace with your actual route table ID
 }
 
@@ -35,7 +35,7 @@ resource "aws_vpc_endpoint" "s3-public" {
   }
 }
 resource "aws_vpc_endpoint_route_table_association" "s3-public-association" {
-  vpc_endpoint_id =  aws_vpc_endpoint.s3-public.id # Replace with your actual subnet ID
+  vpc_endpoint_id =  aws_vpc_endpoint.s3-public.id 
   route_table_id = aws_route_table.Public_RT.id # Replace with your actual route table ID
 }
 
