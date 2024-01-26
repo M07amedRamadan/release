@@ -6,6 +6,7 @@ resource "aws_vpc_endpoint" "s3-private" {
     Name = "${var.CUSTOMER_NAME}-s3-private"
   }
 }
+# Associate the s3-private endpoint with route table.
 resource "aws_vpc_endpoint_route_table_association" "s3-private-association" {
   vpc_endpoint_id =  aws_vpc_endpoint.s3-private.id 
   route_table_id = aws_default_route_table.Private_RT.id # Replace with your actual route table ID
@@ -20,6 +21,7 @@ resource "aws_vpc_endpoint" "s3-help-docs" {
     Name = "${var.CUSTOMER_NAME}-s3-help-doc"
   }
 }
+# Associate the s3-help-docs endpoint with route table.
 resource "aws_vpc_endpoint_route_table_association" "s3-help-docs-association" {
   vpc_endpoint_id =  aws_vpc_endpoint.s3-help-docs.id 
   route_table_id = aws_route_table.Public_RT.id # Replace with your actual route table ID
@@ -34,6 +36,7 @@ resource "aws_vpc_endpoint" "s3-public" {
     Name = "${var.CUSTOMER_NAME}-s3-public"
   }
 }
+# Associate the s3-public endpoint with route table.
 resource "aws_vpc_endpoint_route_table_association" "s3-public-association" {
   vpc_endpoint_id =  aws_vpc_endpoint.s3-public.id 
   route_table_id = aws_route_table.Public_RT.id # Replace with your actual route table ID
