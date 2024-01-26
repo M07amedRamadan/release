@@ -1,6 +1,6 @@
 #No need to change only ad your keys/values
 # resource "aws_secretsmanager_secret" "example_secret" {
-#   name = "${}secret"
+#   name = "${var.CUSTOMER_NAME}-secret"
 # }
 
 # resource "aws_secretsmanager_secret_version" "example_secret_version" {
