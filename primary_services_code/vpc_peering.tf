@@ -51,3 +51,6 @@ value= data.aws_vpc.vultara_vpc.id
 output "vultara_vpc_cidr_block" {
 value= data.aws_vpc.vultara_vpc.cidr_block
 }
+output "main_vpc" {
+value= aws_vpc.New_Customer_VPC.id
+}
