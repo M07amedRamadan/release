@@ -47,6 +47,6 @@ data "aws_vpc" "vultara_vpc" {
 output "vultara_vpc_id" {
 value= aws_vpc.vultara_vpc.id
 }
-output "vultara_vpc_id" {
+output "vultara_vpc_cidr_block" {
 value= aws_vpc.vultara_vpc.cidr_block
 }
