@@ -48,13 +48,13 @@ data "aws_key_pair" "report_key" {
 resource "aws_key_pair" "scheduler_key_new" {
   key_name   = "vultara-trial-scheduler-KP"
   public_key = data.aws_key_pair.scheduler_key.public_key
-  region     = var.region
+  
 }
 # Create a new key pair in us-east-2 using the public key from us-east-1
 resource "aws_key_pair" "report_key_new" {
   key_name   = "vultara-report-server-KP"
   public_key = data.aws_key_pair.report_key.public_key
-  region     = var.region
+ 
 }
 
 
