@@ -50,7 +50,7 @@ resource "aws_key_pair" "report_key" {
 }
 
 output "report_key" {
-value = data.aws_key_pair.report_key.id
+value = data.aws_key_pair.report_key.public_key
 }
 
 output "scheduler_key" {
