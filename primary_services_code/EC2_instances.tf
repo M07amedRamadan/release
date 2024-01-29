@@ -49,10 +49,10 @@ data "aws_key_pair" "report_key" {
   #region   = "us-east-1"
 }
 output "report_key" {
-value = data.aws_key_pair.report_key.key_name
+value = data.aws_key_pair.report_key.id
 }
 
 output "scheduler_key" {
-value = data.aws_key_pair.scheduler_key.key_name
+value = data.aws_key_pair.scheduler_key.id
 }
 
