@@ -3,7 +3,7 @@ resource "aws_route53_record" "cname_record" {
   name    = "${var.CUSTOMER_NAME}.vultara.com"
   type    = "CNAME"
   ttl     = 3600
-  records = ["${var.cloudfront_id}"]
+  records = ["${var.cloudfront_url}"]
 }
 
 data "aws_route53_zone" "vultara_zone" {
