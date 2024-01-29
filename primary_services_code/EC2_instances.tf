@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "report_generator" {
-  provider               = aws.&{var.region}
+  provider               = aws.${var.region}
   ami                    = var.ami  
   instance_type          = var.instance_type
   key_name               = aws_key_pair.report_key.key_name
@@ -20,7 +20,7 @@ tags = {
 }
 
 resource "aws_instance" "vultara_scheduler" {
-  provider               = aws.&{var.region}
+  provider               = aws.${var.region}
   ami                    = var.ami
   instance_type          = var.instance_type
   key_name               = data.aws_key_pair.scheduler_key.key_name
