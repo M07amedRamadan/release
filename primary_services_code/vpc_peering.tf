@@ -44,6 +44,9 @@ data "aws_vpc" "vultara_vpc" {
   id = "vpc-01ff5914b2252b003"  # vultara vpc_id, Replace with the ID of your VPC
 }
 
-output "Vultara_vpc_id" {
+output "vultara_vpc_id" {
 value= aws_vpc.vultara_vpc.id
+}
+output "vultara_vpc_id" {
+value= aws_vpc.vultara_vpc.cidr_block
 }
