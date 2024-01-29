@@ -7,7 +7,7 @@ provider "aws" {
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
   instance_type          =  var.instance_type
-  key_name               = aws_key_pair.report.key_name
+  key_name               = data.aws_key_pair.report_key.key_name
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
@@ -43,18 +43,11 @@ data "aws_key_pair" "report_key" {
   provider = aws.key
   key_name = "vultara-report-server-KP"
 }
-resource "aws_key_pair" "report" {
-key_name= "report"
-}
-
 output "report_key" {
-value = aws_key_pair.report.id
+value = data.aws_key_pair.report_key.id
 }
 
 output "scheduler_key" {
 value = data.aws_key_pair.scheduler_key.id
 }
-import {
-  to = aws_key_pair.report
-  id = "key-0dec4ad0002351b07"
-}
+
