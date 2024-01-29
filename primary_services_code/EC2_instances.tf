@@ -43,5 +43,11 @@ data "aws_key_pair" "scheduler_key" {
   provider = aws.key
   key_name = "vultara-trial-scheduler-KP"
 }
+output "report_key" {
+value = data.aws_key_pair.report_key.key_name
+}
 
+output "scheduler_key" {
+value = data.aws_key_pair.scheduler_key.key_name
+}
 
