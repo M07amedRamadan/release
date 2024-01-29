@@ -6,7 +6,7 @@ provider "aws" {
 
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
-  instance_type          =  var.instance_type
+  instance_type          = var.instance_type
   key_name               = data.aws_key_pair.report_key.key_name
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
@@ -19,8 +19,8 @@ tags = {
 }
 
 resource "aws_instance" "vultara_scheduler" {
-  ami           = var.ami
-  instance_type = var.instance_type
+  ami                    = var.ami
+  instance_type          = var.instance_type
   key_name               = data.aws_key_pair.scheduler_key.key_name
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
   subnet_id              = aws_subnet.private_2.id
@@ -37,11 +37,13 @@ resource "aws_instance" "vultara_scheduler" {
 data "aws_key_pair" "scheduler_key" {
   provider = aws.key
   key_name = "vultara-trial-scheduler-KP"
+  include_public_key = true
 }
 # Obtain the public key from an existing key pair in us-east-1
 data "aws_key_pair" "report_key" {
   provider = aws.key
   key_name = "vultara-report-server-KP"
+  include_public_key = true
 }
 output "report_key" {
 value = data.aws_key_pair.report_key.id
