@@ -16,7 +16,7 @@ on:
 
       region:
         description: 'Enter the Region for Deployment'
-        default: 'us-west-1'
+        default: 'us-east-2'
         required: true
       
       public_subnet-1:
@@ -59,8 +59,9 @@ on:
         type: choice
         options:
           - 'ami-0ce2cb35386fc22e9' #Ubuntu 22.04 us-west-1
-          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04 us-east-1
           - 'ami-0efcece6bed30fd98' #Ubuntu 22.04 us-west-2
+          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04 us-east-1
+          - 'ami-05fb0b8c1424f266b' #Ubuntu 22.04 us-east-2
           - 'ami-06878d265978313ca' #Amazon Linux 2
           
 
