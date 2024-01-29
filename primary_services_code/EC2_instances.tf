@@ -1,14 +1,15 @@
 provider "aws" {
   alias  = "key"
   region = "us-east-1"
-
+  access_key = "secrets.AWS_ACCESS_KEY_ID"
+  secret_key = "secrets.AWS_SECRET_ACCESS_KEY"
   # Accepter's credentials if in another account.
 }
 
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
   instance_type          =  var.instance_type
-  key_name               = aws_key_pair.report_key_new.key_name
+  key_name               = data.aws_key_pair.report_key.key_name
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
@@ -22,7 +23,7 @@ tags = {
 resource "aws_instance" "vultara_scheduler" {
   ami           = var.ami
   instance_type = var.instance_type
-  key_name               = aws_key_pair.scheduler_key_new.key_name
+  key_name               = data.aws_key_pair.scheduler_key.key_name
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
   subnet_id              = aws_subnet.private_2.id
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
@@ -43,18 +44,6 @@ data "aws_key_pair" "scheduler_key" {
 data "aws_key_pair" "report_key" {
   provider = aws.key
   key_name = "vultara-report-server-KP"
-}
-# Create a new key pair in us-east-2 using the public key from us-east-1
-resource "aws_key_pair" "scheduler_key_new" {
-  key_name   = "vultara-trial-scheduler-KP"
-  public_key = data.aws_key_pair.scheduler_key.public_key
-  
-}
-# Create a new key pair in us-east-2 using the public key from us-east-1
-resource "aws_key_pair" "report_key_new" {
-  key_name   = "vultara-report-server-KP"
-  public_key = data.aws_key_pair.report_key.public_key
- 
 }
 
 
