@@ -18,7 +18,7 @@ resource "aws_vpc_peering_connection" "my_peering_connection_mongo" {
   vpc_id               = aws_vpc.New_Customer_VPC.id
   peer_owner_id        = "126124458305" #Mongodb Account ID
   peer_region          = "us-east-1"  # Replace with your MongoDB Atlas region
-  auto_accept               = true
+  #auto_accept               = true
 
   tags = {
     Name = "MyVPCPeeringConnection-MongoDB"
