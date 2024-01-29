@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 resource "aws_vpc_peering_connection" "peering_connection" {
-  provider = aws.peer
+  #provider = aws.peer
   peer_region = "us-east-1"                          # Region of the peer VPC
   vpc_id      = "vpc-01ff5914b2252b003"              # ID of the vultara_vpc in us-east-1
   peer_vpc_id = aws_vpc.New_Customer_VPC.id          # ID of the new VPC in another region
