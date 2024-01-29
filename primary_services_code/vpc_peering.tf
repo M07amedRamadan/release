@@ -46,8 +46,3 @@ data "aws_vpc" "vultara_vpc" {
   provider = aws.peer
   id = "vpc-01ff5914b2252b003"  # vultara vpc_id, Replace with the ID of your VPC
 }
-
-
-output "vultara_vpc_cidr_block" {
-value= data.aws_vpc.vultara_vpc.cidr_block
-}
