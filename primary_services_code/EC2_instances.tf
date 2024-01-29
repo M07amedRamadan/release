@@ -7,7 +7,7 @@ provider "aws" {
 resource "aws_instance" "report_generator" {
   ami                    = var.ami  
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.report_key.key_name
+  key_name               = data.aws_key_pair.report_key.key_name
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
   subnet_id              = aws_subnet.private_1.id
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
@@ -32,15 +32,16 @@ resource "aws_instance" "vultara_scheduler" {
   user_data = file("${path.module}/script.sh")
 }
 
+# Obtain the report key from an existing key pair in us-east-1
+data "aws_key_pair" "report_key" {
+  provider = aws.key
+  key_name = "vultara-report-server-KP"
+} 
 
-# Obtain the public key from an existing key pair in us-east-1
+# Obtain the scheduler key from an existing key pair in us-east-1
 data "aws_key_pair" "scheduler_key" {
   provider = aws.key
   key_name = "vultara-trial-scheduler-KP"
 }
-# Obtain the public key from an existing key pair in us-east-1
-data "aws_key_pair" "report_key" {
-  provider = aws.key
-  key_name = "vultara-report-server-KP"
-}
+
 
