@@ -3,7 +3,7 @@ resource "aws_route53_record" "cname_record" {
   name    = "${var.CUSTOMER_NAME}.vultara.com"
   type    = "CNAME"
   ttl     = 3600
-  records = ["${var.cloudfront_url}"]
+  records = ["var.cloudfront_url"]
 }
 
 data "aws_route53_zone" "vultara_zone" {
@@ -12,6 +12,9 @@ data "aws_route53_zone" "vultara_zone" {
 variable "cloudfront_url"{
 type     =  string
 default  =  aws_cloudfront_distribution.s3_distribution.domain_name
+}
+output "cloudfront_url" {
+value   =    aws_cloudfront_distribution.s3_distribution.domain_name
 }
 
 output "hosted_zone" {
