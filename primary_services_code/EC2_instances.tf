@@ -35,12 +35,12 @@ resource "aws_instance" "vultara_scheduler" {
 
 # Obtain the public key from an existing key pair in us-east-1
 data "aws_key_pair" "scheduler_key" {
-  #provider = aws.key
+  provider = aws.key
   key_name = "vultara-trial-scheduler-KP"
 }
 # Obtain the public key from an existing key pair in us-east-1
 data "aws_key_pair" "report_key" {
-  #provider = aws.key
+  provider = aws.key
   key_name = "vultara-report-server-KP"
 }
 
