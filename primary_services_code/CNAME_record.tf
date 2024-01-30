@@ -9,7 +9,3 @@ resource "aws_route53_record" "cname_record" {
 data "aws_route53_zone" "vultara_zone" {
   name = "vultara.com"  # Replace with the actual domain name
 }
-
-output "hosted_zone" {
-value   =    data.aws_route53_zone.vultara_zone.zone_id 
-}
