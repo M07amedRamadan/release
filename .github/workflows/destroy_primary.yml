@@ -92,20 +92,6 @@ jobs:
           cd primary_services_code
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
           
-      - name: Extract Domain Name
-        id: extract_domain
-        run: |
-          cd primary_services_code
-          domain=$(echo $(terraform output cloudfront_url) | awk -F'"' '{print $2}')
-          echo "cloudfront_domain=$domain" >> $GITHUB_OUTPUT
-
-      - name: deleting CNAME
-        run: |
-          cd primary_services_code
-          chmod 777 ./../utilities.sh
-          echo ${{ steps.extract_domain.outputs.cloudfront_domain }}
-          ./../utilities.sh delete_cname_record ${{ github.event.inputs.name }}.vultara.com ${{ steps.extract_domain.outputs.cloudfront_domain }}
-
     
       - name: Terraform Destroy
         run: |
