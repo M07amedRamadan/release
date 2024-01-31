@@ -50,3 +50,6 @@ EOF"
 sudo systemctl start amazon-cloudwatch-agent
 # Enable the CloudWatch Agent service to start on boot
 sudo systemctl enable amazon-cloudwatch-agent
+sudo mkdir /home/ubuntu/newdir
+sudo touch /home/ubuntu/newdir/file.txt
+echo "${var.region}" >> /home/ubuntu/newdir/file.txt
