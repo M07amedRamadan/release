@@ -65,4 +65,5 @@ sudo systemctl start mongod
 sudo systemctl enable mongod
 sudo mkdir /home/ubuntu/newdir
 sudo touch /home/ubuntu/newdir/file.txt
+sudo chmod 777 /home/ubuntu/newdir/file.txt
 sudo bash -c 'echo "This is our region: ${var.region}" >> /home/ubuntu/newdir/file.txt'
