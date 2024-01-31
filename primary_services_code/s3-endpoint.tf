@@ -82,7 +82,7 @@ resource "aws_vpc_endpoint_policy" "s3-public-policy" {
   #"Statement": [
   #  {
  #     "Action": "s3:*",
- 3     "Effect": "Allow",
+ #     "Effect": "Allow",
  #     "Resource": [ "arn:aws:s3:::vultara-help-page-bucket/*","arn:aws:s3:::vultara-help-page-bucket" ,
  #                    "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
  #                    "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket" ],
