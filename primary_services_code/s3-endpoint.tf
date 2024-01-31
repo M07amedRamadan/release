@@ -8,15 +8,15 @@ resource "aws_vpc_endpoint" "s3-private" {
   }
 }
 
-#resource "aws_vpc_endpoint" "s3-help-docs" {
-  #vpc_id       = aws_vpc.New_Customer_VPC.id
- # vpc_endpoint_type = "Gateway"
- # #service_name = "com.amazonaws.us-east-1.s3"
- # route_table_ids = [ aws_route_table.Public_RT.id ]
-  #tags = {
- #   Name = "${var.CUSTOMER_NAME}-s3-help-doc"
-#  }
-#}
+resource "aws_vpc_endpoint" "s3-help-docs" {
+  vpc_id       = aws_vpc.New_Customer_VPC.id
+  vpc_endpoint_type = "Gateway"
+  service_name = "com.amazonaws.us-east-1.s3"
+  route_table_ids = [ aws_route_table.Public_RT.id ]
+  tags = {
+    Name = "${var.CUSTOMER_NAME}-s3-help-doc"
+  }
+}
 
 resource "aws_vpc_endpoint" "s3-public" {
   vpc_id       = aws_vpc.New_Customer_VPC.id
@@ -75,19 +75,19 @@ resource "aws_vpc_endpoint_policy" "s3-public-policy" {
 }
 
 
-#resource "aws_vpc_endpoint_policy" "s3-help-bucket-policy" {
-#  vpc_endpoint_id = aws_vpc_endpoint.s3-help-docs.id
- # policy = jsonencode({
-#  "Version": "2012-10-17",
-  #"Statement": [
-  #  {
- #     "Action": "s3:*",
- #     "Effect": "Allow",
- #     "Resource": [ "arn:aws:s3:::vultara-help-page-bucket/*","arn:aws:s3:::vultara-help-page-bucket" ,
- #                    "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
- #                    "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket" ],
-  #    "Principal": "*"
- #   }
-#  ]
-#})
-#}
+resource "aws_vpc_endpoint_policy" "s3-help-bucket-policy" {
+  vpc_endpoint_id = aws_vpc_endpoint.s3-help-docs.id
+  policy = jsonencode({
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "s3:*",
+      "Effect": "Allow",
+      "Resource": [ "arn:aws:s3:::vultara-help-page-bucket/*","arn:aws:s3:::vultara-help-page-bucket" ,
+                     "arn:aws:s3:::docker-images-prod/*","arn:aws:s3:::docker-images-prod",
+                     "arn:aws:s3:::prod-us-east-1-starport-layer-bucket/*","arn:aws:s3:::prod-us-east-1-starport-layer-bucket" ],
+      "Principal": "*"
+    }
+  ]
+})
+}
