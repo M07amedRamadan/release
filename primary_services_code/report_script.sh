@@ -9,8 +9,6 @@ sudo ./aws/install
 # Retrieve the instance ID and instance name using the AWS CLI
 instance_id=$(ec2metadata --instance-id)
 instance_name=$(aws ec2 describe-instances --instance-ids "$instance_id" --query 'Reservations[0].Instances[0].Tags[?Key==`Name`].Value' --output text)
-echo "The Instance ID is : ${instance_id}"
-echo "The Instance Name is : ${instance_name}"
 #Download  CloudWatch Agent
 sudo wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest/amazon-cloudwatch-agent.deb
 #Install amazon-cloudwatch-agent
@@ -52,4 +50,5 @@ sudo systemctl start amazon-cloudwatch-agent
 sudo systemctl enable amazon-cloudwatch-agent
 sudo mkdir /home/ubuntu/newdir
 sudo touch /home/ubuntu/newdir/file.txt
+sudo echo " This is our test region " >> /home/ubuntu/newdir/file.txt
 sudo echo " This is our region: ${var.region}" >> /home/ubuntu/newdir/file.txt
