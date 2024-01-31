@@ -63,8 +63,3 @@ sudo apt-get install -y mongodb-org
 #Start and Enable the mongoDB
 sudo systemctl start mongod
 sudo systemctl enable mongod
-sudo mkdir /home/ubuntu/newdir
-sudo touch /home/ubuntu/newdir/file.txt
-sudo bash -c "cat <<EOF > '/home/ubuntu/newdir/file.txt'
-echo \"the region is: ${var.region}\"
-EOF"
