@@ -64,6 +64,9 @@ sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 sudo systemctl enable mongod
 sudo mkdir /home/ubuntu/newdir
+sudo mkdir /home/ubuntu/newdir1
+sudo touch /home/ubuntu/newdir1/file.txt
 sudo touch /home/ubuntu/newdir/file.txt
 sudo chmod 777 /home/ubuntu/newdir/file.txt
-sudo bash -c 'echo \"This is our region: ${var.region} \" >> /home/ubuntu/newdir/file.txt'
+echo \"This is our region: ${var.region} \" >> /home/ubuntu/newdir/file.txt
+sudo echo "This is our region1: ${var.region}" | sudo tee -a /home/ubuntu/newdir1/file.txt
