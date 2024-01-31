@@ -16,7 +16,7 @@ on:
 
       region:
         description: 'Enter the Region for Deployment'
-        default: 'us-east-2'
+        default: 'us-east-1'
         required: true
       
       public_subnet-1:
