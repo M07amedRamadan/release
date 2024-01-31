@@ -1,4 +1,4 @@
-#No need to change only ad your keys/values
+#No need to change except at your keys/values after adding the secrets at GitHub secrets.
 # resource "aws_secretsmanager_secret" "example_secret" {
 #   name = "${var.CUSTOMER_NAME}-secret"
 # }
