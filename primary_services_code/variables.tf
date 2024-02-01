@@ -34,11 +34,6 @@ variable "instance_type" {
   type = string
 }
 
-variable "key_name" {
-  type = string
-  default = "KMS_TEST_LAMBDA"
-}
-
 variable "CUSTOMER_NAME" {
   type = string
 }
