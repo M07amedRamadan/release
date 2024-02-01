@@ -36,5 +36,5 @@ resource "aws_s3_bucket_policy" "import-bucket-police" {
         }
     ]
 })
-  depends_on = [aws_s3_bucket.import-bucket]
+  depends_on = [aws_s3_bucket_public_access_block.Block-public-access]
 }
