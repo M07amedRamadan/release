@@ -22,10 +22,8 @@ resource "aws_s3_bucket_policy" "import-bucket-police" {
 
   policy = jsonencode({
     "Version": "2012-10-17",
-    "Id": "S3PolicyId1",
     "Statement": [
         {
-            "Sid": "AllowPublicRead",
             "Effect": "Allow",
             "Principal": "*",
             "Action": [
