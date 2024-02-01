@@ -68,6 +68,7 @@ resource "aws_s3_bucket" "import-bucket" {
   force_destroy = true
 } 
 
+#still the import bucket private but only can access throw the policy only.
 resource "aws_s3_bucket_public_access_block" "Block-public-access" {
   bucket = aws_s3_bucket.import-bucket.id
 
