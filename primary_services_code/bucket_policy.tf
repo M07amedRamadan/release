@@ -17,7 +17,7 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
   depends_on = [aws_s3_bucket_public_access_block.New_Customer_Bucket_Permissions_Block]
 }
 
-resource "aws_s3_bucket_policy" "import-bucket-police" {
+resource "aws_s3_bucket_policy" "import_bucket_police" {
   bucket = aws_s3_bucket.import_bucket.id
 
   policy = jsonencode({
@@ -36,5 +36,5 @@ resource "aws_s3_bucket_policy" "import-bucket-police" {
         }
     ]
 })
-  depends_on = [aws_s3_bucket.import-bucket]
+  depends_on = [aws_s3_bucket.import_bucket]
 }
