@@ -63,7 +63,7 @@ resource "aws_s3_bucket" "production-file-bucket" {
   force_destroy = true
 }
 #####################################import bucket##################################################
-resource "aws_s3_bucket" "import_bucket" {
+resource "aws_s3_bucket" "import-bucket" {
   bucket = "${var.CUSTOMER_NAME}-import-bucket"
   force_destroy = true
 }
