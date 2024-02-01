@@ -1,5 +1,5 @@
 resource "aws_s3_bucket_cors_configuration" "s3-cors" {
-  bucket = aws_s3_bucket.import-bucket.id
+  bucket = aws_s3_bucket.import_bucket.id
 
   cors_rule {
     allowed_headers = ["*"]
