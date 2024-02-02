@@ -28,7 +28,7 @@ resource "aws_instance" "vultara_scheduler" {
   tags = {
   Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
   }
-  user_data = file("${path.module}/schedular_script.sh")
+  user_data = file("${path.module}/scheduler_script.sh")
 }
 
 # Obtain the report key from an existing key pair in us-east-1
