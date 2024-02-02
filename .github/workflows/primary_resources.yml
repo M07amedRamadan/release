@@ -64,10 +64,6 @@ on:
           - 'ami-0efcece6bed30fd98' #Ubuntu 22.04 us-west-2
           - 'ami-06878d265978313ca' #Amazon Linux 2
           
-
-
-
-
 jobs:
   terraform:
     name: "Terraform"
