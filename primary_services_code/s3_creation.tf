@@ -15,11 +15,6 @@ resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Bl
   restrict_public_buckets = false
 }
 
-#ACL
-#resource "aws_s3_bucket_acl" "my-bucket" {
- # bucket = aws_s3_bucket.New_Customer_Bucket.id
-  #acl    = "private"
-#}
 #########################################s3 report bucket#######################################
 
 
@@ -71,4 +66,14 @@ resource "aws_s3_bucket" "production-file-bucket" {
 resource "aws_s3_bucket" "import-bucket" {
   bucket = "${var.CUSTOMER_NAME}-import-bucket"
   force_destroy = true
+} 
+
+#still the import bucket private but only can access throw the policy only.
+resource "aws_s3_bucket_public_access_block" "Block-public-access" {
+  bucket = aws_s3_bucket.import-bucket.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }

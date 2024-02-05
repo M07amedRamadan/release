@@ -1,13 +1,48 @@
-# No change required in this file
-# Create a VPC peering connection between the Vultara VPC and the new Customer VPC
-
+provider "aws" {
+  alias  = "peer"
+  region = "us-east-1" #vultara vpc region
+}
 
 resource "aws_vpc_peering_connection" "peering_connection" {
-  vpc_id      = "vpc-01ff5914b2252b003"     # ID of the existing VPC
-  peer_vpc_id = aws_vpc.New_Customer_VPC.id # ID of the new VPC
-  auto_accept = true
+  peer_region    = "us-east-1"                          # Region of the vultara VPC
+  peer_vpc_id    = data.aws_vpc.vultara_vpc.id
+  vpc_id         =   aws_vpc.New_Customer_VPC.id          # ID of the new VPC in another region
 
-  tags = {
-    Name = "${var.CUSTOMER_NAME}-vpc-vultara-vpc-peering"
+tags = {
+    Name = "VPC-Peering-Vultara-${var.CUSTOMER_NAME}-VPC"
+    Side = "Requester"
   }
+}
+
+# auto accept as the vpc in another region
+ resource "aws_vpc_peering_connection_accepter" "peer" {
+  provider                  = aws.peer #provide the peer region
+  vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+  auto_accept               = true
+  tags = {
+    Name = "VPC-Peering-Vultara-${var.CUSTOMER_NAME}-VPC"
+    Side = "Accepter"
+  }
+
+}
+
+# Create a route in New_Customer VPC's route table to the Vultara VPC via the peering connection
+ resource "aws_route" "route_from_New_Customer_to_vultara_vpc" {
+   route_table_id         = aws_vpc.New_Customer_VPC.main_route_table_id
+   destination_cidr_block = data.aws_vpc.vultara_vpc.cidr_block # the cidr_block of the Vultara VPC
+   vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+ }
+
+ # Create a route in the Vultara VPC's route table to New_Customer VPC via the peering connection
+ resource "aws_route" "route_from_vultara_to_New_Customer_VPC" {
+   provider               = aws.peer
+   route_table_id         = data.aws_vpc.vultara_vpc.main_route_table_id
+   destination_cidr_block = aws_vpc.New_Customer_VPC.cidr_block # the cidr_block of New_Customer VPC
+   vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+ }
+ 
+#Retreiving the vultara VPC data.
+data "aws_vpc" "vultara_vpc" {
+  provider = aws.peer
+  id = "vpc-01ff5914b2252b003"  # vultara vpc_id, Replace with the ID of your VPC
 }

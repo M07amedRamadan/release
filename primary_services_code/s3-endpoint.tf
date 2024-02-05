@@ -8,6 +8,8 @@ resource "aws_vpc_endpoint" "s3-private" {
   }
 }
 
+# In another region this endpoint won't be created due to the endpoint must be attached to resources in the same region.
+# Here this endpoint will be attached to s3 in us-east-1 so will fail if the region of this customer isn't us-east-1
 resource "aws_vpc_endpoint" "s3-help-docs" {
   vpc_id       = aws_vpc.New_Customer_VPC.id
   vpc_endpoint_type = "Gateway"
@@ -18,7 +20,6 @@ resource "aws_vpc_endpoint" "s3-help-docs" {
   }
 }
 
-
 resource "aws_vpc_endpoint" "s3-public" {
   vpc_id       = aws_vpc.New_Customer_VPC.id
   vpc_endpoint_type = "Gateway"
@@ -28,7 +29,6 @@ resource "aws_vpc_endpoint" "s3-public" {
     Name = "${var.CUSTOMER_NAME}-s3-public"
   }
 }
-
 
 #####################################################important note##################################################################
 # the two buckets docker-images-prod and prod-us-east-1-starport-layer-bucket are user by docker and ECR repectilvly
