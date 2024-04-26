@@ -1,11 +1,18 @@
-resource "aws_cloudfront_origin_access_identity" "oai" {
-  comment = "OAI for private connectivity to S3"
+resource "aws_cloudfront_origin_access_identity" "legacy_oai" {
+  comment = "Legacy OAI for ${var.CUSTOMER_NAME}.vultara.com.s3.${var.region}.amazonaws.com"
+}
+
+resource "aws_cloudfront_origin_access_identity" "new_oai" {
+  comment = "OAI for ${var.CUSTOMER_NAME}.vultara.com.s3.${var.region}.amazonaws.com"
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = "${var.CUSTOMER_NAME}.vultara.com.s3.${var.region}.amazonaws.com"
     origin_id   = "${var.CUSTOMER_NAME}.vultara.com.s3.${var.region}.amazonaws.com"
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.new_oai.cloudfront_access_identity_path
+    }
   }
 
   enabled             = true
