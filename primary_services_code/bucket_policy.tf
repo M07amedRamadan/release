@@ -3,6 +3,11 @@
 resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
   bucket = aws_s3_bucket.New_Customer_Bucket.id
 
+  # Ensure that the CloudFront Origin Access Identity is created before applying the updated bucket policy
+  lifecycle {
+    create_before_destroy = true
+  }
+
   policy = jsonencode({
     "Version": "2008-10-17",
     "Id": "PolicyForCloudFrontPrivateContent",
