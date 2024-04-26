@@ -11,7 +11,7 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
         "Sid": "1",
         "Effect": "Allow",
         "Principal": {
-          "AWS": "${aws_cloudfront_origin_access_identity.legacy_oai.iam_arn}"
+          "AWS": "${aws_cloudfront_origin_access_identity.new_oai.iam_arn}"
         },
         "Action": "s3:GetObject",
         "Resource": "arn:aws:s3:::${var.CUSTOMER_NAME}.vultara.com/*"
