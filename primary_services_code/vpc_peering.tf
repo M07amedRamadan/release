@@ -36,7 +36,7 @@ tags = {
  resource "aws_route" "route_from_vultara_to_New_Customer_report_generator" {
    provider               = aws.peer
    route_table_id         = data.aws_route_table.specific_route_table.route_table_id
-   destination_cidr_block  = "aws_instance.report_generator.private_ip/32" # Using private IP since it's within the VPC
+   destination_cidr_block  = "${aws_instance.report_generator.private_ip}/32" # Using private IP since it's within the VPC
    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
  }
 
@@ -44,7 +44,7 @@ tags = {
  resource "aws_route" "route_from_vultara_to_New_Customer_vultara_scheduler" {
    provider               = aws.peer
    route_table_id         = data.aws_route_table.specific_route_table.route_table_id
-   destination_cidr_block = "aws_instance.vultara_scheduler.private_ip/32" # Using private IP since it's within the VPC
+   destination_cidr_block = "${aws_instance.vultara_scheduler.private_ip}/32" # Using private IP since it's within the VPC
    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
  }
  
