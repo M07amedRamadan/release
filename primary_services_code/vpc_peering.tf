@@ -25,23 +25,18 @@ tags = {
   }
 }
 
-resource "aws_prefix_list" "instance_prefix_list" {
-  name        = "instance-prefix-list"
-  prefix_list = ["10.0.1.250/32"]  # Replace with the IP address of your instance
-}
-
 # Create a route in New_Customer VPC's route table to the Vultara VPC via the peering connection
  resource "aws_route" "route_from_New_Customer_to_vultara_vpc" {
-   route_table_id         = aws_vpc.New_Customer_VPC.main_route_table_id
-   destination_prefix_list = aws_prefix_list.instance_prefix_list.id # the cidr_block of the Vultara VPC
-   vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
+   route_table_id             = aws_vpc.New_Customer_VPC.main_route_table_id
+   destination_cidr_block     = "10.0.1.250/32" # the cidr_block of the Vultara VPC
+   vpc_peering_connection_id  = aws_vpc_peering_connection.peering_connection.id
  }
 
  # Create a route in the Vultara VPC's route table to New_Customer VPC via the peering connection
  resource "aws_route" "route_from_vultara_to_New_Customer_report_generator" {
    provider               = aws.peer
    route_table_id         = data.aws_route_table.specific_route_table.route_table_id
-   destination_cidr_block = aws_instance.report_generator.private_ip # Using private IP since it's within the VPC
+   destination_cidr_block  = aws_instance.report_generator.private_ip # Using private IP since it's within the VPC
    vpc_peering_connection_id = aws_vpc_peering_connection.peering_connection.id
  }
 
