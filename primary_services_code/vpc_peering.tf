@@ -59,10 +59,3 @@ data "aws_route_table" "specific_route_table" {
   vpc_id      = data.aws_vpc.vultara_vpc.id
   route_table_id = "rtb-0671ab4ce03160f84"  # Replace with the ID of the specific route table
 }
-
-output "instance_ip-vultara_scheduler" {
-  value = aws_instance.vultara_scheduler.private_ip
-}
-output "instance_ip-report_generator" {
-  value = aws_instance.report_generator.private_ip
-}
