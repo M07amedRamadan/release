@@ -38,7 +38,7 @@ resource "aws_prefix_list" "instance_prefix_list" {
  }
 
  # Create a route in the Vultara VPC's route table to New_Customer VPC via the peering connection
- resource "aws_route" "route_from_vultara_to_New_Customer_VPC" {
+ resource "aws_route" "route_from_vultara_to_New_Customer_report_generator" {
    provider               = aws.peer
    route_table_id         = data.aws_route_table.specific_route_table.route_table_id
    destination_cidr_block = aws_instance.report_generator.private_ip # Using private IP since it's within the VPC
@@ -46,7 +46,7 @@ resource "aws_prefix_list" "instance_prefix_list" {
  }
 
  # Create a route in the Vultara VPC's route table to New_Customer VPC via the peering connection
- resource "aws_route" "route_from_vultara_to_New_Customer_VPC" {
+ resource "aws_route" "route_from_vultara_to_New_Customer_vultara_scheduler" {
    provider               = aws.peer
    route_table_id         = data.aws_route_table.specific_route_table.route_table_id
    destination_cidr_block = aws_instance.vultara_scheduler.private_ip # Using private IP since it's within the VPC
