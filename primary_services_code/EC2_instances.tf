@@ -12,7 +12,7 @@ resource "aws_instance" "report_generator" {
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
 
 tags = {
-  Name = "${var.CUSTOMER_NAME}-report-Prod"
+  Name = "${var.CUSTOMER_NAME}-Report-Generator"
   }
   user_data = file("${path.module}/report_script.sh")
 }
@@ -26,7 +26,7 @@ resource "aws_instance" "vultara_scheduler" {
   iam_instance_profile   = aws_iam_instance_profile.instance_profile.name
 
   tags = {
-  Name = "${var.CUSTOMER_NAME}-scheduler-Prod"
+  Name = "${var.CUSTOMER_NAME}-Scheduler"
   }
   user_data = file("${path.module}/scheduler_script.sh")
 }
