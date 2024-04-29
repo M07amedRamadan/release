@@ -9,7 +9,9 @@ const createAccessKey = async (user) => {
         .promise();
     const promises = [resp];
     try { // Update the cuurent user secret value in the secrets manager if found
+        const oldSecretValue = await secretsManager.getSecretValue({ SecretId: `${user.UserName}` }).promise();
         const secretValue = JSON.stringify({ 
+            ...oldSecretValue.SecretString,
             accessKeyId: resp.AccessKey.AccessKeyId,
             secretAccessKey: resp.AccessKey.SecretAccessKey
         });
