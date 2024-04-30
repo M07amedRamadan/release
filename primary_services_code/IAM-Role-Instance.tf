@@ -4,7 +4,7 @@ data "aws_iam_role" "vultara_role" {
  
 #IAM Instance Profile Used to attach IAM role with ec2 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = "Ec2-instance-profile"
+  name = "${var.CUSTOMER_NAME}-instance-profile"
   role = data.aws_iam_role.vultara_role.name
 }
 
