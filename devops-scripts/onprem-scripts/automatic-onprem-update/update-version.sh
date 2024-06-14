@@ -60,7 +60,7 @@ done
 vultara_up
 
 echo "Updating the configrations"
-/usr/local/bin/aws s3 cp s3://onsite-images0401/<enter the rest of the directory> ./docker-compose.yml > /dev/null 2>&1
+/usr/local/bin/aws s3 cp s3://onsite-images0401/<customer-name>/docker-compose.yml ./docker-compose.yml > /dev/null 2>&1
 Encrypt
 
 EMAIL_SUBJECT="BorgWarner deployment"
