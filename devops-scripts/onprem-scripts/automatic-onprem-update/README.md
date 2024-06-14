@@ -52,7 +52,7 @@ This guide explains how to create a cron job on a CentOS system that downloads a
     ```bash
     0 2 * * * /path/to/your/update-version.sh
     ```
-
+note in this step you must know what timeline does the server use (mostly it will be UTC so you need to consider that).
     Here’s a breakdown of the schedule format:
     ```
     * * * * * command_to_execute
