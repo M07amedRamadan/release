@@ -19,9 +19,6 @@ SES is used as a notification to tell us if the deployment has failed or succeed
 ### Important Note
 The script handles the case where the customer had an issue with pulling the image or a connectivity issue. In that case, the script will run the application on the old version.
 
-## Images
-The above images show the services the customer uses to update their application.
-
 ## How to run it?
 You need to put both the `function.sh` and `update-version.sh` in the same directory you put the docker-compose.yml file. Don't forget to add the value of the following: -
 1) RECIPIENT_EMAIL
