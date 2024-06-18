@@ -57,11 +57,12 @@ for imageName in "${vultara_images[@]}"; do
   update-image $imageName 1
 done
 
-vultara_up
-
 echo "Updating the configrations"
 /usr/local/bin/aws s3 cp s3://onsite-images0401/<customer-name>/docker-compose.yml ./docker-compose.yml > /dev/null 2>&1
+
 Encrypt
+
+vultara_up
 
 EMAIL_SUBJECT="BorgWarner deployment"
 EMAIL_BODY="Deployment version update on date ${date} has been successful"
