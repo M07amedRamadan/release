@@ -13,7 +13,7 @@ Repository >> Settings >> Actions >> Runners.
 
 ## How to run it?
 You need GitHub workflow with self runner and mongo script:- 
-1) create script `mongodb.sh` with execute command.
+1) create script `mongodb.sh` with execution permission.
 2) create Workflow with self runner.
 3) Create step as follwing:- 
 
