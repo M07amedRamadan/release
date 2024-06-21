@@ -39,8 +39,22 @@ on:
         default: '10.1.0.192/26'
         required: true
 
-      instance-type:
-        description: 'Enter the Intance Type for EC2 Instance Scheduler'
+      report-generator-instance-type:
+        description: 'Enter the Intance Type for EC2 Instance report generator, the default is suitable for report generator.'
+        default: 't2.micro'
+        required: true
+        type: choice
+        options:
+          - 't2.micro'
+          - 't2.small'
+          - 't2.medium'
+          - 't2.large'
+          - 't3.small'
+          - 't3.medium'
+          - 't3.large'
+      
+      scheduler-instance-type:
+        description: 'Enter the Intance Type for EC2 Instance Scheduler, the default is suitable for scheuler.'
         default: 't2.small'
         required: true
         type: choice
@@ -99,7 +113,7 @@ jobs:
         id: plan
         run: |
           cd primary_services_code
-          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="scheduler_instance_type=${{ github.event.inputs.scheduler-instance-type }}" -var="report_generator_instance_type=${{ github.event.inputs.report-generator-instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
       - name: Terraform Apply
@@ -107,7 +121,7 @@ jobs:
           cd primary_services_code
           chmod 777 ./report_script.sh
           chmod 777 ./scheduler_script.sh
-          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="instance_type=${{ github.event.inputs.instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="ami=${{ github.event.inputs.ami-type }}" -var="scheduler_instance_type=${{ github.event.inputs.scheduler-instance-type }}" -var="report_generator_instance_type=${{ github.event.inputs.report-generator-instance-type }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
 
 
     

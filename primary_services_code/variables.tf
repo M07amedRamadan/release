@@ -30,7 +30,11 @@ variable "ami" {
   type = string
 }
 
-variable "instance_type" {
+variable "report_generator_instance_type" {
+  type = string
+}
+
+variable "scheduler_instance_type" {
   type = string
 }
 
