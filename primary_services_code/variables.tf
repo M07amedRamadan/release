@@ -30,14 +30,6 @@ variable "ami" {
   type = string
 }
 
-variable "report_generator_instance_type" {
-  type = string
-}
-
-variable "scheduler_instance_type" {
-  type = string
-}
-
 variable "CUSTOMER_NAME" {
   type = string
 }
