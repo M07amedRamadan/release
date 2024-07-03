@@ -25,7 +25,8 @@ sudo bash -c "cat <<EOF > '/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatc
         \"collect_list\": [
           {
             \"file_path\": \"/var/log/syslog\",
-            \"log_group_name\": \"${instance_name}-Logs\"
+            \"log_group_name\": \"${var.CUSTOMER_NAME}-EC2-Logs\",
+            \"log_stream_name\": \"Instance-Stream\"
           }
         ]
       }
