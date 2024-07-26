@@ -60,4 +60,4 @@ jobs:
       run: npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
 
     - name: Push latest version
-      run: git push origin pre-master --follow-tags 
+      run: git push origin main --follow-tags 
