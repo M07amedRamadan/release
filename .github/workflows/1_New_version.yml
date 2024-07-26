@@ -26,6 +26,7 @@ on:
         type: choice
         default: 'Both'
         options: 
+        - Both
         - Production_Only
         - Trial_Only
         - None
