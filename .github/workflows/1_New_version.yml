@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: 0_New version
+name: 0_New version and deploy
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -19,6 +19,17 @@ on:
         - minor
         - major
 
+      DeployTo:
+        # Friendly description to be shown in the UI.
+        description: 'Which environment you want to deploy, default Trial and Production'
+        required: true
+        type: choice
+        default: 'Both'
+        options: 
+        - Production_Only
+        - Trial_Only
+        - None
+                
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -38,17 +49,14 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-    #   with:
-    #     ssh-key: ${{ secrets.DEPLOY_KEY }}
-
-    # - name: Setup Node.js
-    #   uses: actions/setup-node@v2
-    #   with:
-    #     node-version: '14'
-    #     cache: 'npm'
-
-    # - name: Install npm packages
-    #   run: npm ci
+    
+    - name: Install GitHub CLI
+      run: sudo apt-get install -y gh
+ 
+    - name: Authenticate GitHub CLI
+      env:
+        GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}
+      run: gh auth login --with-token <<< $GITHUB_TOKEN
 
     - name: Initialize mandatory git config
       run: |
@@ -61,3 +69,21 @@ jobs:
 
     - name: Push latest version
       run: git push origin main --follow-tags 
+
+    - name: Deploy Release to both environment 'Trial and Production'
+      run: |
+        echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+    
+    - name: Trigger Both Environment.
+      if: env.environment == 'Both'
+      run: |
+        gh workflow run production.yml
+        gh workflow run trial.yml
+
+    - name: Trigger Production Workflow
+      if: env.environment == 'Production_Only'
+      run: gh workflow run production.yml
+
+    - name: Trigger Trial Workflow
+      if: env.environment == 'Trial_Only'
+      run: gh workflow run trial.yml
