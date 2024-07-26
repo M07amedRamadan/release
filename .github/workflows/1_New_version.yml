@@ -36,8 +36,8 @@ jobs:
     
     - name: Checkout repository
       uses: actions/checkout@v4
-      # with:
-      #   token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+      with:
+         token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
     #   with:
     #     ssh-key: ${{ secrets.DEPLOY_KEY }}
 
