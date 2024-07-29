@@ -90,8 +90,8 @@ jobs:
     - name: Merge prod_branch to pre-master branch.
       if: success()
       run: |
-         gh pr create --base main --head prod_branch --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
-         pr_url=$(gh pr list --base main --head prod_branch --json number --jq '.[0].url')
+         gh pr create --base prod_branch --head main --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
+         pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
          gh pr merge $pr_url --merge 
       #gh pr merge prod_branch
 
