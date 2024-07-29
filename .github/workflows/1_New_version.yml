@@ -50,6 +50,13 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+         
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: us-east-1
     
     - name: Install GitHub CLI
       run: sudo apt-get install -y gh
@@ -93,5 +100,7 @@ jobs:
          gh pr create --base prod_branch --head main --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
          pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
          gh pr merge $pr_url --merge 
-      #gh pr merge prod_branch
-
+    # - name: success
+    #   if: failure()
+    #   run:  aws sns publish --topic-arn "arn:aws:sns:us-east-1:837491041518:cloudMonitoring" --message "The workflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}" --subject "Release Workflow Status"
+  
