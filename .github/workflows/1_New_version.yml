@@ -86,3 +86,10 @@ jobs:
     - name: Trigger Trial Workflow
       if: env.environment == 'Trial_Only'
       run: gh workflow run trial.yml
+
+    - name: Merge prod_branch to pre-master branch.
+      if: success()
+      run: |
+        gh pr create --base prod_branch --head prod_branch --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
+        pr_url=$(gh pr list --base prod_branch --head prod_branch --json number --jq '.[0].url')
+        gh pr merge $pr_url --merge
