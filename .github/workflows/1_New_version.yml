@@ -73,7 +73,7 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
     
-    - name: Trigger Both Environment.
+    - name: Trigger Both Environments.
       if: env.environment == 'Both'
       run: |
         gh workflow run production.yml
@@ -90,6 +90,6 @@ jobs:
     - name: Merge prod_branch to pre-master branch.
       if: success()
       run: |
-        gh pr create --base prod_branch --head prod_branch --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
-        pr_url=$(gh pr list --base prod_branch --head prod_branch --json number --jq '.[0].url')
+        gh pr create --base main --head prod --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
+        pr_url=$(gh pr list --base main --head prod --json number --jq '.[0].url')
         gh pr merge $pr_url --merge
