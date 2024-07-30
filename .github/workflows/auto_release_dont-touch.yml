@@ -1,6 +1,8 @@
 on:
-  repository_dispatch:
-    types: [trigger-workflow-b]
+  workflow_run:
+    workflows: ["0_New version and deploy"]
+    types:
+      - completed
 
 name: Auto Release Process_Do not Touch
 
@@ -68,13 +70,20 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
-      - name: Process User Input
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: my-data
+
+      - name: Process data
         run: |
-          echo "User input received: ${{ github.event.client_payload.release_notes }}"
+          Notes=$(cat my-data/data.txt)
+          echo "Notes=$Notes" >> GITHUB_ENV
+          echo "Processing data: ${{env.Notes}}"
           
       - name: add notes using GH-cli
         run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{ github.event.client_payload.release_notes }}
+          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{env.Notes}}
                 
 
  
