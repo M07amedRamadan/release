@@ -51,23 +51,26 @@ jobs:
             });
 
 
-  append-release-notes:
-    needs: create-github-release
+  append-notes:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install GitHub CLI
-        run: sudo apt-get install -y gh
- 
-      - name: Authenticate GitHub CLI
-        run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+      - name: Get release body
+        id: get_release
+        run: echo "::set-output name=body::$(cat $GITHUB_EVENT_PATH.release.body)"
 
-      - name: Append Release Notes
-        run: |
-          RELEASE_TAG=$(git describe --tags --abbrev=0)
-          CURRENT_NOTES=$(gh release view $RELEASE_TAG --json body --jq .body)
-          ADDITIONAL_NOTES="Additional notes here"
-          UPDATED_NOTES="${CURRENT_NOTES}\n\n${ADDITIONAL_NOTES}"
-          gh release edit $RELEASE_TAG --notes "$UPDATED_NOTES"
+      - name: Update release with additional notes
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+          script: |
+            const body = `<additional notes>\n\n${process.env.INPUT_BODY}`;
+            github.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: context.payload.release.id,
+              body: body
+            });
