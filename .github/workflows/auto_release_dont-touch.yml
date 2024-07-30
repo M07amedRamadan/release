@@ -62,8 +62,8 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-             const releaseId = '${{env.RELEASE_VERSION}}';
-              await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
+             const releaseId = `${{env.RELEASE_VERSION}}`;
+             await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
                 body: "Additional release notes here"
               });
 
