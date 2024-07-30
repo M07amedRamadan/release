@@ -68,7 +68,7 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-             await github.request('POST /repos/${{ github.repository }}/releases/${{env.RELEASE_VERSION}}/update', {
+             await github.request('POST /repos/${{ github.repository }}/releases/v${{ env.RELEASE_VERSION }}/update', {
                 body: "Additional release notes here"
               });
 
