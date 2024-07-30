@@ -30,8 +30,12 @@ on:
         - Production_Only
         - Trial_Only
         - None
-                
 
+      release_notes:
+        description: 'Release Notes'
+        required: true
+        default: 'No release notes provided.'
+        
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel.
 jobs:
   # This workflow contains a single job called "bump-version"
@@ -75,6 +79,20 @@ jobs:
 
     - name: Push latest version
       run: git push origin main --follow-tags 
+
+    
+    - name: Release Notes.     
+      run: |
+        release_id=$(curl -s \
+          -H "Authorization: token ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.tag }} \
+          | jq -r .id)
+
+        curl -s \
+          -X PATCH \
+          -H "Authorization: token ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}" \
+          -d "{\"body\": \"${{ github.event.inputs.release_notes }}\"}" \
+          https://api.github.com/repos/${{ github.repository }}/releases/$release_id
 
     - name: Deploy Release to both environment 'Trial and Production'
       run: |
