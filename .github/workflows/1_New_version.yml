@@ -80,14 +80,19 @@ jobs:
     - name: Push latest version
       run: git push origin main --follow-tags 
 ######################################
+    - name: Extract version from branch name (for release branches)
+      run: |
+          BRANCH_NAME="${{ github.ref }}"
+          VERSION=${BRANCH_NAME#refs/tags/}
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
       with:
-        tag_name: v${{ github.event.inputs.version }}
-        release_name: Release v${{ github.event.inputs.version }}
+        tag_name: "${{ github.ref }}"
+        release_name: "v${{ env.RELEASE_VERSION }} release"
         draft: false
         prerelease: false
 
