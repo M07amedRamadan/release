@@ -85,14 +85,6 @@ jobs:
         git push origin main --follow-tags 
         echo "the version is: ${{steps.version.outputs.*}}"
 
-    - name: Append Release Notes
-      run: |
-          RELEASE_TAG=$(git describe --tags --abbrev=0)
-          CURRENT_NOTES=$(gh release view $RELEASE_TAG --json body --jq .body)
-          ADDITIONAL_NOTES="Additional notes here"
-          UPDATED_NOTES="${CURRENT_NOTES}\n\n${ADDITIONAL_NOTES}"
-          gh release edit $RELEASE_TAG --notes "$UPDATED_NOTES"
-
     - name: Deploy Release to both environment 'Trial and Production'
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
