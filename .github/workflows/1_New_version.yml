@@ -125,7 +125,7 @@ jobs:
           github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
           script: |
             github.actions.createWorkflowDispatch({
-              workflow_file: 'path/to/workflow-b.yml',
+              workflow_file: '.github/workflows/auto_release_dont-touch.yml',
               ref: 'main',
               inputs: {
                 data: '${{ steps.process_data.outputs.data }}'
