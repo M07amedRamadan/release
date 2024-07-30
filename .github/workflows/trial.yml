@@ -11,16 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get git output names
-      id: git
-      shell: bash
-      run: |
-          if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
-            REF=$(printf "%q" "${{ github.ref }}")
-            REF_BRANCH=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
-            echo "::set-output name=current_branch::$(eval printf "%s" "$REF_BRANCH")"
-          fi
-   
+
     - name: Checkout
       uses: actions/checkout@v3
 
