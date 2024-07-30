@@ -120,4 +120,5 @@ jobs:
     - name: Send data to auto-release file.
       uses: actions/upload-artifact@v3
       with:
-          name: data.txt
+          name: my-data
+          path: data.txt
