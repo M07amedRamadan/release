@@ -75,10 +75,15 @@ jobs:
       env:
         git_email: "${{ github.actor }}@vultara.com"
     - name: bump version
-      run: npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
+      id: version
+      run: |
+        npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
+        echo "npm version ${{ github.event.inputs.version }} --tag-version-prefix=""" >> $GITHUB_OUTPUT
 
     - name: Push latest version
-      run: git push origin main --follow-tags 
+      run: |
+        git push origin main --follow-tags 
+        echo "the version is: ${{steps.version.outputs.*}}"
 
     - name: Deploy Release to both environment 'Trial and Production'
       run: |
