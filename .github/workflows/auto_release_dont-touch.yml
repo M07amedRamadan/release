@@ -52,8 +52,8 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
-              # const releaseId = response.data.id;
-              # echo "releaseId= $releaseId" >> GITHUB_OUTPUT
+          # const releaseId = response.data.id;
+          # echo "releaseId= $releaseId" >> GITHUB_OUTPUT
     
 
   append-notes:
