@@ -3,14 +3,13 @@ name: Deploy Production
 on:
   push:
     branches:
-    - prod_branch
+    - master
   workflow_dispatch:
 jobs:
   prod-deploy:
     runs-on: ubuntu-latest
 
-  steps:
-  
+    steps:
     - name: Checkout
       uses: actions/checkout@v3
 
