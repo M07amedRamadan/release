@@ -78,7 +78,7 @@ jobs:
             }
 
             const currentNotes = release.body || '';
-            const additionalNotes = 'Full Changelog: 1.0.28...1.0.29\n\nAdditional notes here';
+            const additionalNotes = 'Additional notes here';
             const updatedNotes = `${currentNotes}\n\n${additionalNotes}`;
 
             await github.rest.releases.update({
@@ -88,5 +88,5 @@ jobs:
               body: updatedNotes,
             });
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
