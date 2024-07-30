@@ -57,6 +57,12 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
+
+      - name: print the release ID
+        run: |
+            echo "wait"
+            sleep 60
+          
                 
       - name: Append Notes to Release
         uses: actions/github-script@v5
