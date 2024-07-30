@@ -1,7 +1,6 @@
 on:
-  push:
-    tags:
-      - '*'
+  repository_dispatch:
+    types: [trigger-workflow-b]
 
 name: Auto Release Process_Do not Touch
 
@@ -69,17 +68,13 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
-
+      - name: Process User Input
+        run: |
+          echo "User input received: ${{ github.event.client_payload.release_notes }}"
+          
       - name: add notes using GH-cli
         run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes release_notes.md
+          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{ github.event.client_payload.release_notes }}
                 
-      # - name: Append Notes to Release
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #        await github.request('POST /repos/${{ github.repository }}/releases/v${{ env.RELEASE_VERSION }}/update', {
-      #           body: "Additional release notes here"
-      #         });
 
  
