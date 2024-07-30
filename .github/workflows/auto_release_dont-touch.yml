@@ -36,6 +36,18 @@ jobs:
       RELEASE_ID: ${{ steps.release.outputs.releaseId}}
 
     steps:
+  
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+           token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+      
+      - name: Install GitHub CLI
+        run: sudo apt-get install -y gh
+   
+      - name: Authenticate GitHub CLI
+        run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+        
       - name: Extract version from branch name (for release branches)
         id: release
         run: |
@@ -58,38 +70,16 @@ jobs:
               generate_release_notes: true
                 });
 
-      - name: print the release ID
+      - name: add notes using GH-cli
         run: |
-            echo "wait"
-            sleep 60
-          
+          gh release edit v${{ env.RELEASE_VERSION }} --notes release_notes.md
                 
-      - name: Append Notes to Release
-        uses: actions/github-script@v5
-        with:
-          script: |
-             await github.request('POST /repos/${{ github.repository }}/releases/v${{ env.RELEASE_VERSION }}/update', {
-                body: "Additional release notes here"
-              });
-
-  # append-notes:
-  #   needs: create-github-release
-  #   runs-on: ubuntu-latest
-  #   env: 
-  #     RELEASE_ID: ${{ needs.create-github-release.outputs.RELEASE_ID }}
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: print the release ID
-  #       run: |
-  #         echo "the releaseID is= ${{ env.RELEASE_ID }} "
-        
       # - name: Append Notes to Release
       #   uses: actions/github-script@v5
       #   with:
       #     script: |
-      #        const releaseId = '${{env.RELEASE_ID}}';
-      #         await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
+      #        await github.request('POST /repos/${{ github.repository }}/releases/v${{ env.RELEASE_VERSION }}/update', {
       #           body: "Additional release notes here"
       #         });
+
+ 
