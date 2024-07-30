@@ -32,6 +32,8 @@ jobs:
       contents: write
       statuses: write
     # needs: publish
+    outputs: 
+      RELEASE_ID: ${{ steps.release.outputs.releaseI}}
 
     steps:
       - name: Extract version from branch name (for release branches)
@@ -40,53 +42,37 @@ jobs:
           VERSION=${BRANCH_NAME#refs/tags/}
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
       - name: Create Release Notes
+        id: release
         uses: actions/github-script@v7
         with:
           github-token: ${{github.token}}
           script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+              const response = await github.request('POST /repos/${{ github.repository }}/releases', {
               tag_name: "${{ github.ref }}",
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
-            });
-
+                });
+              const releaseId = response.data.id;
+              echo "releaseId= $releaseId" >> GITHUB_OUTPUT
+              core.setOutput('release_id', releaseId);  // Save the release ID for future reference
+    
 
   append-notes:
     needs: create-github-release
     runs-on: ubuntu-latest
+    env: 
+      RELEASE_ID: ${{ needs.create-github-release.outputs.RELEASE_ID }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get release body
-        id: get_release
-        run: echo "::set-output name=body::$(cat $GITHUB_EVENT_PATH.release.body)"
-
+      - name: print the release ID
+        run: echo "the releaseID is= ${{env.RELEASE_ID}} "
       - name: Append Notes to Release
         uses: actions/github-script@v5
         with:
           script: |
-            const { data: release } = await github.rest.releases.getByTag({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag: process.env.RELEASE_TAG,
-            });
-
-            if (!release) {
-              core.setFailed(`Release with tag ${process.env.RELEASE_TAG} not found.`);
-              return;
-            }
-
-            const currentNotes = release.body || '';
-            const additionalNotes = 'Additional notes here';
-            const updatedNotes = `${currentNotes}\n\n${additionalNotes}`;
-
-            await github.rest.releases.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: release.id,
-              body: updatedNotes,
-            });
-        env:
-          RELEASE_TAG: ${{ github.ref }}
-          GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+             const releaseId = '${{env.RELEASE_ID}}';
+              await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
+                body: "Additional release notes here"
+              });
