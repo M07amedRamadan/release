@@ -62,16 +62,31 @@ jobs:
         id: get_release
         run: echo "::set-output name=body::$(cat $GITHUB_EVENT_PATH.release.body)"
 
-      - name: Update release with additional notes
+      - name: Append Notes to Release
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
           script: |
-            const octokit = github.getOctokit(process.env.VERSION_UPDATE_WORKFLOW_TOKEN);
-            const body = `<additional notes>\n\n${process.env.INPUT_BODY}`;
-            octokit.repos.updateRelease({
+            const { data: release } = await github.rest.releases.getByTag({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              release_id: context.payload.release.id,
-              body: body
+              tag: process.env.RELEASE_TAG,
             });
+
+            if (!release) {
+              core.setFailed(`Release with tag ${process.env.RELEASE_TAG} not found.`);
+              return;
+            }
+
+            const currentNotes = release.body || '';
+            const additionalNotes = 'Full Changelog: 1.0.28...1.0.29\n\nAdditional notes here';
+            const updatedNotes = `${currentNotes}\n\n${additionalNotes}`;
+
+            await github.rest.releases.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: release.id,
+              body: updatedNotes,
+            });
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
