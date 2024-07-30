@@ -1,8 +1,7 @@
 on:
-  workflow_run:
-    workflows: ["0_New version and deploy"]
-    types:
-      - completed
+    push:
+      tags:
+      - '*'
 
 name: Auto Release Process_Do not Touch
 
