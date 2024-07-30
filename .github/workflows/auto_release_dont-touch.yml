@@ -42,8 +42,11 @@ jobs:
           BRANCH_NAME="${{ github.ref }}"
           VERSION=${BRANCH_NAME#refs/tags/}
           echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "releaseId=$VERSION" >> GITHUB_OUTPUT
-          echo "releaseId=$VERSION"
+
+      - name: print the release ID
+        run: |
+            echo "the releaseID is= ${{ env.RELEASE_VERSION }} "
+          
       - name: Create Release Notes
         uses: actions/github-script@v7
         with:
@@ -54,24 +57,34 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
-    
-
-  append-notes:
-    needs: create-github-release
-    runs-on: ubuntu-latest
-    env: 
-      RELEASE_ID: ${{ needs.create-github-release.outputs.RELEASE_ID }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: print the release ID
-        run: echo "the releaseID is= ${{env.RELEASE_ID}} "
+                
       - name: Append Notes to Release
         uses: actions/github-script@v5
         with:
           script: |
-             const releaseId = '${{env.RELEASE_ID}}';
+             const releaseId = '${{env.RELEASE_VERSION}}';
               await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
                 body: "Additional release notes here"
               });
+
+  # append-notes:
+  #   needs: create-github-release
+  #   runs-on: ubuntu-latest
+  #   env: 
+  #     RELEASE_ID: ${{ needs.create-github-release.outputs.RELEASE_ID }}
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+
+  #     - name: print the release ID
+  #       run: |
+  #         echo "the releaseID is= ${{ env.RELEASE_ID }} "
+        
+      # - name: Append Notes to Release
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #        const releaseId = '${{env.RELEASE_ID}}';
+      #         await github.request('POST /repos/${{ github.repository }}/releases/${releaseId}/update', {
+      #           body: "Additional release notes here"
+      #         });
