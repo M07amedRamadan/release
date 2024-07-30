@@ -2,27 +2,11 @@ name: Auto Release Process_Do not Touch
 
 on:
   workflow_run:
-    workflows: ["0_New version and deploy"]
+    workflows: "0_New version and deploy"
     types:
       - completed
 
 jobs:
-  # publish:
-  #   name: Publish to npm
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '14'
-  #         cache: 'npm'
-  #     - name: Publish
-  #       run: |
-  #         npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-  #         npm ci
-  #         npm publish
-  #       env:
-  #         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   create-github-release:
     name: Create GitHub Release
@@ -75,15 +59,13 @@ jobs:
         with:
           name: my-data
 
-      - name: Process data
+      - name: Process Data
         run: |
-          Notes=$(cat my-data/data.txt)
-          echo "Notes=$Notes" >> GITHUB_ENV
-          echo "Processing data: ${{env.Notes}}"
+          echo "Data received from Workflow A: ${{ github.event.workflow_run.payload.inputs.data }}"
           
       - name: add notes using GH-cli
         run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{env.Notes}}
+          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{ github.event.workflow_run.payload.inputs.data }}
                 
 
  
