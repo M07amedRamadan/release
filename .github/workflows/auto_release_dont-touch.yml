@@ -67,8 +67,9 @@ jobs:
         with:
           github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
           script: |
+            const octokit = github.getOctokit(process.env.VERSION_UPDATE_WORKFLOW_TOKEN);
             const body = `<additional notes>\n\n${process.env.INPUT_BODY}`;
-            github.repos.updateRelease({
+            octokit.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: context.payload.release.id,
