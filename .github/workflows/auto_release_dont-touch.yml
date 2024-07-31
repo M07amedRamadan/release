@@ -59,13 +59,10 @@ jobs:
         # Update the release with the combined notes
       - name: add notes using GH-cli
         run: |
-          existing_notes=$(gh api repos/:owner/:repo/releases/tags/${RELEASE_VERSION} --jq '.body')
+          NEW_NOTES="New notes"
+          existing_notes=$(gh api repos/:M07amedRamadan/:${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} --jq '.body')
           echo "$existing_notes"
           combined_notes="${existing_notes}\n${NEW_NOTES}"
           echo "$combined_notes"
           gh release edit ${{ env.RELEASE_VERSION }} --notes "${combined_notes}"
                 
-      - name: add notes using GH-cli
-        run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes "Second Notes"
- 
