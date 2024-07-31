@@ -89,10 +89,11 @@ jobs:
     - name: Merge pre-master to prod_branch
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
-          git checkout prod_branch
-          git pull origin prod_branch
-          git merge main --no-edit
-          git push origin prod_branch
+          gh pr create --base prod_branch --head main --title "Merge production into pre-master" --body "Merging changes from production into pre-master"
+          pr_url=$(gh pr list --base pre-master --head prod_branch --json number --jq '.[0].url')
+          pr_number=$(basename "${pr_url}")
+          gh pr comment ${pr_number} --body "${{ github.event.inputs.release_notes }}"
+          gh pr merge $pr_url --merge
 
     # - name: Merge pre-master to master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
