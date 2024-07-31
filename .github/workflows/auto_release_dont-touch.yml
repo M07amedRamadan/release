@@ -58,5 +58,7 @@ jobs:
         run: |
           gh release edit ${{ env.RELEASE_VERSION }} --notes "Note"
                 
-
+      - name: add notes using GH-cli
+        run: |
+          gh release edit ${{ env.RELEASE_VERSION }} --notes "Second Notes"
  
