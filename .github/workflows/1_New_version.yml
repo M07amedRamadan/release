@@ -121,8 +121,7 @@ jobs:
 
     - name: Add comment to PR using GH-cli
       run: |
-        pr_url=$(gh pr list --base pre-master --head prod_branch --json url --jq '.[0].url')
+        pr_url=$(gh pr list --base prod_branch --head main --json url --jq '.[0].url')
         pr_number=$(basename "${pr_url}")
-        # Print the PR number (for debugging purposes)
         echo "PR Number: ${pr_number}"
         gh pr comment ${pr_number} --body "New Comment"
