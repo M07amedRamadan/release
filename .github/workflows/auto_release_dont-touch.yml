@@ -56,7 +56,7 @@ jobs:
                   
       - name: add notes using GH-cli
         run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes ${{ github.event.workflow_run.payload.inputs.data }}
+          gh release edit ${{ env.RELEASE_VERSION }} --notes "Note"
                 
 
  
