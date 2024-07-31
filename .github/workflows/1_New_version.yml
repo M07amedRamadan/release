@@ -19,21 +19,21 @@ on:
         - minor
         - major
 
-      # DeployTo:
-      #   # Friendly description to be shown in the UI.
-      #   description: 'Which environment you want to deploy, default Trial and Production'
-      #   required: true
-      #   type: choice
-      #   default: 'Both'
-      #   options: 
-      #   - Both
-      #   - Production_Only
-      #   - Trial_Only
-      #   - None
+      DeployTo:
+        # Friendly description to be shown in the UI.
+        description: 'Which environment do you want to deploy, default Trial and Production'
+        required: true
+        type: choice
+        default: 'Both'
+        options: 
+        - Both
+        - Production_Only
+        - Trial_Only
+        - None
 
-      # release_notes:
-      #   description: 'Release Notes'
-      #   default: 'Notes'
+      release_notes:
+        description: 'Release Notes'
+        # default: 'Notes'
         
 # A workflow run comprises one or more jobs that can run sequentially or in parallel.
 jobs:
@@ -72,33 +72,43 @@ jobs:
       run: |
           new_version=$(npm version patch --tag-version-prefix="" )
           echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
-          echo "RELEASE_VERSION=$new_version"
 
     - name: Generate release notes
       run: |
         git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate > release_notes.txt
         
-    - name: Create new release
+    - name: Create a new release
       run: |
         gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
+
+    - name: update current add notes using GH-cli
+      run: |
+          NEW_NOTES="${{ github.event.inputs.release_notes }}"
+          existing_notes=$(gh api repos/:owner/:repo/releases/tags/${{ env.RELEASE_VERSION }} --jq '.body')
+          echo "${existing_notes}"
+          combined_notes="${NEW_NOTES} 
+          ---
+          ${existing_notes}"
+          echo -e "${combined_notes}" > combined_notes.txt
+          gh release edit ${{ env.RELEASE_VERSION }} --notes "$(cat combined_notes.txt)"
             
-    # - name: Deploy Release to both environment 'Trial and Production'
-    #   run: |
-    #     echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+    - name: Deploy Release to both environment 'Trial and Production'
+      run: |
+        echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
     
-    # # - name: Trigger Both Environments.
-    #   if: env.environment == 'Both'
-    #   run: |
-    #     gh workflow run production.yml
-    #     gh workflow run trial.yml
+    - name: Trigger Both Environments.
+      if: env.environment == 'Both'
+      run: |
+        gh workflow run production.yml
+        gh workflow run trial.yml
 
-    # - name: Trigger Production Workflow
-    #   if: env.environment == 'Production_Only'
-    #   run: gh workflow run production.yml
+    - name: Trigger Production Workflow
+      if: env.environment == 'Production_Only'
+      run: gh workflow run production.yml
 
-    # - name: Trigger Trial Workflow
-    #   if: env.environment == 'Trial_Only'
-    #   run: gh workflow run trial.yml
+    - name: Trigger Trial Workflow
+      if: env.environment == 'Trial_Only'
+      run: gh workflow run trial.yml
 
     # - name: Merge prod_branch back to pre-master branch.
     #   if: success()
@@ -113,7 +123,14 @@ jobs:
 
     # - name: Add comment to PR using GH-cli
     #   run: |
-    #     pr_url=$(gh pr list --base prod_branch --head main --json url --jq '.[0].url')
+    #     pr_url=$(gh pr list --base master --head pre-master --json url --jq '.[0].url')
+    #     pr_number=$(basename "${pr_url}")
+    #     echo "PR Number: ${pr_number}"
+    #     gh pr comment ${pr_number} --body "New Comment"
+
+    # - name: Add comment to PR using GH-cli
+    #   run: |
+    #     pr_url=$(gh pr list --base prod_branch --head pre-master --json url --jq '.[0].url')
     #     pr_number=$(basename "${pr_url}")
     #     echo "PR Number: ${pr_number}"
     #     gh pr comment ${pr_number} --body "New Comment"
