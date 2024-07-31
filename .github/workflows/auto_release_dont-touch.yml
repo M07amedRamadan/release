@@ -66,7 +66,7 @@ jobs:
           NEW_NOTES="New notes"
           existing_notes=$(gh api repos/:owner/:repo/releases/tags/${{ env.RELEASE_VERSION }} --jq '.body')
           echo "${existing_notes}"
-          combined_notes="${NEW_NOTES}\n\n---\n\n${existing_notes}"
+          combined_notes="${NEW_NOTES} \\n\\n---\\n\\n ${existing_notes}"
           echo "${combined_notes}"
           gh release edit ${{ env.RELEASE_VERSION }} --notes "${combined_notes}"
                 
