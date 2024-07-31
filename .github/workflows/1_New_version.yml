@@ -81,33 +81,27 @@ jobs:
     - name: Create a new release
       run: |
         gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
-            
-    # - name: Deploy Release to both environment Trial and Production
-    #   run: |
-    #     echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+
+    - name: Deploy Release to both environment Trial and Production
+      run: |
+        echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
     
-    # - name: Trigger Both Environments.
-    #   if: env.environment == 'Both'
-    #   run: |
-    #     gh workflow run deploy_nikola_to_aws.yml
-    #     gh workflow run deploy_app_on_prem.yml
-    #     gh workflow run deploy_trial_server.yml
-    #     gh workflow run deploy_internal_to_aws.yml
-    #     gh workflow run deploy_app_to_aws.yml
+    - name: Merge pre-master to prod_branch
+      if: env.environment == 'Both' || env.environment == 'Production_Only'
+      run: |
+          git checkout prod_branch
+          git pull origin prod_branch
+          git merge main --no-edit
+          git push origin prod_branch
 
-    # - name: Trigger Production Workflow
-    #   if: env.environment == 'Production_Only'
+    # - name: Merge pre-master to master
+    #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
-    #     gh workflow run deploy_nikola_to_aws.yml
-    #     gh workflow run deploy_app_on_prem.yml
-
-    # - name: Trigger Trial Workflow
-    #   if: env.environment == 'Trial_Only'
-    #   run: |
-    #     gh workflow run deploy_trial_server.yml
-    #     gh workflow run deploy_internal_to_aws.yml
-    #     gh workflow run deploy_app_to_aws.yml
-
+    #       git checkout master
+    #       git pull origin master
+    #       git merge pre-master --no-edit
+    #       git push origin master
+          
     # - name: Merge prod_branch back to pre-master branch.
     #   if: success()
     #   run: |
