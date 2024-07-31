@@ -61,7 +61,6 @@ jobs:
         git_email: "${{ github.actor }}@vultara.com"
 
     - name: Bump version
-      id: version
       run: |
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
         
@@ -75,17 +74,13 @@ jobs:
           echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$new_version"
 
-    - name: Create Release Notes
-      uses: actions/github-script@v7
-      with:
-          github-token: ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}
-          script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: "${{ github.ref }}",
-              name: "v${{ env.RELEASE_VERSION }} release",
-              generate_release_notes: true
-            });
-
+    - name: Generate release notes
+      run: |
+        git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate > release_notes.txt
+        
+    - name: Create new release
+      run: |
+        gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
             
     # - name: Deploy Release to both environment 'Trial and Production'
     #   run: |
