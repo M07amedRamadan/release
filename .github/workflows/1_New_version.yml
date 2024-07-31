@@ -71,14 +71,14 @@ jobs:
 
     - name: Extract version from branch name (for release branches)
       run: |
-          new_version=$(npm version patch --tag-version-prefix="" --no-git-tag-version | grep -oP '(?<=\d\.\d\.\d)(?=\n|$)')
+          new_version=$(npm version patch --tag-version-prefix="" )
           echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$new_version"
 
     - name: Create Release Notes
       uses: actions/github-script@v7
       with:
-          github-token: ${{github.token}}
+          github-token: ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}
           script: |
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
               tag_name: "${{ github.ref }}",
