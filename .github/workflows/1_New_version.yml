@@ -119,7 +119,10 @@ jobs:
         echo "data=${{github.event.inputs.release_notes}}" >> data.txt
         cat data.txt
 
-###################################
     - name: Add comment to PR using GH-cli
       run: |
-        gh pr comment 3 --body "comment to this PR from Workflow action"
+        pr_url=$(gh pr list --base pre-master --head prod_branch --json url --jq '.[0].url')
+        pr_number=$(basename "${pr_url}")
+        # Print the PR number (for debugging purposes)
+        echo "PR Number: ${pr_number}"
+        gh pr comment ${pr_number} --body "New Comment"
