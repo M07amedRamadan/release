@@ -129,5 +129,5 @@ jobs:
           curl -X POST \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" \
-            https://api.github.com/repos/release/dispatches \
+            https://api.github.com/repos/M07amedRamadan/release/dispatches \
             -d '{"event_type":"trigger-consumer"}'
