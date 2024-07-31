@@ -38,33 +38,19 @@ on:
 # A workflow run comprises one or more jobs that can run sequentially or in parallel.
 jobs:
   # This workflow contains a single job called "bump-version"
-  bump-version:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    outputs:
-      data: ${{ steps.process_data.outputs.data }}
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    # Check out the content (source branch).  Use a deploy key so that
-    # when we push changes, it will trigger the release workflow
-    # run that runs on: tag. (Using the GitHub token would
-    # not run the workflow to prevent infinite recursion.)
-    
+ bump-version:
+  runs-on: ubuntu-latest
+  outputs:
+    data: ${{ steps.process_data.outputs.data }}
+  steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
          
-    # - name: Configure AWS Credentials
-    #   uses: aws-actions/configure-aws-credentials@v2
-    #   with:
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-region: us-east-1
-    
     - name: Install GitHub CLI
       run: sudo apt-get install -y gh
- 
+
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
 
@@ -74,7 +60,8 @@ jobs:
         git config user.email $git_email
       env:
         git_email: "${{ github.actor }}@vultara.com"
-    - name: bump version
+
+    - name: Bump version
       id: version
       run: |
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
@@ -83,7 +70,16 @@ jobs:
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
-        echo "the version is: ${{steps.version.outputs.*}}"
+        echo "the version is: ${{ steps.version.outputs.*}}"
+
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate > release_notes.txt
+
+    - name: Create new release
+      run: |
+        gh release create v${{ steps.version.outputs.* }} -t "Release v${{ steps.version.outputs.* }}" -F release_notes.txt
 
     - name: Deploy Release to both environment 'Trial and Production'
       run: |
@@ -113,11 +109,6 @@ jobs:
     # - name: Send notification at the failure.
     #   if: failure()
     #   run:  aws sns publish --topic-arn "arn:aws:sns:us-east-1:837491041518:cloudMonitoring" --message "The workflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}" --subject "Release Workflow Status"
-
-    - name: Accept data from input
-      run: |
-        echo "data=${{github.event.inputs.release_notes}}" >> data.txt
-        cat data.txt
 
     - name: Add comment to PR using GH-cli
       run: |
