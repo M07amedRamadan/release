@@ -19,21 +19,21 @@ on:
         - minor
         - major
 
-      DeployTo:
-        # Friendly description to be shown in the UI.
-        description: 'Which environment you want to deploy, default Trial and Production'
-        required: true
-        type: choice
-        default: 'Both'
-        options: 
-        - Both
-        - Production_Only
-        - Trial_Only
-        - None
+      # DeployTo:
+      #   # Friendly description to be shown in the UI.
+      #   description: 'Which environment you want to deploy, default Trial and Production'
+      #   required: true
+      #   type: choice
+      #   default: 'Both'
+      #   options: 
+      #   - Both
+      #   - Production_Only
+      #   - Trial_Only
+      #   - None
 
-      release_notes:
-        description: 'Release Notes'
-        default: 'Notes'
+      # release_notes:
+      #   description: 'Release Notes'
+      #   default: 'Notes'
         
 # A workflow run comprises one or more jobs that can run sequentially or in parallel.
 jobs:
@@ -64,13 +64,17 @@ jobs:
       id: version
       run: |
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
-        new_version=$(npm version ${{ github.event.inputs.version }} --tag-version-prefix="" --no-git-tag-version | grep 'version' | awk -F: '{print $2}' | xargs)
-        echo "VERSION=${new_version}" >> $GITHUB_ENV
-        echo "Release v${{ env.VERSION }}"
         
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
+
+    - name: Extract version from branch name (for release branches)
+      run: |
+          BRANCH_NAME="${{ github.ref }}"
+          VERSION=${BRANCH_NAME#refs/tags/}
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$VERSION"
 
     - name: Generate release notes
       id: release_notes
@@ -79,25 +83,25 @@ jobs:
 
     - name: Create new release
       run: |
-        gh release create v${{ env.VERSION }} -t "Release v${{ env.VERSION }}" -F release_notes.txt
+        gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
 
-    - name: Deploy Release to both environment 'Trial and Production'
-      run: |
-        echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+    # - name: Deploy Release to both environment 'Trial and Production'
+    #   run: |
+    #     echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
     
-    - name: Trigger Both Environments.
-      if: env.environment == 'Both'
-      run: |
-        gh workflow run production.yml
-        gh workflow run trial.yml
+    # # - name: Trigger Both Environments.
+    #   if: env.environment == 'Both'
+    #   run: |
+    #     gh workflow run production.yml
+    #     gh workflow run trial.yml
 
-    - name: Trigger Production Workflow
-      if: env.environment == 'Production_Only'
-      run: gh workflow run production.yml
+    # - name: Trigger Production Workflow
+    #   if: env.environment == 'Production_Only'
+    #   run: gh workflow run production.yml
 
-    - name: Trigger Trial Workflow
-      if: env.environment == 'Trial_Only'
-      run: gh workflow run trial.yml
+    # - name: Trigger Trial Workflow
+    #   if: env.environment == 'Trial_Only'
+    #   run: gh workflow run trial.yml
 
     # - name: Merge prod_branch back to pre-master branch.
     #   if: success()
@@ -110,9 +114,9 @@ jobs:
     #   if: failure()
     #   run:  aws sns publish --topic-arn "arn:aws:sns:us-east-1:837491041518:cloudMonitoring" --message "The workflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}" --subject "Release Workflow Status"
 
-    - name: Add comment to PR using GH-cli
-      run: |
-        pr_url=$(gh pr list --base prod_branch --head main --json url --jq '.[0].url')
-        pr_number=$(basename "${pr_url}")
-        echo "PR Number: ${pr_number}"
-        gh pr comment ${pr_number} --body "New Comment"
+    # - name: Add comment to PR using GH-cli
+    #   run: |
+    #     pr_url=$(gh pr list --base prod_branch --head main --json url --jq '.[0].url')
+    #     pr_number=$(basename "${pr_url}")
+    #     echo "PR Number: ${pr_number}"
+    #     gh pr comment ${pr_number} --body "New Comment"
