@@ -71,10 +71,9 @@ jobs:
 
     - name: Extract version from branch name (for release branches)
       run: |
-          BRANCH_NAME="${{ github.ref }}"
-          VERSION=${BRANCH_NAME#refs/tags/}
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "RELEASE_VERSION=$VERSION"
+          new_version=$(npm version patch --tag-version-prefix="" --no-git-tag-version | grep 'version' | awk -F: '{print $2}' | xargs)
+          echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$new_version"
 
     - name: Generate release notes
       id: release_notes
