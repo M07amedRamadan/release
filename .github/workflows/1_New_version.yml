@@ -89,20 +89,20 @@ jobs:
     - name: Merge pre-master to prod_branch
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
-          gh pr create --base prod_branch --head main --title "Merge pre-master into production" --body "Merging changes from  pre-master into production"
-          pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
+          gh pr create --base prod_branch --head pre-master --title "Merge pre-master into production" --body "Merging changes from  pre-master into production"
+          pr_url=$(gh pr list --base prod_branch --head pre-master --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
           gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
           gh pr merge $pr_url --merge
           
-    # - name: Merge pre-master to master.
-    #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
-    #   run: |
-    #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
-    #       pr_url=$(gh pr list --base master --head pre-master --json number --jq '.[0].url')
-    #       gh pr merge $pr_url --merge
-    #       pr_number=$(basename "${pr_url}")
-    #       gh pr comment ${pr_number} --body "${{ github.event.inputs.release_notes }}"
+    - name: Merge pre-master to master.
+      if: env.environment == 'Both' || env.environment == 'Trial_Only'
+      run: |
+          gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
+          pr_url=$(gh pr list --base master --head pre-master --json number --jq '.[0].url')
+          pr_number=$(basename "${pr_url}")
+          gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
+          gh pr merge $pr_url --merge
           
     # - name: Merge prod_branch back to pre-master branch.
     #   if: success()
