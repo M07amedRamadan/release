@@ -41,7 +41,7 @@ jobs:
  bump-version:
   runs-on: ubuntu-latest
   outputs:
-    VERSION: ${{ steps.version.outputs.* }}
+    VERSION: ${{ steps.version.outputs.version }}
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
       id: version
       run: |
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
-        echo "npm version ${{ github.event.inputs.version }} --tag-version-prefix=""" >> $GITHUB_OUTPUT
+        echo "version=${npm version ${{ github.event.inputs.version }} --tag-version-prefix=""}" >> $GITHUB_OUTPUT
 
     - name: Push latest version
       run: |
