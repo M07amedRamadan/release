@@ -100,7 +100,7 @@ jobs:
           pr_number=$(basename "${pr_url}")
           gh pr comment ${pr_number} --body "${{ github.event.inputs.release_notes }}"
           
-    # - name: Merge pre-master to master
+    # - name: Merge pre-master to master.
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
     #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
