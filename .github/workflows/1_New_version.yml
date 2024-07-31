@@ -65,7 +65,7 @@ jobs:
       id: version
       run: |
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
-        echo "version=${npm version ${{ github.event.inputs.version }} --tag-version-prefix=""}" >> $GITHUB_OUTPUT
+        echo "version=${{npm version ${{ github.event.inputs.version }} --tag-version-prefix=""}}" >> $GITHUB_OUTPUT
 
     - name: Push latest version
       run: |
