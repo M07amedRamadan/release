@@ -64,7 +64,8 @@ jobs:
       
       - name: add notes using GH-cli
         run: |
-          NEW_NOTES="New notes"
+          NEW_NOTES="New notes from github action and this is test for Mr Yuanbo to test it, 
+          but I am not sure if this will work with him"
           existing_notes=$(gh api repos/:owner/:repo/releases/tags/${{ env.RELEASE_VERSION }} --jq '.body')
           echo "${existing_notes}"
           combined_notes="${NEW_NOTES} 
