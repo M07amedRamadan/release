@@ -66,6 +66,8 @@ jobs:
         npm version ${{ github.event.inputs.version }} --tag-version-prefix=""
         new_version=$(npm version ${{ github.event.inputs.version }} --tag-version-prefix="" --no-git-tag-version | grep 'version' | awk -F: '{print $2}' | xargs)
         echo "VERSION=${new_version}" >> $GITHUB_ENV
+        echo "Release v${{ env.VERSION }}"
+        
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
