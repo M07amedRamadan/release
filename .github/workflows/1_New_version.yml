@@ -41,7 +41,7 @@ jobs:
  bump-version:
   runs-on: ubuntu-latest
   outputs:
-    data: ${{ steps.process_data.outputs.data }}
+    VERSION: ${{ steps.version.outputs.* }}
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
 
     - name: Create new release
       run: |
-        gh release create v${{ steps.version.outputs.* }} -t "Release v${{ steps.version.outputs.* }}" -F release_notes.txt
+        gh release create v${{ steps.version.outputs.VERSION }} -t "Release v${{ steps.version.outputs.VERSION }}" -F release_notes.txt
 
     - name: Deploy Release to both environment 'Trial and Production'
       run: |
