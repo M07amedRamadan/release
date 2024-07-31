@@ -116,7 +116,7 @@ jobs:
 
     - name: Accept data from input
       run: |
-        echo "data=${{github.event.inputs.release_notes}}" data.txt
+        echo "data=${{github.event.inputs.release_notes}}" >> data.txt
         cat data.txt
     - name: Upload artifact
       uses: actions/upload-artifact@v2
