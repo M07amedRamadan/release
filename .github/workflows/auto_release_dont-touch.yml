@@ -53,10 +53,17 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
                 });
-                  
+
+        # Fetch existing release notes
+        # Combine existing notes with new notes
+        # Update the release with the combined notes
       - name: add notes using GH-cli
         run: |
-          gh release edit ${{ env.RELEASE_VERSION }} --notes "Note"
+          existing_notes=$(gh api repos/:owner/:repo/releases/tags/${RELEASE_VERSION} --jq '.body')
+          echo "$existing_notes"
+          combined_notes="${existing_notes}\n${NEW_NOTES}"
+          echo "$combined_notes"
+          gh release edit ${{ env.RELEASE_VERSION }} --notes "${combined_notes}"
                 
       - name: add notes using GH-cli
         run: |
