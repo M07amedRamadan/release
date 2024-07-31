@@ -39,6 +39,9 @@ on:
 jobs:
   # This workflow contains a single job called "bump-version"
   bump-version:
+    permissions:
+      contents: read
+      actions: write
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     outputs:
