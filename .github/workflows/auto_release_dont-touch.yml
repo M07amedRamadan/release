@@ -1,8 +1,11 @@
 name: Auto Release Process_Do not Touch
 
 on:
-  repository_dispatch:
-    types: [trigger-consumer]
+  push:
+    tags:
+      - '*'
+  # repository_dispatch:
+  #   types: [trigger-consumer]
 
 jobs:
 
