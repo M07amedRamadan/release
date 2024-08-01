@@ -5,16 +5,14 @@ on:
     branches:
     - master
   workflow_dispatch:
-#job  wdeqwd
+  
 jobs:
   prod-deploy:
     runs-on: ubuntu-latest
-qwd
     steps:
 
     - name: Checkoutd
       uses: actions/checkout@v3
-sfsdfsd
     - name: Trial
       run: |
         echo "Trial"
