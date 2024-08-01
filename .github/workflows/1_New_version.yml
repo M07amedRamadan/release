@@ -107,12 +107,12 @@ jobs:
     #       gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
     #       gh pr merge $pr_url --merge
           
-    # - name: Merge prod_branch back to pre-master branch.
-    #   if: success()
-    #   run: |
-    #       gh pr create --base pre-master --head prob_branch --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
-    #       pr_url=$(gh pr list --base pre-master --head prob_branch --json number --jq '.[0].url')
-    #       gh pr merge $pr_url --merge
+    - name: Merge prod_branch back to pre-master branch.
+      if: success()
+      run: |
+          gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
+          pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
+          gh pr merge $pr_url --merge
     
     # - name: Send a notification about the failure.
     #   if: failure()
