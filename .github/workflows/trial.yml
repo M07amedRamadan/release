@@ -9,12 +9,10 @@ on:
 jobs:
   prod-deploy:
     runs-on: ubuntu-latest
-
     steps:
 
-    - name: Checkout
+    - name: Checkoutd
       uses: actions/checkout@v3
-
     - name: Trial
       run: |
         echo "Trial"
