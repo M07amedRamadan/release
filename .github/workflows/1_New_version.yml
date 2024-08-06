@@ -112,7 +112,6 @@ jobs:
       run: |
           gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-          gh pr review $pr_url --approve
           gh pr merge $pr_url --merge --admin
     
     # - name: Send a notification about the failure.
