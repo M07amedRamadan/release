@@ -46,9 +46,6 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-         
-    - name: Install GitHub CLI
-      run: sudo apt-get install -y gh
 
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
@@ -87,6 +84,7 @@ jobs:
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
     
     - name: Merge pre-master to prod_branch
+      id: production_merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
           gh pr create --base prod_branch --head main --title "Merge pre-master into production" --body "Merging changes from  pre-master into production"
@@ -108,12 +106,12 @@ jobs:
     #       gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
     #       gh pr merge $pr_url --merge
           
-    # - name: Merge prod_branch back to pre-master branch.
-    #   if: success()
-    #   run: |
-    #       gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
-    #       pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-    #       gh pr merge $pr_url --merge
+    - name: Merge prod_branch back to pre-master branch.
+      if: steps.production_merge.outcome == 'success'
+      run: |
+          gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
+          pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
+          gh pr merge $pr_url --merge
     
     # - name: Send a notification about the failure.
     #   if: failure()
