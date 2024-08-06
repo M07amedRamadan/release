@@ -95,7 +95,10 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr merge $pr_url --merge
+          gh pr merge $pr_url --merge --admin
+      # gh pr review $pr_url --request-changes --body "Please address the following issues..."
+      # gh pr review $pr_url --approve
+          
           
     # - name: Merge pre-master to master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
@@ -106,12 +109,13 @@ jobs:
     #       gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
     #       gh pr merge $pr_url --merge
           
-    - name: Merge prod_branch back to pre-master branch.
-      if: steps.production_merge.outcome == 'success'
-      run: |
-          gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
-          pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-          gh pr merge $pr_url --merge
+    # - name: Merge prod_branch back to pre-master branch.
+    #   if: steps.production_merge.outcome == 'success'
+    #   run: |
+    #       gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
+    #       pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
+    #       gh pr review $pr_url --approve
+    #       gh pr merge $pr_url --merge
     
     # - name: Send a notification about the failure.
     #   if: failure()
