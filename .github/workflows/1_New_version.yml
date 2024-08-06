@@ -95,8 +95,7 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr review $pr_url --approve
-          gh pr merge $pr_url --merge 
+          gh pr merge $pr_url --merge --admin
 
           
     # - name: Merge pre-master to master
