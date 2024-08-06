@@ -95,9 +95,10 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr review $pr_url --request-changes --body "Please address the following issues..."
-          gh pr review $pr_url --approve
           gh pr merge $pr_url --merge
+      # gh pr review $pr_url --request-changes --body "Please address the following issues..."
+      # gh pr review $pr_url --approve
+          
           
     # - name: Merge pre-master to master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
