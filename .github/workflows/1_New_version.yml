@@ -46,9 +46,6 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-         
-    - name: Install GitHub CLI
-      run: sudo apt-get install -y gh
 
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
