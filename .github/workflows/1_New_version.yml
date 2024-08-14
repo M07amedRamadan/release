@@ -84,15 +84,6 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
 
-    # - name: Attempt to Rebase
-    #   run: |
-    #       git fetch origin
-    #       git checkout ${{ github.head_ref }}
-    #       git rebase origin/prod_branch || {
-    #         echo "Rebase failed due to conflicts.";
-    #         exit 1;
-    #       }
-
     - name: Fetch Latest Changes
       run: |
           git fetch origin
@@ -100,7 +91,7 @@ jobs:
     - name: Check for Conflicts
       id: check_conflicts
       run: |
-          git checkout ${{ github.head_ref }}
+          git checkout main
           git rebase origin/prod_branch || true
           conflicts=$(git diff --name-only --diff-filter=U)
           echo "Conflicted files: $conflicts"
@@ -112,7 +103,7 @@ jobs:
       run: |
           echo "Conflicts detected. Attempting to resolve..."
           git rebase --abort
-          git checkout ${{ github.head_ref }}
+          git checkout main
           git rebase origin/prod_branch || {
             echo "Rebase failed due to unresolved conflicts.";
             exit 1;
