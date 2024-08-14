@@ -106,6 +106,7 @@ jobs:
           # Resolve conflicts
           for file in $conflicted_files; do
             git add $file
+            git commit -m "$file is committed from conflict"
           done
 
           git rebase --continue
