@@ -93,10 +93,9 @@ jobs:
       run: |
           git checkout main
           git rebase origin/prod_branch || true
-          conflicts=$(git diff --name-only --diff-filter=U)
-          echo "Conflicted files: $conflicts"
-          echo "has_conflicts=$(test -n "$conflicts" && echo true || echo false)" >> $GITHUB_ENV
-
+          conflicts=$(git ls-files -u)
+          echo "Conflicts detected: $conflicts"
+          echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
     - name: Resolve Conflicts Automatically
       if: steps.check_conflicts.outputs.has_conflicts == 'true'
@@ -105,15 +104,17 @@ jobs:
           git rebase --abort
           git checkout main
           git rebase origin/prod_branch || {
-            echo "Rebase failed due to unresolved conflicts.";
+            echo "Rebase failed again.";
             exit 1;
           }
           conflicted_files=$(git diff --name-only --diff-filter=U)
           echo "Conflicted files: $conflicted_files"
 
+          # Resolve conflicts
           for file in $conflicted_files; do
             git checkout --theirs $file
             git add $file
+            git commit -m "$file is committed"
           done
 
           git rebase --continue
