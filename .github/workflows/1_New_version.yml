@@ -91,7 +91,7 @@ jobs:
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
-          gh pr checkout $pr_number
+          gh pr checkout $pr_number --force
           git fetch origin prod_branch
           git merge origin/prod_branch
           release_notes="${{ github.event.inputs.release_notes }}"
