@@ -87,20 +87,6 @@ jobs:
       id: production_merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
-          git fetch origin prod_branch
-          git merge --no-commit --no-ff origin/prod_branch  # Merge without committing
-          if git diff --quiet; then
-            echo "No conflicts, proceeding with commit and push."
-            git commit -m "Merge changes from prod_branch"
-            git push origin main
-          else
-            echo "Merge conflicts detected, resolving conflicts."
-            # Resolve conflicts
-            # Add resolved files
-            git add .
-            git commit -m "Resolved merge conflicts"
-            git push origin main
-          fi
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
@@ -109,6 +95,7 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
+          gh pr update-branch $pr_url --rebase
           gh pr merge $pr_url --merge --admin     
           
     # - name: Merge pre-master to master
