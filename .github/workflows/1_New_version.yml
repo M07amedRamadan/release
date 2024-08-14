@@ -46,6 +46,7 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+         fetch-depth: 0
 
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
@@ -82,12 +83,38 @@ jobs:
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
-    
-    - name: Merge pre-master to prod_branch
-      id: production_merge
-      if: env.environment == 'Both' || env.environment == 'Production_Only'
+
+    - name: Fetch Latest Changes
       run: |
-          gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
+          git fetch origin
+
+    - name: Check for Conflicts
+      id: check_conflicts
+      run: |
+          git rebase origin/prod_branch || true
+          conflicts=$(git ls-files -u)
+          echo "Conflicts detected: $conflicts"
+          echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
+
+    - name: Resolve Conflicts Automatically
+      if: steps.check_conflicts.outputs.has_conflicts == 'true'
+      run: |
+
+          conflicted_files=$(git diff --name-only --diff-filter=U)
+          echo "Conflicted files: $conflicted_files"
+
+          # Resolve conflicts
+          for file in $conflicted_files; do
+            git add $file
+            git commit -m "$file is committed"
+          done
+
+          git rebase --continue
+          git push --force-with-lease
+
+    - name: Merge pre-master to prod_branch
+      run: |
+          gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
           release_notes="${{ github.event.inputs.release_notes }}"
@@ -96,15 +123,25 @@ jobs:
             gh pr comment $pr_number --body "$release_notes"
           fi 
           gh pr update-branch $pr_url --rebase
-          gh pr merge $pr_url --merge --admin  
-          if ! git merge --no-ff ${{ github.event.pull_request.head.ref }}; then
-            echo "Merge conflict detected. Mentioning the user..."
-            gh pr comment ${{ github.event.pull_request.number }} --body "@M07amedRamadan There is a merge conflict that needs to be resolved."
-          else
-            echo "Merged successfully."
-          fi
-
-    # - name: Merge pre-master to master
+          gh pr merge $pr_url --merge --admin
+    
+    # - name: Merge pre-master to prod_branch
+    #   id: production_merge
+    #   if: env.environment == 'Both' || env.environment == 'Production_Only'
+    #   run: |
+    #       gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
+    #       pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
+    #       pr_number=$(basename "${pr_url}")
+    #       git fetch origin prod_branch
+    #       release_notes="${{ github.event.inputs.release_notes }}"
+    #       if [ -n "$release_notes" ]; then
+    #         release_notes=$(echo -e "$release_notes")
+    #         gh pr comment $pr_number --body "$release_notes"
+    #       fi 
+    #       gh pr update-branch $pr_url --rebase
+    #       gh pr merge $pr_url --merge --admin  
+          
+    # - name: Merge pre-master to master /// 
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
     #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
