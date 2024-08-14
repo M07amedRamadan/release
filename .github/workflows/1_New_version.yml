@@ -90,7 +90,7 @@ jobs:
           git checkout main
           git fetch origin prod_branch
           git merge origin/prod_branch --allow-unrelated-histories
-          git push origin pre-master
+          git push origin main
           gh pr create --base prod_branch --head main --title "Merge pre-master into production" --body "Merging changes from  pre-master into production"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
