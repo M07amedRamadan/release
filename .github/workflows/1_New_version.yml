@@ -95,8 +95,8 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr merge $pr_url --merge --admin
-
+          gh pr checkout $pr_url && git fetch origin prod_branch && git merge origin/prod_branch
+          gh pr merge $pr_url --merge --admin     
           
     # - name: Merge pre-master to master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
