@@ -93,7 +93,7 @@ jobs:
           pr_number=$(basename "${pr_url}")
           gh pr checkout main --force
           git fetch origin prod_branch
-          git merge origin/prod_branch
+          git merge origin/prod_branch --allow-unrelated-histories
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
