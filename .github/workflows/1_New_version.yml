@@ -89,7 +89,7 @@ jobs:
       run: |
           git checkout main
           git fetch origin prod_branch
-          git merge --no-commit --no-ff origin/prod_branch  # Merge without committing
+          git merge --no-commit --no-ff origin/prod_branch --allow-unrelated-histories # Merge without committing
           if git diff --quiet; then
             echo "No conflicts, proceeding with commit and push."
             git commit -m "Merge changes from prod_branch"
