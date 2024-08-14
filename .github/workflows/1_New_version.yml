@@ -87,22 +87,11 @@ jobs:
       id: production_merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
-          git checkout main
-          git fetch origin prod_branch
-          git merge --no-commit --no-ff origin/prod_branch --allow-unrelated-histories 
-          if git diff --quiet; then
-            echo "No conflicts, proceeding with commit and push."
-            git commit -m "Merge changes from prod_branch"
-            git push origin main
-          else
-            echo "Merge conflicts detected, resolving conflicts."
-            # Resolve conflicts
-            # Add resolved files
-            git add .
-            git commit -m "Resolved merge conflicts"
-            git push origin main
-          fi
-          gh pr create --base prod_branch --head main --title "Merge pre-master into production" --body "Merging changes from  pre-master into production"
+          gh pr create --base main --head prod_branch --title "Merge prod_branch into main" --body "Merging changes from  prod_branch into main"
+          pr_url=$(gh pr list --base main --head prod_branch --json number --jq '.[0].url')
+          pr_number=$(basename "${pr_url}")
+          gh pr merge $pr_url --merge --admin
+          gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
           release_notes="${{ github.event.inputs.release_notes }}"
