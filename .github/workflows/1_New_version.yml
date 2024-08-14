@@ -100,7 +100,7 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr update-branch $pr_url --rebase
+
           gh pr merge $pr_url --merge --admin  
           
     - name: Attempt to merge
@@ -111,7 +111,7 @@ jobs:
           else
             echo "Merged successfully."
           fi
-    # - name: Merge pre-master to master
+    # - name: Merge pre-master to master /// gh pr update-branch $pr_url --rebase
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
     #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
