@@ -88,10 +88,8 @@ jobs:
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
           git fetch origin
-          git checkout main
-          git rebase --continue
-          git rebase origin/prod_branch
-          git push origin main --force
+          git merge origin/prod_branch
+          git push origin main 
 
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
