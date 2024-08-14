@@ -83,6 +83,35 @@ jobs:
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+
+    - name: Attempt to Rebase
+      run: |
+          git fetch origin
+          git checkout ${{ github.head_ref }}
+          git rebase origin/prod_branch || {
+            echo "Rebase failed due to conflicts.";
+            exit 1;
+          }
+
+    - name: Resolve Conflicts Automatically
+      run: |
+          git status
+          conflicted_files=$(git diff --name-only --diff-filter=U)
+          echo "Conflicted files: $conflicted_files"
+
+          if [ -n "$conflicted_files" ]; then
+            echo "Attempting to resolve conflicts..."
+            for file in $conflicted_files; do
+              # Example automatic conflict resolution
+              # This simply keeps the changes from the current branch
+              git checkout --theirs $file
+              git add $file
+            done
+
+            # Continue rebase after conflict resolution
+            git rebase --continue
+          fi
+          git push --force-with-lease
     
     - name: Merge pre-master to prod_branch
       id: production_merge
@@ -92,17 +121,12 @@ jobs:
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
           git fetch origin prod_branch
-
-          git merge origin/prod_branch --allow-unrelated-histories
-          git add .
-          git commit -m "solve conflict"
-          git push --force-with-lease origin main
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-
+          gh pr update-branch $pr_url --rebase
           gh pr merge $pr_url --merge --admin  
           
     - name: Attempt to merge
@@ -113,7 +137,7 @@ jobs:
           else
             echo "Merged successfully."
           fi
-    # - name: Merge pre-master to master /// gh pr update-branch $pr_url --rebase
+    # - name: Merge pre-master to master /// 
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
     #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
