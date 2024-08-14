@@ -90,6 +90,7 @@ jobs:
           git fetch origin
           git checkout main
           git rebase origin/prod_branch
+          git rebase --continue
           git push origin main --force
 
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
