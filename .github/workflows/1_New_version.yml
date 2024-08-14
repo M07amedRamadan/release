@@ -102,9 +102,10 @@ jobs:
       run: |
           git checkout ${{ github.head_ref }}
           git rebase origin/prod_branch || true
-          conflicts=$(git ls-files -u)
-          echo "Conflicts detected: $conflicts"
-          echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
+          conflicts=$(git diff --name-only --diff-filter=U)
+          echo "Conflicted files: $conflicts"
+          echo "has_conflicts=$(test -n "$conflicts" && echo true || echo false)" >> $GITHUB_ENV
+
 
     - name: Resolve Conflicts Automatically
       if: steps.check_conflicts.outputs.has_conflicts == 'true'
@@ -113,13 +114,12 @@ jobs:
           git rebase --abort
           git checkout ${{ github.head_ref }}
           git rebase origin/prod_branch || {
-            echo "Rebase failed again.";
+            echo "Rebase failed due to unresolved conflicts.";
             exit 1;
           }
           conflicted_files=$(git diff --name-only --diff-filter=U)
           echo "Conflicted files: $conflicted_files"
 
-          # Resolve conflicts
           for file in $conflicted_files; do
             git checkout --theirs $file
             git add $file
@@ -127,11 +127,8 @@ jobs:
 
           git rebase --continue
           git push --force-with-lease
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Create or Update PR
-      if: steps.check_conflicts.outputs.has_conflicts == 'false'
+    - name: Merge pre-master to prod_branch
       run: |
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
