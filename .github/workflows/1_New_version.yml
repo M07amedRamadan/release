@@ -96,20 +96,14 @@ jobs:
             gh pr comment $pr_number --body "$release_notes"
           fi 
           gh pr update-branch $pr_url --rebase
-          gh pr merge $pr_url --merge --admin     
-
-    - name: Attempt to merge
-      run: |
-          git fetch origin ${{ github.event.pull_request.base.ref }}
-          git checkout ${{ github.event.pull_request.base.ref }}
+          gh pr merge $pr_url --merge --admin  
           if ! git merge --no-ff ${{ github.event.pull_request.head.ref }}; then
             echo "Merge conflict detected. Mentioning the user..."
             gh pr comment ${{ github.event.pull_request.number }} --body "@M07amedRamadan There is a merge conflict that needs to be resolved."
           else
             echo "Merged successfully."
           fi
-      env:
-          GITHUB_TOKEN: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+
     # - name: Merge pre-master to master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
     #   run: |
