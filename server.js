@@ -3,7 +3,7 @@ const http = require('http');
 // Define the port to listen to
 const PORT = 3000;
 
-// Define the HTML content
+// Define the HTML content.
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
