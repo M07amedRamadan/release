@@ -84,14 +84,14 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
 
-    - name: Attempt to Rebase
-      run: |
-          git fetch origin
-          git checkout ${{ github.head_ref }}
-          git rebase origin/prod_branch || {
-            echo "Rebase failed due to conflicts.";
-            exit 1;
-          }
+    # - name: Attempt to Rebase
+    #   run: |
+    #       git fetch origin
+    #       git checkout ${{ github.head_ref }}
+    #       git rebase origin/prod_branch || {
+    #         echo "Rebase failed due to conflicts.";
+    #         exit 1;
+    #       }
 
     - name: Resolve Conflicts Automatically
       run: |
