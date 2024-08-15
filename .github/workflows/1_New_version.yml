@@ -129,7 +129,8 @@ jobs:
             gh pr comment $pr_number --body "$release_notes"
           fi 
           gh pr update-branch $pr_url --rebase
-          gh pr merge $pr_url --merge00 --admin  
+          gh pr merge $pr_url --merge --admin  
+          00kcat
           
     # - name: Merge pre-master to master /// 
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
