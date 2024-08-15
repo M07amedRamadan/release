@@ -120,7 +120,8 @@ jobs:
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
             gh pr merge $pr_number --merge --admin  
           else
-            gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+            gh pr comment pr_url --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+            echo "pr_url is: $pr_url"
           fi
           echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
           
