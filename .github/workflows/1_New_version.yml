@@ -106,19 +106,19 @@ jobs:
           fi 
           
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
-          
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
             gh pr merge ${pr_number} --merge --admin  
           else
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           fi
           
-          echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
-
     # - name: Merge Outcome.
     #   run: |
     #    echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
-
+    - name: Fetch Latest Changes
+      run: |
+          git fetch origin
+          
     - name: Check master for Conflicts
       id: check_conflicts_master
       run: |
