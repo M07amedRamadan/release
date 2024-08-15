@@ -143,15 +143,22 @@ jobs:
           gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
           gh pr merge $pr_url --merge --admin....
-          
-    - name: Notify on failures
-      if: failure() || steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
-      uses: peter-evans/commit-comment@v3
+
+    - name: Notify Failure
+      if: steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
+      uses: mshick/add-pr-comment@v2.8.1
       with:
-        body: |
-            The `Release Creation` action has failed!
-            - PR Assignee: @${{ github.event.pull_request.assignee.login }}
-            - Infrastructure Engineer(s): @M07amedRamadan
+        message: '@M07amedRamadan The pipeline failed! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
+        allow-repeats: false
+          
+    # - name: Notify on failures
+    #   if: failure() || steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
+    #   uses: peter-evans/commit-comment@v3
+    #   with:
+    #     body: |
+    #         The `Release Creation` action has failed!
+    #         - PR Assignee: @${{ github.event.pull_request.assignee.login }}
+    #         - Infrastructure Engineer(s): @M07amedRamadan
             
     # - name: Send a notification about the failure.
     #   if: failure()
