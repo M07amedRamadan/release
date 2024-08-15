@@ -146,7 +146,7 @@ jobs:
       run: |
           gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-          gh pr merge $pr_url --merge --admin
+          gh pr merge $pr_url --merge --admin.
 
     # - name: Notify Failure
     #   if: steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
@@ -156,7 +156,7 @@ jobs:
     #     allow-repeats: false
           
     - name: Notify on failures
-      #if: failure() || steps.api-testing.outcome == 'failure'
+      if: steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
       uses: peter-evans/commit-comment@v3
       with:
         body: |
