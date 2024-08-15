@@ -159,10 +159,12 @@ jobs:
       #if: steps.merge-back.outcome != 'success' || steps.production-merge.outcome != 'success'
       uses: peter-evans/commit-comment@v3
       with:
+        repository: ${{ github.repository }}
+        issue-number: ${{ github.event.pull_request.number }}
         body: |
             The `Automation testing` action has failed!
             - Assignee: @M07amedRamadan
-        number: ${{ github.event.pull_request.number }}
+
 
             
     # - name: Send a notification about the failure.
