@@ -48,6 +48,7 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+         fetch-depth: 0 
 
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
@@ -94,6 +95,21 @@ jobs:
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
    
+    - name: Resolve Conflicts Automatically
+      if: steps.check_conflicts.outputs.has_conflicts == 'true'
+      run: |
+
+          conflicted_files=$(git diff --name-only --diff-filter=U)
+          echo "Conflicted files: $conflicted_files"
+
+          # Resolve conflicts
+          for file in $conflicted_files; do
+            git add $file
+            git commit -m "$file is committed from conflict"
+          done
+
+          git rebase --continue
+          git push --force-with-lease
 
     - name: Merge pre-master to prod_branch
       id: production-merge
@@ -118,13 +134,6 @@ jobs:
           fi
           
           echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
-
-    # - name: Resolve Conflicts Automatically
-    #   if: steps.check_conflicts.outputs.has_conflicts == 'true' 
-    #   run: |
-    #         echo "pr_number is: ${{ env.pr_number }}"
-    #         gh pr comment 118 --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-            
             
     - name: Merge prod_branch back to pre-master branch.
       id: merge-back
