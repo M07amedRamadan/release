@@ -1,3 +1,4 @@
+
 # This is a basic workflow that is manually triggered
 
 name: 0_New version and deploy
@@ -68,12 +69,10 @@ jobs:
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
-
     - name: Extract version from branch name (for release branches)
       run: |
           new_version=$(npm version patch --tag-version-prefix="" )
           echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
-
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
@@ -82,7 +81,6 @@ jobs:
     - name: Create a new release
       run: |
         gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
-
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
@@ -98,7 +96,6 @@ jobs:
           conflicts=$(git ls-files -u)
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
-
     # - name: Resolve Conflicts Automatically
     #   if: steps.check_conflicts.outputs.has_conflicts == 'true' && env.environment == 'Production_Only'
 
@@ -117,10 +114,10 @@ jobs:
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
             gh pr merge $pr_number --merge --admin  
-          else
-            gh pr comment $pr_number  --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-            echo "pr_number is: ${{pr_number}}"
-            
+          fi
+          if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'true' ]; then
+            gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+            echo "pr_url is: $pr_url"
           fi
           echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
           
@@ -131,7 +128,6 @@ jobs:
           gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
           gh pr merge $pr_url --merge --admin
-
     # - name: Send a notification about the failure.
     #   if: failure()
     #   run:  aws sns publish --topic-arn "arn:aws:sns:us-east-1:837491041518:cloudMonitoring" --message "The workflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}" --subject "Release Workflow Status"
