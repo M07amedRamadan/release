@@ -111,9 +111,9 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          if [steps.check_conflicts.outputs.has_conflicts != 'true'] ; then
+          if [steps.check_conflicts.outputs.has_conflicts != 'true']; then
             gh pr merge $pr_url --merge --admin  
-          else:
+          else
             gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           fi
           echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
