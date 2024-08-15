@@ -87,9 +87,9 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
         
-    # - name: Fetch Latest Changes
-    #   run: |
-    #       git fetch origin
+    - name: Fetch Latest Changes
+      run: |
+          git fetch origin
           
     - name: Check for Conflicts
       id: check_conflicts
