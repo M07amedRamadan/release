@@ -129,7 +129,7 @@ jobs:
             gh pr comment $pr_number --body "$release_notes"
           fi 
           gh pr update-branch $pr_url --rebase
-          gh pr merge $pr_url --merge --admin  
+          gh pr merge $pr_url --merge00 --admin  
           
     # - name: Merge pre-master to master /// 
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
@@ -146,7 +146,7 @@ jobs:
       run: |
           gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-          gh pr merge $pr_url --merge --admin.
+          gh pr merge $pr_url --merge --admin
 
     # - name: Notify Failure
     #   if: steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
