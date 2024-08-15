@@ -157,7 +157,7 @@ jobs:
     #     allow-repeats: false
           
     - name: Notify on failures
-      if: steps.merge-back.outcome != 'success' || steps.production-merge.outcome != 'success'
+      #if: steps.merge-back.outcome != 'success' || steps.production-merge.outcome != 'success'
       uses: peter-evans/commit-comment@v3
       with:
         body: |
