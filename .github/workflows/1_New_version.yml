@@ -37,10 +37,7 @@ on:
         # default: 'Notes'
         
 # A workflow run comprises one or more jobs that can run sequentially or in parallel.
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+
 jobs:
   # This workflow contains a single job called "bump-version"
  bump-version:
