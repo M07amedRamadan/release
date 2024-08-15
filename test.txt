@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-1test22
+test
 =======
 test
 >>>>>>> 13fbfb4 (Update test.txt)
