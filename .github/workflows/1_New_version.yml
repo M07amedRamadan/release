@@ -88,10 +88,6 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
 
-    - name: Fetch Latest Changes
-      run: |
-          git fetch origin
-
     - name: Check for Conflicts
       id: check_conflicts
       run: |
@@ -100,22 +96,9 @@ jobs:
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
-    - name: Resolve Conflicts Automatically
-      if: steps.check_conflicts.outputs.has_conflicts == 'true'
-      run: |
+    # - name: Resolve Conflicts Automatically
+    #   if: steps.check_conflicts.outputs.has_conflicts == 'true' && env.environment == 'Production_Only'
 
-          conflicted_files=$(git diff --name-only --diff-filter=U)
-          echo "Conflicted files: $conflicted_files"
-
-          # Resolve conflicts
-          for file in $conflicted_files; do
-            git add $file
-            git commit -m "$file is committed from conflict"
-          done
-
-          git rebase --continue
-          git push --force-with-lease
-    
     - name: Merge pre-master to prod_branch
       id: production-merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
@@ -128,17 +111,13 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          gh pr update-branch $pr_url --rebase
-          gh pr merge $pr_url --merge --admin  
-          
-    # - name: Merge pre-master to master /// 
-    #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
-    #   run: |
-    #       gh pr create --base master --head pre-master --title "Merge pre-master into Trial" --body "Merging changes from  pre-master into trial"
-    #       pr_url=$(gh pr list --base master --head pre-master --json number --jq '.[0].url')
-    #       pr_number=$(basename "${pr_url}")
-    #       gh pr comment ${pr_number} --body "comment:${{ github.event.inputs.release_notes }}"
-    #       gh pr merge $pr_url --merge 
+          echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
+          if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
+            gh pr merge $pr_url --merge --admin  
+          else
+            gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+          fi
+          echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
           
     - name: Merge prod_branch back to pre-master branch.
       id: merge-back
@@ -148,25 +127,6 @@ jobs:
           pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
           gh pr merge $pr_url --merge --admin
 
-    # - name: Notify Failure
-    #   if: steps.merge-back.outcome == 'failure' || steps.production-merge.outcome == 'failure'
-    #   uses: mshick/add-pr-comment@v2.8.1
-    #   with:
-    #     message: '@M07amedRamadan The pipeline failed! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
-    #     allow-repeats: false
-          
-    - name: Notify on failures
-      #if: steps.merge-back.outcome != 'success' || steps.production-merge.outcome != 'success'
-      uses: peter-evans/commit-comment@v3
-      with:
-        repository: ${{ github.repository }}
-        issue-number: ${{ github.event.pull_request.number }}
-        body: |
-            The `Automation testing` action has failed!
-            - Assignee: @M07amedRamadan
-
-
-            
     # - name: Send a notification about the failure.
     #   if: failure()
     #   run:  aws sns publish --topic-arn "arn:aws:sns:us-east-1:837491041518:cloudMonitoring" --message "The workflow ${{ github.workflow }} of ${{ github.repository }} has ${{ job.status }}" --subject "Release Workflow Status"
