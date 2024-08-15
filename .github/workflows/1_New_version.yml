@@ -118,8 +118,6 @@ jobs:
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
-          echo "pr_number is: ${pr_number}"
-          echo "pr_url=${pr_url}"
           
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
@@ -130,7 +128,7 @@ jobs:
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
-            gh pr merge $pr_url --merge --admin  
+            gh pr merge ${pr_number} --merge --admin  
           else
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           fi
