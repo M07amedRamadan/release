@@ -113,6 +113,7 @@ jobs:
           fi 
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
+            git checkout main
             gh pr merge $pr_url --merge --admin  
           else
             gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
