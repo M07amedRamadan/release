@@ -111,8 +111,8 @@ jobs:
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
-            
           fi 
+          
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
             gh pr merge $pr_url --merge --admin  
