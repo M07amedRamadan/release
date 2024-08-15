@@ -122,10 +122,10 @@ jobs:
     - name: Resolve Conflicts Automatically
       if: steps.check_conflicts.outputs.has_conflicts == 'true' 
       run: |
+            echo "pr_number is: ${{ env.pr_number }}"
             gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-            echo "pr_number is: $pr_number"
-        
-          
+            
+            
     - name: Merge prod_branch back to pre-master branch.
       id: merge-back
       if: steps.production_merge.outcome == 'success'
