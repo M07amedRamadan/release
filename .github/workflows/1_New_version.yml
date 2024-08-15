@@ -162,6 +162,7 @@ jobs:
         body: |
             The `Automation testing` action has failed!
             - Assignee: @M07amedRamadan
+        number: ${{ github.event.pull_request.number }}
 
             
     # - name: Send a notification about the failure.
