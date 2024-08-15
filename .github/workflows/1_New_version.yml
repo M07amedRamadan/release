@@ -96,8 +96,7 @@ jobs:
           conflicts=$(git ls-files -u)
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
-    # - name: Resolve Conflicts Automatically
-    #   if: steps.check_conflicts.outputs.has_conflicts == 'true' && env.environment == 'Production_Only'
+   
 
     - name: Merge pre-master to prod_branch
       id: production-merge
@@ -106,20 +105,26 @@ jobs:
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_url=$(gh pr list --base prod_branch --head main --json number --jq '.[0].url')
           pr_number=$(basename "${pr_url}")
+          echo "pr_number=${pr_number}" >> $GITHUB_ENV
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
+            
           fi 
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" != 'true' ]; then
             gh pr merge $pr_number --merge --admin  
           fi
-          if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'true' ]; then
-            gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-            echo "pr_url is: $pr_url"
-          fi
+
           echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
+
+    - name: Resolve Conflicts Automatically
+      if: steps.check_conflicts.outputs.has_conflicts == 'true' 
+      run: |
+            gh pr comment $pr_number --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+            echo "pr_number is: $pr_number"
+        
           
     - name: Merge prod_branch back to pre-master branch.
       id: merge-back
