@@ -161,7 +161,7 @@ jobs:
       with:
         body: |
             The `Automation testing` action has failed!
-            - Assignee: @$M07amedRamadan
+            - Assignee: @M07amedRamadan
 
             
     # - name: Send a notification about the failure.
