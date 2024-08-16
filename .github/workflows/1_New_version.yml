@@ -86,7 +86,7 @@ jobs:
     - name: Check for Conflicts
       id: check_conflicts
       run: |
-          git merge origin/prod_branch || true
+          git rebase origin/prod_branch || true
           conflicts=$(git ls-files -u)
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
@@ -103,7 +103,6 @@ jobs:
             git add $file
             git commit -m "$file is committed from conflict"
           done
-
           git rebase --continue
           git push --force-with-lease
    
