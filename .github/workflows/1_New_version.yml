@@ -48,6 +48,7 @@ jobs:
       uses: actions/checkout@v4
       with:
          token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+         fetch-depth: 0 
 
     - name: Authenticate GitHub CLI
       run: gh auth login --with-token <<< ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
@@ -111,13 +112,11 @@ jobs:
       run: |
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
-          
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
             gh pr merge ${pr_number} --merge --admin > merge_output.txt
