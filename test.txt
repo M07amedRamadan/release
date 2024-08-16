@@ -1,5 +1,9 @@
 <<<<<<< HEAD
 test
 =======
+<<<<<<< HEAD
 test2
+=======
+test1
+>>>>>>> 83acf0c (Update test.txt)
 >>>>>>> 13fbfb4 (Update test.txt)
