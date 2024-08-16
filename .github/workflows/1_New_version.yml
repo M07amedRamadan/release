@@ -86,7 +86,7 @@ jobs:
     - name: Check for Conflicts
       id: check_conflicts
       run: |
-          git rebase origin/prod_branch || true
+          git merge origin/prod_branch || true
           conflicts=$(git ls-files -u)
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
@@ -122,7 +122,7 @@ jobs:
     - name: Check master for Conflicts
       id: check_conflicts_master
       run: |
-          git rebase origin/pre-master || true
+          git merge origin/pre-master || true
           master-conflicts=$(git ls-files -u)
           echo "Conflicts detected: $master-conflicts"
           echo "::set-output name=master_conflicts::$(test -n "$master-conflicts" && echo true || echo false)"
