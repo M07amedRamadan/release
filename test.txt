@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-test2
+test
 =======
 test1
 >>>>>>> 71d457b (Update test.txt)
