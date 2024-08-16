@@ -91,20 +91,20 @@ jobs:
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
-    - name: Resolve Conflicts Automatically
-      if: steps.check_conflicts.outputs.has_conflicts == 'true'
-      run: |
+    # - name: Resolve Conflicts Automatically
+    #   if: steps.check_conflicts.outputs.has_conflicts == 'true'
+    #   run: |
 
-          conflicted_files=$(git diff --name-only --diff-filter=U)
-          echo "Conflicted files: $conflicted_files"
+    #       conflicted_files=$(git diff --name-only --diff-filter=U)
+    #       echo "Conflicted files: $conflicted_files"
 
-          # Resolve conflicts
-          for file in $conflicted_files; do
-            git add $file
-            git commit -m "$file is committed from conflict"
-          done
-          git rebase --continue
-          git push --force-with-lease
+    #       # Resolve conflicts
+    #       for file in $conflicted_files; do
+    #         git add $file
+    #         git commit -m "$file is committed from conflict"
+    #       done
+    #       git rebase --continue
+    #       git push --force-with-lease
    
     - name: Merge pre-master to prod_branch
       id: production-merge
@@ -122,51 +122,17 @@ jobs:
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
             gh pr merge ${pr_number} --merge --admin > merge_output.txt
-            echo "merged_status=$(<merge_output.txt) " >> GITHUB_ENV
-            echo "merged_status = ${{env.merged_status}}"
-            cat merge_output.txt
+            echo "merge_success=true" >> $GITHUB_ENV
           else
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           fi
           
-    - name: Merge Outcome.
-      run: |
-       echo "Merge Outcome: ${{ steps.production_merge.outcome }}"
-
-    - name: Check master for Conflicts
-      id: check_conflicts_master
-      run: |
-          git rebase origin/pre-master || true
-          master-conflicts=$(git ls-files -u)
-          echo "Conflicts detected: $master-conflicts"
-          echo "::set-output name=master_conflicts::$(test -n "$master-conflicts" && echo true || echo false)"
-   
-    - name: Merge pre-master to master
-      if: env.environment == 'Both'
-      run: |
-          gh pr create --base pre-master --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
-          pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
-          
-          release_notes="${{ github.event.inputs.release_notes }}"
-          if [ -n "$release_notes" ]; then
-            release_notes=$(echo -e "$release_notes")
-            gh pr comment $pr_number --body "$release_notes"
-          fi 
-          
-          echo "master_conflicts: ${{steps.check_conflicts_master.outputs.master_conflicts}}"
-          if [ "${{ steps.check_conflicts_master.outputs.master_conflicts }}" == 'false' ]; then
-            gh pr merge ${pr_number} --merge --admin  
-          else
-            gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-          fi
-
     - name: Merge prod_branch back to pre-master branch.
+      if: env.merge_success == 'true'
       run: |
-          if [[ $merged_status == *"Merged pull request"* ]]; then
             gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
             pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
             gh pr merge $pr_url --merge --admin
-          fi
           
     # - name: Send a notification about the failure.
     #   if: failure()
