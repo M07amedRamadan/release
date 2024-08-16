@@ -91,20 +91,20 @@ jobs:
           echo "Conflicts detected: $conflicts"
           echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
-    # - name: Resolve Conflicts Automatically
-    #   if: steps.check_conflicts.outputs.has_conflicts == 'true'
-    #   run: |
+    - name: Resolve Conflicts Automatically
+      if: steps.check_conflicts.outputs.has_conflicts == 'true'
+      run: |
 
-    #       conflicted_files=$(git diff --name-only --diff-filter=U)
-    #       echo "Conflicted files: $conflicted_files"
+          conflicted_files=$(git diff --name-only --diff-filter=U)
+          echo "Conflicted files: $conflicted_files"
 
-    #       # Resolve conflicts
-    #       for file in $conflicted_files; do
-    #         git add $file
-    #         git commit -m "$file is committed from conflict"
-    #       done
-    #       git rebase --continue
-    #       git push --force-with-lease
+          # Resolve conflicts
+          for file in $conflicted_files; do
+            git add $file
+            git commit -m "$file is committed from conflict"
+          done
+          git rebase --continue
+          git push --force-with-lease
    
     - name: Merge pre-master to prod_branch
       id: production-merge
