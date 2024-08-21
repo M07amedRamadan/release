@@ -8,7 +8,7 @@ on:
   
 jobs:
   prod-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
 
     - name: Checkoutd
