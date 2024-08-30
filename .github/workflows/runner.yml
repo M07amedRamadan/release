@@ -1,9 +1,9 @@
 name: self runner
 
 on:
-  # push:
-  #   branches:
-  #   - master
+  push:
+    branches:
+    - main
   workflow_dispatch:
 jobs:
   prod-deploy:
@@ -16,5 +16,6 @@ jobs:
     - name: Production
       run: |
         echo "Production"
+        sleep 1000
 
    
