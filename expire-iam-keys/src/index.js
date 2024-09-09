@@ -32,10 +32,10 @@ const processUser = async ([user, accessKeys]) => {
         USER_SECOND_WARNING_MAX_AGE_SECS = SECOND_WARNING_MAX_AGE_SECS,
         USER_LAST_WARNING_MAX_AGE_SECS = LAST_WARNING_MAX_AGE_SECS;
 
-   // if not and the user name don't start with github (github actions users), make the expiry date 3 months
+    // if not and the user name don't start with github (github actions users), make the expiry date 3 months
     const flag = await checkSecretExistence(user);
     if (flag == false && !user.UserName.toLowerCase().startsWith('github')) {
-        console.log("this hasn't a secret secont step",user.UserName);
+        console.log(user.UserName, "Don't have a secret");
         USER_KEY_MAX_AGE_SECS = 3 * ONE_MONTH;
         USER_FIRST_WARNING_MAX_AGE_SECS = USER_KEY_MAX_AGE_SECS - 2 * ONE_WEEK;
         USER_SECOND_WARNING_MAX_AGE_SECS = USER_KEY_MAX_AGE_SECS - ONE_WEEK;
@@ -48,11 +48,17 @@ const processUser = async ([user, accessKeys]) => {
                 if (shouldRemove(key.CreateDate, USER_KEY_MAX_AGE_SECS))
                 {
                     console.log(`Removing expired access key ${key.AccessKeyId}`);
-
+                    // if the user don't have a secret then don't auto generate a new accessKeyId
+                    if (flag == false) {
+                        return Promise.all([
+                            deleteAccessKey(user, key),
+                            notifyUser(user, key),
+                        ]);
+                    }
                     return Promise.all([
                         deleteAccessKey(user, key),
                         notifyUser(user, key),
-                        createAccessKey(user),
+                        //createAccessKey(user),
                     ]);
                 }
 
