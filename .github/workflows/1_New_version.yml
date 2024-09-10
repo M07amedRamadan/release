@@ -67,6 +67,8 @@ jobs:
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
+        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+        echo "The latest tag is: $LATEST_TAG"
         
     - name: Extract version from branch name (for release branches)
       run: |
