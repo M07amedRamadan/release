@@ -67,14 +67,11 @@ jobs:
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
-        LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-        echo "The latest tag is: $LATEST_TAG"
-        
+                
     - name: Extract version from branch name (for release branches)
       run: |
-          new_version=$(npm version patch --tag-version-prefix="" )
-          echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
-          cat "the new version is: $new_version"
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "The latest tag is: $LATEST_TAG"
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
