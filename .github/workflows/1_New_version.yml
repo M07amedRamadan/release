@@ -71,7 +71,7 @@ jobs:
     - name: Extract version from branch name (for release branches)
       run: |
           LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-          echo "LATEST_TAG=$LATEST_TAG" >> >> $GITHUB_ENV
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "The latest tag is: $LATEST_TAG"
     - name: Generate release notes
       run: |
