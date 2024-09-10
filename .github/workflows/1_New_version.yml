@@ -41,7 +41,7 @@ on:
 jobs:
   # This workflow contains a single job called "bump-version"
  bump-version:
-  runs-on: self-hosted
+  runs-on: ubuntu-latest
 
   steps:
     - name: Checkout repository
