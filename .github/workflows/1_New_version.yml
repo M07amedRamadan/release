@@ -95,44 +95,50 @@ jobs:
             release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id') 
             echo "RELEASE_ID=release_id" >> $GITHUB_ENV
             echo "release ID is: $release_id"
-            
-    - name: Update Release Notes
-      uses: actions/github-script@v7
+
+    - name: Add Notes to Existing Release
+      uses: actions/github-script@v3
       with:
-        github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`);
-          const existingNotes = release.body || '';
-          const newNotes = '${{ github.event.inputs.release_notes }}';
-          
-          const updatedNotes = `${existingNotes}\n\n${newNotes}`;
-          
-          await github.request(`PATCH /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`, {
-            body: updatedNotes
+          const releaseId = ${{env.RELEASE_ID}}; 
+          const additionalNotes = "${{ github.event.inputs.release_notes }}";
+          const currentRelease = await github.repos.getRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: releaseId
           });
+          const combinedNotes = `${currentRelease.data.body}\n\n${additionalNotes}`;
+          const response = await github.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: releaseId,
+            body: {
+              body: combinedNotes
+            }
+          });
+            
+    # - name: Update Release Notes
+    #   uses: actions/github-script@v7
+    #   with:
+    #     github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+    #     script: |
+    #       const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`);
+    #       const existingNotes = release.body || '';
+    #       const newNotes = '${{ github.event.inputs.release_notes }}';
+          
+    #       const updatedNotes = `${existingNotes}\n\n${newNotes}`;
+          
+    #       await github.request(`PATCH /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`, {
+    #         body: updatedNotes
+    #       });
 
 
     # - name: update release notes
     #   run: |
     #       gh release edit ${{ env.RELEASE_VERSION }} --notes "${{ github.event.inputs.release_notes }}"
             
-    # - name: update Notes to Existing Release
-    #   uses: actions/github-script@v3
-    #   with:
-    #     github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-    #     script: |
-    #       const releaseId = "${{ env.RELEASE_VERSION }}"; // Specify the release ID of the release you want to update
-    #       const additionalNotes = "${{ github.event.inputs.release_notes }}"; // Get additional notes input from the workflow
-          
-    #       const response = await github.repos.updateRelease({
-    #         owner: context.repo.owner,
-    #         repo: context.repo.repo,
-    #         release_id: releaseId,
-    #         body: {
-    #           body: `${additionalNotes}`
-    #         }
-    #       });
-    
+
     # - name: Generate release notes
     #   run: |
     #     echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
