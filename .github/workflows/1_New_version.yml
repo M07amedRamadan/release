@@ -188,7 +188,7 @@ jobs:
     #         echo "merge_success=true" >> $GITHUB_ENV
     #       else
     #         gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-          fi
+    #      fi
           
     # - name: Merge prod_branch back to pre-master branch.
     #   if: env.merge_success == 'true'
