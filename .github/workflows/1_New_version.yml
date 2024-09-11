@@ -79,7 +79,6 @@ jobs:
           echo "The latest tag is: $RELEASE_VERSION"
 
     - name: Create Release Notes
-      id: create_release
       uses: actions/github-script@v7
       with:
           github-token: ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}
@@ -94,14 +93,7 @@ jobs:
       id: update_release_notes
       run: |
           release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id')
-          echo "release_id=$release_id" >> $GITHUB_ENV
           echo "release_id=$release_id" >> $GITHUB_OUTPUT
-          echo "release ID is: $release_id"
-
-    - name: Debug Outputs
-      run: |
-          echo "Release ID: ${{ steps.update_release_notes.outputs.release_id }}"
-
 
     - name: Add Notes to Existing Release
       uses: actions/github-script@v3
@@ -115,16 +107,18 @@ jobs:
             repo: context.repo.repo,
             release_id: releaseId
           });
-          
+    
           const combinedNotes = `${currentRelease.data.body}\n\n${additionalNotes}`;
           const response = await github.repos.updateRelease({
             owner: context.repo.owner,
             repo: context.repo.repo,
             release_id: releaseId,
-            body: {
-              body: combinedNotes
-            }
+            body: combinedNotes
           });
+    
+          // Output only the body value
+          console.log(response.data.body);
+
             
 
     # - name: update release notes
