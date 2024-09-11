@@ -1,4 +1,3 @@
 <<<<<<< HEAD
 Hello from main.
-=======
 >>>>>>> e126b3d (Update conflict.txt)
