@@ -42,7 +42,11 @@ jobs:
   # This workflow contains a single job called "bump-version"
  bump-version:
   runs-on: ubuntu-latest
-
+  permissions:
+      deployments: write
+      contents: write
+      statuses: write
+      
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
