@@ -90,20 +90,25 @@ jobs:
               generate_release_notes: true
             });
 
+    - name: update release notes
+      run: |
+            release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id') 
+            echo "RELEASE_ID=release_id" >> $GITHUB_ENV
+            echo "release ID is: $release_id"
     - name: Update Release Notes
       uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
         script: |
-          release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id')          echo "release ID is: $releasedId"
+          release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id') 
           echo "release ID is: $release_id"
-          const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${release_id}`);
+          const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`);
           const existingNotes = release.body || '';
           const newNotes = '${{ github.event.inputs.release_notes }}';
           
           const updatedNotes = `${existingNotes}\n\n${newNotes}`;
           
-          await github.request(`PATCH /repos/${{ github.repository }}/releases/${release_id}`, {
+          await github.request(`PATCH /repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}`, {
             body: updatedNotes
           });
 
