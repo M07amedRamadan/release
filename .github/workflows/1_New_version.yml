@@ -80,7 +80,7 @@ jobs:
         
     - name: Create a new release
       run: |
-        gh release create v${{ env.LATEST_TAG }} -t "Release ${{ env.LATEST_TAG }}" -F release_notes.txt
+        gh release create ${{ env.LATEST_TAG }} -t "Release v${{ env.LATEST_TAG }}" -F release_notes.txt
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
