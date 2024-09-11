@@ -116,7 +116,7 @@ jobs:
             release_id: releaseId
           });
           
-          const combinedNotes = `${currentRelease.data.body}\\n\\n${additionalNotes}`;
+          const combinedNotes = `${currentRelease.data.body}\n\n${additionalNotes}`;
           const response = await github.repos.updateRelease({
             owner: context.repo.owner,
             repo: context.repo.repo,
