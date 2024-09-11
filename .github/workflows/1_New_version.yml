@@ -46,6 +46,7 @@ jobs:
       deployments: write
       contents: write
       statuses: write
+  needs: publish
       
   steps:
     - name: Checkout repository
