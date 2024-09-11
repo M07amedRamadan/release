@@ -94,7 +94,7 @@ jobs:
       with:
         github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
         script: |
-          const releaseId = ${{ env.RELEASE_VERSION }}; // Specify the release ID of the release you want to update
+          const releaseId = "${{ env.RELEASE_VERSION }}"; // Specify the release ID of the release you want to update
           const additionalNotes = "${{ github.event.inputs.release_notes }}"; // Get additional notes input from the workflow
           
           const response = await github.repos.updateRelease({
