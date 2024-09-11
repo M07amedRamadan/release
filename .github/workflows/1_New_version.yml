@@ -102,17 +102,13 @@ jobs:
     - name: Create Release Notes
       uses: actions/github-script@v7
       with:
-        github-token: ${{secrets.VERSION_UPDATE_WORKFLOW_TOKEN}}
-        script: |
-          const releaseNotes = "${{ github.event.inputs.release_notes }}";  // Get release notes input from the workflow
-          const currentTag = "${{ github.ref }}";
-          const releaseVersion = "${{ env.RELEASE_VERSION }}";
-          const fullReleaseNotes = `Release Notes for v${releaseVersion}:\n${releaseNotes}`;
-          await github.request(`POST /repos/${{ github.repository }}/releases`, {
-            tag_name: currentTag,
-            name: `v${releaseVersion} release`,
-            body: fullReleaseNotes
-          });
+          github-token: ${{github.token}}
+          script: |
+            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+              tag_name: "${{ github.ref }}",
+              name: "v${{ env.RELEASE_VERSION }} release",
+              generate_release_notes: true
+            });
           
     - name: Deploy Release to both environment Trial and Production
       run: |
