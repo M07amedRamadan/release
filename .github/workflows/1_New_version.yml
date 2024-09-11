@@ -46,7 +46,6 @@ jobs:
       deployments: write
       contents: write
       statuses: write
-  needs: publish
       
   steps:
     - name: Checkout repository
@@ -88,29 +87,18 @@ jobs:
     #     echo "$RELEASE_NOTES" >> release_notes.txt
     #     cat release_notes.txt  
           
-    # - name: Generate release notes
-    #   run: |
-    #     echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-    #     PREVIOUS_TAG=$(git describe --tags --abbrev=0)
-    #     echo "Generating release notes for tag: $PREVIOUS_TAG"
-    #     git log $PREVIOUS_TAG..HEAD --oneline --decorate >> release_notes.txt
-    #     cat release_notes.txt
+    - name: Generate release notes
+      run: |
+        echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0)
+        echo "Generating release notes for tag: $PREVIOUS_TAG"
+        git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate >> release_notes.txt
+        cat release_notes.txt
         
-    # - name: Create a new release
-    #   run: |
-    #     gh release create ${{ env.LATEST_TAG }} -t "Release v${{ env.LATEST_TAG }}" -F release_notes.txt
+    - name: Create a new release
+      run: |
+        gh release create ${{ env.LATEST_TAG }} -t "Release v${{ env.LATEST_TAG }}" -F release_notes.txt
 
-    - name: Create Release Notes
-      uses: actions/github-script@v7
-      with:
-          github-token: ${{github.token}}
-          script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: "${{ github.ref }}",
-              name: "v${{ env.RELEASE_VERSION }} release",
-              generate_release_notes: true
-            });
-          
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
