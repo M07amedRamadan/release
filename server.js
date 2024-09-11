@@ -2,7 +2,6 @@ const http = require('http');
 // Define the port to listen to..
 <<<<<<< HEAD
 =======
-// Define listen to.
 >>>>>>> 906e221 (Update server.js)
 const PORT = 3000;
 // Define the HTML content

@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-Hello from main
+Hello from main.
 =======
-Hello from main1
+Hello from main1..
 >>>>>>> e126b3d (Update conflict.txt)
