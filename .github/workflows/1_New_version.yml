@@ -76,7 +76,10 @@ jobs:
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-        git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate >> release_notes.txt
+        LATEST_TAG=$(git describe --tags --abbrev=0)
+        echo "Generating release notes for tag: $LATEST_TAG"
+        git log $LATEST_TAG..HEAD --oneline --decorate >> release_notes.txt
+        cat release_notes.txt
         
     - name: Create a new release
       run: |
