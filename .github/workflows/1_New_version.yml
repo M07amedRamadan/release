@@ -90,9 +90,9 @@ jobs:
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-        PREVIOUS_TAG=$(git describe --tags --abbrev=0)
+        PREVIOUS_TAG=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
         echo "Generating release notes for tag: $PREVIOUS_TAG"
-        git log $(git describe --tags --abbrev=0)..HEAD --oneline --decorate >> release_notes.txt
+        git log ${PREVIOUS_TAG}..HEAD >> release_notes.txt
         cat release_notes.txt
         
     - name: Create a new release
