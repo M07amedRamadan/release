@@ -70,18 +70,18 @@ jobs:
                 
     - name: Extract version from branch name (for release branches)
       run: |
-          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-          echo "The latest tag is: $LATEST_TAG"
+          RELEASE_VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "The latest tag is: $RELEASE_VERSION"
 
-    - name: Generate new release notes
-      run: |
-        echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-        LATEST_RELEASE_TAG=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
-        echo "Generating release notes for tag: $LATEST_RELEASE_TAG"
-        RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/compare/$LATEST_RELEASE_TAG...HEAD" | jq -r '.commits[].commit.message')
-        echo "$RELEASE_NOTES" >> release_notes.txt
-        cat release_notes.txt  
+    # - name: Generate new release notes
+    #   run: |
+    #     echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
+    #     LATEST_RELEASE_TAG=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
+    #     echo "Generating release notes for tag: $LATEST_RELEASE_TAG"
+    #     RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/compare/$LATEST_RELEASE_TAG...HEAD" | jq -r '.commits[].commit.message')
+    #     echo "$RELEASE_NOTES" >> release_notes.txt
+    #     cat release_notes.txt  
           
     # - name: Generate release notes
     #   run: |
@@ -91,9 +91,25 @@ jobs:
     #     git log $PREVIOUS_TAG..HEAD --oneline --decorate >> release_notes.txt
     #     cat release_notes.txt
         
-    - name: Create a new release
-      run: |
-        gh release create ${{ env.LATEST_TAG }} -t "Release v${{ env.LATEST_TAG }}" -F release_notes.txt
+    # - name: Create a new release
+    #   run: |
+    #     gh release create ${{ env.LATEST_TAG }} -t "Release v${{ env.LATEST_TAG }}" -F release_notes.txt
+
+    - name: Create Release Notes
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{github.token}}
+        script: |
+          const releaseNotes = "${{ github.event.inputs.release_notes }}";  // Get release notes input from the workflow
+          const currentTag = "${{ github.ref }}";
+          const releaseVersion = "${{ env.RELEASE_VERSION }}";
+          const fullReleaseNotes = `Release Notes for v${releaseVersion}:\n${releaseNotes}`;
+          await github.request(`POST /repos/${{ github.repository }}/releases`, {
+            tag_name: currentTag,
+            name: `v${releaseVersion} release`,
+            body: fullReleaseNotes
+          });
+          
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
