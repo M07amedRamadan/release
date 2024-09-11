@@ -95,15 +95,15 @@ jobs:
       with:
         github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
         script: |
-          const releasedId =$(gh release view ${{ env.RELEASE_VERSION }} --json id)
-          echo "release ID is: $releasedId"
-          const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${releaseId}`);
+          release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id')          echo "release ID is: $releasedId"
+          echo "release ID is: $release_id"
+          const { data: release } = await github.request(`GET /repos/${{ github.repository }}/releases/${release_id}`);
           const existingNotes = release.body || '';
           const newNotes = '${{ github.event.inputs.release_notes }}';
           
           const updatedNotes = `${existingNotes}\n\n${newNotes}`;
           
-          await github.request(`PATCH /repos/${{ github.repository }}/releases/${releaseId}`, {
+          await github.request(`PATCH /repos/${{ github.repository }}/releases/${release_id}`, {
             body: updatedNotes
           });
 
