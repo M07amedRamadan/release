@@ -73,12 +73,13 @@ jobs:
           LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           echo "The latest tag is: $LATEST_TAG"
+          
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-        LATEST_TAG=$(git describe --tags --abbrev=0)
-        echo "Generating release notes for tag: $LATEST_TAG"
-        git log $LATEST_TAG..HEAD --oneline --decorate >> release_notes.txt
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0)
+        echo "Generating release notes for tag: $PREVIOUS_TAG"
+        git log $PREVIOUS_TAG..HEAD --oneline --decorate >> release_notes.txt
         cat release_notes.txt
         
     - name: Create a new release
