@@ -78,8 +78,8 @@ jobs:
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
         LATEST_RELEASE_TAG=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
-        echo "Generating release notes for tag: $LATEST_RELEASE_TAG"
-        RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/compare/$LATEST_RELEASE_TAG...HEAD" | jq -r '.commits[].commit.message')
+        echo "Generating release notes for tag: $LATEST_TAG"
+        RELEASE_NOTES=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" "https://api.github.com/repos/${{ github.repository }}/compare/$LATEST_TAG...HEAD" | jq -r '.commits[].commit.message')
         echo "$RELEASE_NOTES" >> release_notes.txt
         cat release_notes.txt  
           
