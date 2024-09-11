@@ -127,12 +127,12 @@ jobs:
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           fi
           
-    - name: Merge prod_branch back to pre-master branch.
-      if: env.merge_success == 'true'
-      run: |
-            gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
-            pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
-            gh pr merge $pr_url --merge --admin
+    # - name: Merge prod_branch back to pre-master branch.
+    #   if: env.merge_success == 'true'
+    #   run: |
+    #         gh pr create --base main --head prob_branch --title "Merge prod_brnach into main" --body "Merging changes from  prob_branch back to main"
+    #         pr_url=$(gh pr list --base main --head prob_branch --json number --jq '.[0].url')
+    #         gh pr merge $pr_url --merge --admin
           
     # - name: Send a notification about the failure.
     #   if: failure()
