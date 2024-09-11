@@ -95,6 +95,7 @@ jobs:
             release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id') 
             echo "release_id=$release_id" >> $GITHUB_OUTPUT
             echo "release ID is: $release_id"
+            echo "ID is: ${{ steps.update_release_notes.outputs.release_id }}"
 
     - name: Add Notes to Existing Release
       uses: actions/github-script@v3
