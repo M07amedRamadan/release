@@ -1,5 +1,5 @@
 const http = require('http');
-// Define the port to listen to..
+// Define the port to listen to...
 const PORT = 3000;
 const htmlContent = `
 <!DOCTYPE html>
