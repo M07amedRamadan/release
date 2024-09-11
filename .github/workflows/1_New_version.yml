@@ -101,18 +101,17 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const releaseId = ${{env.RELEASE_ID}}; 
           const additionalNotes = "${{ github.event.inputs.release_notes }}";
           const currentRelease = await github.repos.getRelease({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            release_id: releaseId
+            release_id: ${{env.RELEASE_ID}}
           });
           const combinedNotes = `${currentRelease.data.body}\n\n${additionalNotes}`;
           const response = await github.repos.updateRelease({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            release_id: releaseId,
+            release_id: ${{env.RELEASE_ID}},
             body: {
               body: combinedNotes
             }
