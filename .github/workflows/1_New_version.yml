@@ -67,10 +67,12 @@ jobs:
     - name: Push latest version
       run: |
         git push origin main --follow-tags 
+                
     - name: Extract version from branch name (for release branches)
       run: |
-          new_version=$(npm version patch --tag-version-prefix="" )
-          echo "RELEASE_VERSION=$new_version" >> $GITHUB_ENV
+          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "The latest tag is: $LATEST_TAG"
     - name: Generate release notes
       run: |
         echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
@@ -78,7 +80,7 @@ jobs:
         
     - name: Create a new release
       run: |
-        gh release create v${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
+        gh release create v${{ env.LATEST_TAG }} -t "Release ${{ env.LATEST_TAG }}" -F release_notes.txt
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV

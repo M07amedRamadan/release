@@ -8,7 +8,7 @@ on:
   
 jobs:
   prod-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
 
     - name: Checkoutd
@@ -16,5 +16,6 @@ jobs:
     - name: Trial
       run: |
         echo "Trial"
+        sleep 120
 
    
