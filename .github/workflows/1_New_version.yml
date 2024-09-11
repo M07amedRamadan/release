@@ -88,23 +88,27 @@ jobs:
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
             });
+
+    - name: Extract version from branch name (for release branches)
+      run: |
+          gh release edit ${{ env.RELEASE_VERSION }} --notes "${{ github.event.inputs.release_notes }}"
             
-    - name: update Notes to Existing Release
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-        script: |
-          const releaseId = "${{ env.RELEASE_VERSION }}"; // Specify the release ID of the release you want to update
-          const additionalNotes = "${{ github.event.inputs.release_notes }}"; // Get additional notes input from the workflow
+    # - name: update Notes to Existing Release
+    #   uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+    #     script: |
+    #       const releaseId = "${{ env.RELEASE_VERSION }}"; // Specify the release ID of the release you want to update
+    #       const additionalNotes = "${{ github.event.inputs.release_notes }}"; // Get additional notes input from the workflow
           
-          const response = await github.repos.updateRelease({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            release_id: releaseId,
-            body: {
-              body: `${additionalNotes}`
-            }
-          });
+    #       const response = await github.repos.updateRelease({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         release_id: releaseId,
+    #         body: {
+    #           body: `${additionalNotes}`
+    #         }
+    #       });
     
     # - name: Generate release notes
     #   run: |
