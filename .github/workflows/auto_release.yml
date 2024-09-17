@@ -2,7 +2,7 @@
 on:
   workflow_dispatch:
 
-# name: Auto Release Process_Do not Touch
+name: Auto Release Process_Do not Touch
 
 # jobs:
 #   # publish:
