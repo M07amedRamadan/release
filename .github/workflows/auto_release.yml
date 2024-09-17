@@ -4,7 +4,7 @@ on:
 
 name: Auto Release Process_Do not Touch
 
-# jobs:
+jobs:
 #   # publish:
 #   #   name: Publish to npm
 #   #   runs-on: ubuntu-latest
