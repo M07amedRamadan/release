@@ -1,9 +1,8 @@
 
 on:
-  workflow_run:
-    workflows: ["Deploy Trial"]  # Name of the workflow to wait for
-    types:
-      - completed 
+  # push:
+  #   tags:
+  #     - '*'
 
 name: Auto Release Process_Do not Touch
 
