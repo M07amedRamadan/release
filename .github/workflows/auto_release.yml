@@ -1,7 +1,7 @@
 
 on:
   workflow_run:
-    workflows: ["0_New version and deploy"]  # Name of the workflow to wait for
+    workflows: ["self runner"]  # Name of the workflow to wait for
     types:
       - completed 
 
