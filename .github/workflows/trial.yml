@@ -16,6 +16,6 @@ jobs:
     - name: Trial
       run: |
         echo "Trial"
-        sleep 120
+        sleep 3
 
    
