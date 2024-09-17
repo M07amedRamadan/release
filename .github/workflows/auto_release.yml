@@ -1,8 +1,9 @@
 
 on:
-  # push:
-  #   tags:
-  #     - '*'
+  workflow_run:
+    workflows: ["0_New version and deploy"]  # Name of the workflow to wait for
+    types:
+      - completed 
 
 name: Auto Release Process_Do not Touch
 
