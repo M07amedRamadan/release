@@ -87,7 +87,7 @@ jobs:
               tag_name: "${{ env.RELEASE_VERSION }}",
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
-    #         });
+             });
 
     # - name: Update Release Notes
     #   id: update_release_notes
