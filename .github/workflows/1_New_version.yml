@@ -137,10 +137,21 @@ jobs:
     - name: Check for Conflicts
       id: check_conflicts
       run: |
-          git rebase origin/prod_branch || true
-          conflicts=$(git ls-files -u)
-          echo "Conflicts detected: $conflicts"
-          echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
+          MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeableState --jq '.mergeableState')
+          if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
+            echo "Conflicts detected: $conflicts"
+            echo "::set-output name=has_conflicts::{CONFLICTING}"
+            exit 1 
+          else
+            echo "::set-output name=has_conflicts::{false}"
+          fi
+
+
+    
+    # git rebase origin/prod_branch || true
+    # conflicts=$(git ls-files -u)
+    # echo "Conflicts detected: $conflicts"
+    # echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
     # - name: Resolve Conflicts Automatically
     #   if: steps.check_conflicts.outputs.has_conflicts == 'true'
