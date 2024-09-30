@@ -87,37 +87,37 @@ jobs:
               tag_name: "${{ env.RELEASE_VERSION }}",
               name: "v${{ env.RELEASE_VERSION }} release",
               generate_release_notes: true
-            });
+    #         });
 
-    - name: Update Release Notes
-      id: update_release_notes
-      run: |
-          release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id')
-          echo "release_id=$release_id" >> $GITHUB_OUTPUT
+    # - name: Update Release Notes
+    #   id: update_release_notes
+    #   run: |
+    #       release_id=$(curl -s -H "Authorization: Bearer ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_VERSION }} | jq -r '.id')
+    #       echo "release_id=$release_id" >> $GITHUB_OUTPUT
 
-    - name: Add Notes to Existing Release
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
-        script: |
-          const releaseId = '${{ steps.update_release_notes.outputs.release_id }}';
-          const additionalNotes = "${{ github.event.inputs.release_notes }}";
-          const currentRelease = await github.repos.getRelease({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            release_id: releaseId
-          });
+    # - name: Add Notes to Existing Release
+    #   uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}
+    #     script: |
+    #       const releaseId = '${{ steps.update_release_notes.outputs.release_id }}';
+    #       const additionalNotes = "${{ github.event.inputs.release_notes }}";
+    #       const currentRelease = await github.repos.getRelease({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         release_id: releaseId
+    #       });
     
-          const combinedNotes = `${currentRelease.data.body}\n---\n${additionalNotes}`;
-          const response = await github.repos.updateRelease({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            release_id: releaseId,
-            body: combinedNotes
-          });
+    #       const combinedNotes = `${currentRelease.data.body}\n---\n${additionalNotes}`;
+    #       const response = await github.repos.updateRelease({
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         release_id: releaseId,
+    #         body: combinedNotes
+    #       });
     
-          // Output only the body value
-          console.log(response.data.body);
+    #       // Output only the body value
+    #       console.log(response.data.body);
 
             
 
@@ -125,30 +125,22 @@ jobs:
     #   run: |
     #       gh release edit ${{ env.RELEASE_VERSION }} --notes "${{ github.event.inputs.release_notes }}"
             
-
-    # - name: Generate release notes
-    #   run: |
-    #     echo -e "${{ github.event.inputs.release_notes }}" > release_notes.txt
-    #     PREVIOUS_TAG=$(curl -s -H "Authorization: token ${{ secrets.VERSION_UPDATE_WORKFLOW_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r '.tag_name')
-    #     echo "Generating release notes for tag: $PREVIOUS_TAG"
-    #     git log ${PREVIOUS_TAG}..HEAD --oneline --decorate >> release_notes.txt
-    #     cat release_notes.txt
         
     # - name: Create a new release
     #   run: |
     #     gh release create ${{ env.RELEASE_VERSION }} -t "Release v${{ env.RELEASE_VERSION }}" -F release_notes.txt
 
-    # - name: Deploy Release to both environment Trial and Production
-    #   run: |
-    #     echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
+    - name: Deploy Release to both environment Trial and Production
+      run: |
+        echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
         
-    # - name: Check for Conflicts
-    #   id: check_conflicts
-    #   run: |
-    #       git rebase origin/prod_branch || true
-    #       conflicts=$(git ls-files -u)
-    #       echo "Conflicts detected: $conflicts"
-    #       echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
+    - name: Check for Conflicts
+      id: check_conflicts
+      run: |
+          git rebase origin/prod_branch || true
+          conflicts=$(git ls-files -u)
+          echo "Conflicts detected: $conflicts"
+          echo "::set-output name=has_conflicts::$(test -n "$conflicts" && echo true || echo false)"
 
     # - name: Resolve Conflicts Automatically
     #   if: steps.check_conflicts.outputs.has_conflicts == 'true'
@@ -165,24 +157,24 @@ jobs:
     #       git rebase --continue
     #       git push --force-with-lease
    
-    # - name: Merge pre-master to prod_branch
-    #   id: production-merge
-    #   if: env.environment == 'Both' || env.environment == 'Production_Only'
-    #   run: |
-    #       gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
-    #       pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
-    #       release_notes="${{ github.event.inputs.release_notes }}"
-    #       if [ -n "$release_notes" ]; then
-    #         release_notes=$(echo -e "$release_notes")
-    #         gh pr comment $pr_number --body "$release_notes"
-    #       fi 
-    #       echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
-    #       if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
-    #         gh pr merge ${pr_number} --merge --admin > merge_output.txt
-    #         echo "merge_success=true" >> $GITHUB_ENV
-    #       else
-    #         gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-    #      fi
+    - name: Merge pre-master to prod_branch
+      id: production-merge
+      if: env.environment == 'Both' || env.environment == 'Production_Only'
+      run: |
+          gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
+          pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
+          release_notes="${{ github.event.inputs.release_notes }}"
+          if [ -n "$release_notes" ]; then
+            release_notes=$(echo -e "$release_notes")
+            gh pr comment $pr_number --body "$release_notes"
+          fi 
+          echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
+          if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
+            gh pr merge ${pr_number} --merge --admin > merge_output.txt
+            echo "merge_success=true" >> $GITHUB_ENV
+          else
+            gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+          fi
           
     # - name: Merge prod_branch back to pre-master branch.
     #   if: env.merge_success == 'true'
