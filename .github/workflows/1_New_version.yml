@@ -181,10 +181,10 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
+          if [ "$MERGEABLE_STATE" == 'MERGEABLE' ] ; then
             gh pr merge ${pr_number} --merge --admin > merge_output.txt
             echo "merge_success=true" >> $GITHUB_ENV
-          elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ]
+          elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           else
             gh pr comment ${pr_number} --body "@M07amedRamadan there are unknown issues that need to be checked with pre-master"
