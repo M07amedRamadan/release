@@ -176,20 +176,13 @@ jobs:
           pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
           MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
           echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
-          if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
-            echo "Conflicts detected: $conflicts"
-            echo "::set-output name=has_conflicts::true"
-            exit 1 
-          else
-            echo "::set-output name=has_conflicts::false"
-          fi
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
           echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
-          if [ "${{ steps.check_conflicts.outputs.has_conflicts }}" == 'false' ]; then
+          if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
             gh pr merge ${pr_number} --merge --admin > merge_output.txt
             echo "merge_success=true" >> $GITHUB_ENV
           else
