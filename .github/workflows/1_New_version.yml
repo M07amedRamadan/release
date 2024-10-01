@@ -175,6 +175,7 @@ jobs:
           gh pr create --base prod_branch --head main --title "Merge main into prod_branch" --body "Merging changes from  main into prod_branch"
           pr_number=$(gh pr list --base prod_branch --head main --json number --jq '.[0].number')
           MERGEABLE_STATE=$(gh pr status $PR_NUMBER)
+          echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
           if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
             echo "Conflicts detected: $conflicts"
             echo "::set-output name=has_conflicts::true"
