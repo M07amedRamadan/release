@@ -134,17 +134,17 @@ jobs:
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
         
-    - name: Check for Conflicts
-      id: check_conflicts
-      run: |
-          MERGEABLE_STATE=$(gh pr status $PR_NUMBER)
-          if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
-            echo "Conflicts detected: $conflicts"
-            echo "::set-output name=has_conflicts::{CONFLICTING}"
-            exit 1 
-          else
-            echo "::set-output name=has_conflicts::{false}"
-          fi
+    # - name: Check for Conflicts
+    #   id: check_conflicts
+    #   run: |
+    #       MERGEABLE_STATE=$(gh pr status $PR_NUMBER)
+    #       if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
+    #         echo "Conflicts detected: $conflicts"
+    #         echo "::set-output name=has_conflicts::true"
+    #         exit 1 
+    #       else
+    #         echo "::set-output name=has_conflicts::{false}"
+    #       fi
 
 
     
@@ -177,10 +177,10 @@ jobs:
           MERGEABLE_STATE=$(gh pr status $PR_NUMBER)
           if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
             echo "Conflicts detected: $conflicts"
-            echo "::set-output name=has_conflicts::{CONFLICTING}"
+            echo "::set-output name=has_conflicts::true"
             exit 1 
           else
-            echo "::set-output name=has_conflicts::{false}"
+            echo "::set-output name=has_conflicts::false"
           fi
           release_notes="${{ github.event.inputs.release_notes }}"
           if [ -n "$release_notes" ]; then
