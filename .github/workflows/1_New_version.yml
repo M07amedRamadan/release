@@ -181,12 +181,13 @@ jobs:
             release_notes=$(echo -e "$release_notes")
             gh pr comment $pr_number --body "$release_notes"
           fi 
-          echo "has_conflicts: ${{steps.check_conflicts.outputs.has_conflicts}}"
           if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
             gh pr merge ${pr_number} --merge --admin > merge_output.txt
             echo "merge_success=true" >> $GITHUB_ENV
-          else
+          elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ]
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+          else
+            gh pr comment ${pr_number} --body "@M07amedRamadan the unknown reasons need to be checked with pre-master"
           fi
           
     # - name: Merge prod_branch back to pre-master branch.
