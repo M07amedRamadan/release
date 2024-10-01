@@ -187,7 +187,7 @@ jobs:
           elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ]
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           else
-            gh pr comment ${pr_number} --body "@M07amedRamadan the unknown reasons need to be checked with pre-master"
+            gh pr comment ${pr_number} --body "@M07amedRamadan there are unknown issues that need to be checked with pre-master"
           fi
           
     # - name: Merge prod_branch back to pre-master branch.
