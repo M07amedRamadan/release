@@ -22,3 +22,9 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
+
+    - name: Upload SARIF report
+      uses: actions/upload-artifact@v3
+      with:
+        name: codeql-sarif-report
+        path: codeql-results/javascript.sarif  # Path to SARIF report
