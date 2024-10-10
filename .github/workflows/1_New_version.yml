@@ -133,21 +133,8 @@ jobs:
     - name: Deploy Release to both environment Trial and Production
       run: |
         echo "environment=${{ github.event.inputs.DeployTo }}" >> $GITHUB_ENV
-        
-    # - name: Check for Conflicts
-    #   id: check_conflicts
-    #   run: |
-    #       MERGEABLE_STATE=$(gh pr status $PR_NUMBER)
-    #       if [[ "$MERGEABLE_STATE" == "CONFLICTING" ]]; then
-    #         echo "Conflicts detected: $conflicts"
-    #         echo "::set-output name=has_conflicts::true"
-    #         exit 1 
-    #       else
-    #         echo "::set-output name=has_conflicts::{false}"
-    #       fi
 
 
-    
     # git rebase origin/prod_branch || true
     # conflicts=$(git ls-files -u)
     # echo "Conflicts detected: $conflicts"
@@ -168,7 +155,7 @@ jobs:
     #       git rebase --continue
     #       git push --force-with-lease
    
-    - name: Merge pre-master to prod_branch
+    - name: Merge main to prod_branch
       id: production-merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
       run: |
@@ -188,6 +175,45 @@ jobs:
             gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
           else
             gh pr comment ${pr_number} --body "@M07amedRamadan there are unknown issues that need to be checked with pre-master"
+          fi
+
+    - name: Merge main to pre-master
+      if: env.environment == 'Both' || env.environment == 'Trial_Only'
+      run: |
+          gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
+          pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
+          MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
+          echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
+          release_notes="${{ github.event.inputs.release_notes }}"
+          if [ -n "$release_notes" ]; then
+            release_notes=$(echo -e "$release_notes")
+            gh pr comment $pr_number --body "$release_notes"
+          fi 
+          if [ "$MERGEABLE_STATE" == 'MERGEABLE' ] ; then
+            gh pr merge ${pr_number} --merge --admin > merge_output.txt
+            echo "merge_success=true" >> $GITHUB_ENV
+          elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
+            gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+          else
+            echo " sleeping 60 seconds"
+            sleep 60
+            MERGEABLE="UNKNOWN"
+            while [ "$MERGEABLE" != 'MERGEABLE' ] || [ "$MERGEABLE" != "CONFLICTING" ]; do
+              MERGEABLE=$(MERGEABLE_STATE)
+              echo "MERGEABLE state is: $MERGEABLE"
+              if [ "$MERGEABLE" != "MERGEABLE" ] || [ "$MERGEABLE" != "CONFLICTING" ]; then
+                echo "Mergeable state is unknown, retrying in 5 seconds..."
+                sleep 10
+              elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
+                gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+                echo "MERGEABLE state is: $MERGEABLE"
+                break
+              else
+                gh pr merge ${pr_number} --merge --admin > merge_output.txt
+                echo "MERGEABLE state is: $MERGEABLE"
+                echo "merge_success=true" >> $GITHUB_ENV
+                break
+            done
           fi
           
     # - name: Merge prod_branch back to pre-master branch.
