@@ -154,6 +154,36 @@ jobs:
     #       done
     #       git rebase --continue
     #       git push --force-with-lease
+
+    - name: Merge main to pre-master
+      if: env.environment == 'Both' || env.environment == 'Trial_Only'
+      run: |
+          gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
+          pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
+          while true; do
+            MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
+            echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
+            if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
+              gh pr merge ${pr_number} --merge --admin > merge_output.txt
+              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
+              break
+              
+            elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
+              gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflicts with pre-master"
+              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
+              break
+              
+            else 
+              count+=1
+              if [ count => 5 ] ; then  # count is used to prevent looping inside for a while.
+                 gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown"
+                 break
+              fi
+              echo "Mergeable state is unknown, retrying in 30 seconds..."
+              sleep 30
+            fi
+          done
+
    
     - name: Merge main to prod_branch
       id: production-merge
@@ -177,30 +207,7 @@ jobs:
             gh pr comment ${pr_number} --body "@M07amedRamadan there are unknown issues that need to be checked with pre-master"
           fi
           
-    - name: Merge main to pre-master
-      if: env.environment == 'Both' || env.environment == 'Trial_Only'
-      run: |
-          gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
-          pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
-          while true; do
-            MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
-            echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
-            if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
-              gh pr merge ${pr_number} --merge --admin > merge_output.txt
-              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
-              break
-              
-            elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
-              gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflicts with pre-master"
-              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
-              break
-              
-            else
-              echo "The state is: $MERGEABLE_STATE"
-              echo "Mergeable state is unknown, retrying in 30 seconds..."
-              sleep 30
-            fi
-          done
+   
 
     # - name: Merge main to pre-master
     #   if: env.environment == 'Both' || env.environment == 'Trial_Only'
