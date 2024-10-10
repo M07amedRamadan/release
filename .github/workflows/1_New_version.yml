@@ -199,7 +199,7 @@ jobs:
             sleep 60
             MERGEABLE="UNKNOWN"
             while [ "$MERGEABLE" != 'MERGEABLE' ] || [ "$MERGEABLE" != "CONFLICTING" ]; do
-              MERGEABLE=$(MERGEABLE_STATE)
+              MERGEABLE=$($MERGEABLE_STATE)
               echo "MERGEABLE state is: $MERGEABLE"
               if [ "$MERGEABLE" != "MERGEABLE" ] || [ "$MERGEABLE" != "CONFLICTING" ]; then
                 echo "Mergeable state is unknown, retrying in 5 seconds..."
