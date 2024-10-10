@@ -165,6 +165,10 @@ jobs:
           git add test.txt
           git commit -m "Trigger recalculation for mergeable state"
           git push --force
+          echo "Test recalcasdasdasdasdasdulation" >> test.txt
+          git add test.txt
+          git commit -m "Trigger recalculation for mergeable state"
+          git push --force
           echo "checkout to main again"
           git checkout main
           count=0
