@@ -213,6 +213,7 @@ jobs:
                 echo "MERGEABLE state is: $MERGEABLE"
                 echo "merge_success=true" >> $GITHUB_ENV
                 break
+              fi
             done
           fi
           
