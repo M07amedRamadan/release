@@ -160,31 +160,32 @@ jobs:
       run: |
           gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
           pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
+          count=0
           while true; do
             MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
             echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
             if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
               gh pr merge ${pr_number} --merge --admin > merge_output.txt
-              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
+              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE and PR merged successfully"
               break
               
             elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
               gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflicts with pre-master"
-              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE"
+              echo "MERGEABLE_STATE state is: $MERGEABLE_STATE and PR created without merging"
               break
               
             else 
-              count+=1
-              if [ count => 5 ] ; then  # count is used to prevent looping inside for a while.
-                 gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown"
+              count=$((count+1))
+              if [ "$count" -ge 5 ] ; then  # count is used to prevent looping inside while looping after 4 minutes.
+                 echo "the time exceeded 4 minutes "
+                 gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown, please check it"
                  break
               fi
               echo "Mergeable state is unknown, retrying in 30 seconds..."
-              sleep 30
+              sleep 40
             fi
           done
 
-   
     - name: Merge main to prod_branch
       id: production-merge
       if: env.environment == 'Both' || env.environment == 'Production_Only'
