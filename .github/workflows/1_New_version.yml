@@ -184,7 +184,6 @@ jobs:
           pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
           MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
           echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
-          sleep 60
           while true; do
             echo "Inside while loop"
             if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
