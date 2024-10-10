@@ -160,6 +160,11 @@ jobs:
       run: |
           gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
           pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
+          git checkout pre-master
+          echo "Test recalculation" >> test.txt
+          git add test.txt
+          git commit -m "Trigger recalculation for mergeable state"
+          git push --force
           count=0
           while true; do
             MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
