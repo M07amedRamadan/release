@@ -160,8 +160,9 @@ jobs:
       run: |
           gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
           pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
+          count=0
           while true; do
-            MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
+            #MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
             echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
             if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
               gh pr merge ${pr_number} --merge --admin > merge_output.txt
@@ -174,9 +175,10 @@ jobs:
               break
               
             else 
-              count+=1
-              if [ count => 5 ] ; then  # count is used to prevent looping inside for a while.
-                 gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown"
+              count=$((count+1))
+              if [ "$count" -ge 5 ] ; then  # count is used to prevent looping inside for a while.
+                 echo "the time exceeded 3 minutes "
+                 gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown, please check it"
                  break
               fi
               echo "Mergeable state is unknown, retrying in 30 seconds..."
