@@ -199,20 +199,24 @@ jobs:
             sleep 60
             MERGEABLE="UNKNOWN"
             while [ "$MERGEABLE" != 'MERGEABLE' ] || [ "$MERGEABLE" != "CONFLICTING" ]; do
-              MERGEABLE=$($MERGEABLE_STATE)
+              echo "Inside while loop"
+              MERGEABLE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
               echo "MERGEABLE state is: $MERGEABLE"
-              if [ "$MERGEABLE" != "MERGEABLE" ] || [ "$MERGEABLE" != "CONFLICTING" ]; then
-                echo "Mergeable state is unknown, retrying in 5 seconds..."
-                sleep 10
-              elif [ "$MERGEABLE_STATE" == 'CONFLICTING' ] ; then
-                gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
-                echo "MERGEABLE state is: $MERGEABLE"
-                break
-              else
+              if [ "$MERGEABLE" == 'MERGEABLE' ]; then
                 gh pr merge ${pr_number} --merge --admin > merge_output.txt
                 echo "MERGEABLE state is: $MERGEABLE"
                 echo "merge_success=true" >> $GITHUB_ENV
                 break
+                
+              elif [ "$MERGEABLE" == 'CONFLICTING' ] ; then
+                gh pr comment ${pr_number} --body "@M07amedRamadan the prod_branch has conflict with pre-master"
+                echo "MERGEABLE state is: $MERGEABLE"
+                break
+                
+              else
+                echo "the state is: $MERGEABLE"
+                echo "Mergeable state is unknown, retrying in 10 seconds..."
+                sleep 10
               fi
             done
           fi
