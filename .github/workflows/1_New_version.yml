@@ -188,8 +188,8 @@ jobs:
                  gh pr comment ${pr_number} --body "@M07amedRamadan the Mergeable state is unknown, please check it"
                  break
               fi
-              echo "Mergeable state is unknown, retrying in 30 seconds..."
-              sleep 40
+              echo "Mergeable state is unknown, retrying in 10 seconds..."
+              sleep 10
             fi
           done
 
