@@ -2,8 +2,4 @@
 Hello from main
 
 Hello from main1..
-<<<<<<< main
- (Update conflict.txt)
-=======
- e126b3d 
->>>>>>> prod_branch
+
