@@ -182,9 +182,9 @@ jobs:
       run: |
           gh pr create --base pre-master --head main --title "Merge main into pre-master" --body "Merging changes from  main into pre-master"
           pr_number=$(gh pr list --base pre-master --head main --json number --jq '.[0].number')
-          MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
+          MERGEABLE_STATE="UNKNOWN"
           echo "MERGEABLE_STATE is: $MERGEABLE_STATE"
-          while true; do
+          while [ "$MERGEABLE_STATE" != 'MERGEABLE' ] || [ "$MERGEABLE_STATE" != "CONFLICTING" ]; do
             echo "Inside while loop"
             if [ "$MERGEABLE_STATE" == 'MERGEABLE' ]; then
               gh pr merge ${pr_number} --merge --admin > merge_output.txt
@@ -197,6 +197,7 @@ jobs:
               break
               
             else
+              MERGEABLE_STATE=$(gh pr view $PR_NUMBER --json mergeable --jq '.mergeable')
               echo "The state is: $MERGEABLE_STATE"
               echo "Mergeable state is unknown, retrying in 30 seconds..."
               sleep 30
