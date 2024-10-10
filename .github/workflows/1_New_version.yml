@@ -193,7 +193,7 @@ jobs:
                  break
               fi
               echo "Mergeable state is unknown, retrying in 10 seconds..."
-              sleep 3
+              sleep 40
             fi
           done
 
