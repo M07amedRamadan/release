@@ -47,11 +47,11 @@ This guide explains how to create a cron job on a CentOS system that downloads a
 
 2. Add a new cron job to execute the script at your desired schedule. For example, to run the script every day at 2 AM, add:
     ```bash
-    0 2 * * * /path/to/your/update-version.sh
+    0 2 * * * /path/to/your/update-version.sh /path/to/your-bash-file
     ```
 note in this step you must know what timeline does the server use (mostly it will be UTC so you need to consider that).
     Here’s a breakdown of the schedule format:
-    ```
+
     * * * * * command_to_execute
     - - - - -
     | | | | |
@@ -60,7 +60,7 @@ note in this step you must know what timeline does the server use (mostly it wil
     | | --------- Day of the month (1 - 31)
     | ----------- Hour (0 - 23)
     ------------- Minute (0 - 59)
-    ```
+
 
 3. Save and exit the editor. The cron job is now scheduled to run the script every day at 2 AM.
 
