@@ -1,4 +1,7 @@
 #!/bin/bash
+
+cd $1
+
 source ./function.sh
 
  AWS_REGION="us-east-1"
