@@ -70,7 +70,7 @@ This guide explains how to create a cron job on a CentOS system that downloads a
     ```
 note in this step you must know what timeline does the server use (mostly it will be UTC so you need to consider that).
     Here’s a breakdown of the schedule format:
-    ```
+
     * * * * * command_to_execute
     - - - - -
     | | | | |
@@ -79,7 +79,7 @@ note in this step you must know what timeline does the server use (mostly it wil
     | | --------- Day of the month (1 - 31)
     | ----------- Hour (0 - 23)
     ------------- Minute (0 - 59)
-    ```
+
 also note that the file takes the path it's currently in as an input. this is done to give the flexibility to put the file any where on the server.
 3. Save and exit the editor. The cron job is now scheduled to run the script every day at 2 AM.
 
