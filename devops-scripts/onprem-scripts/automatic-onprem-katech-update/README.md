@@ -18,18 +18,18 @@ SES is used as a notification to tell us if the deployment has failed or succeed
 
 ### encrypting docker-compose.yml
  in this case the docker-compose.yml is encrypted via kms. to encrypt it use the following cmd
-    ```bash
+ 
+
     /usr/local/bin/aws kms encrypt \
     --key-id alias/<put the key alias here> \
     --plaintext fileb://docker-compose.yml \
     --output text \
     --query CiphertextBlob \
     | base64 --decode > docker-compose.yml.encrypted
-    ```
+
 
 ### transform the file to executable files
 to transform the file to executable files use the shc utility.
-
     ```bash
     shc -r -f update-version-katech.sh
     ```
@@ -63,7 +63,7 @@ This guide explains how to create a cron job on a CentOS system that downloads a
     crontab -e
     ```
 
-2. Add a new cron job to execute the script at your desired schedule. For example, to run the script every day at 2 AM, add:
+2. Add a new cron job to execute the script at your desired schedule. For example, to run the script at 2 AM at sunday and wensday, add:
     ```bash
     0 2 * * 0 /path/to/your/update-version-katech.sh.x /path/to/your/executablefile
     0 2 * * 3 /path/to/your/update-version-katech.sh.x /path/to/your/executablefile
