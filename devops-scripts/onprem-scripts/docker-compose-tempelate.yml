@@ -152,8 +152,8 @@ services:
       - 80:80
       - 443:443
     environment:
-      vultara_app: localhost:4200
-      soc_app: localhost:4203
+      vultara_app: localhost:4200 #add vultara-app url
+      soc_app: localhost:4203 #add soc-app url
     volumes:
       - ./cert/vultara:/etc/nginx/vultara
       - ./cert/soc:/etc/nginx/soc
