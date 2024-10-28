@@ -33,13 +33,13 @@ jobs:
           scheduler_sha=$(aws ecr describe-images --repository-name scheduler --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
           echo $report_sha
           echo $scheduler_sha
-      #     docker pull $ECR_REGISTRY/vultara-main-app:frontend
-      #     docker pull $ECR_REGISTRY/vultara-main-app:backend
-      #     docker pull $ECR_REGISTRY/report-generator:$report_sha
-      #     docker pull $ECR_REGISTRY/scheduler:$scheduler_sha
-      #     docker pull $ECR_REGISTRY/soc-app:frontend
-      #     docker pull $ECR_REGISTRY/soc-app:backend
-      #     docker pull $ECR_REGISTRY/authentication-server:backend
+          docker pull $ECR_REGISTRY/vultara-main-app:frontend
+          docker pull $ECR_REGISTRY/vultara-main-app:backend
+          docker pull $ECR_REGISTRY/report-generator:$report_sha
+          docker pull $ECR_REGISTRY/scheduler:$scheduler_sha
+          docker pull $ECR_REGISTRY/soc-app:frontend
+          docker pull $ECR_REGISTRY/soc-app:backend
+          docker pull $ECR_REGISTRY/authentication-server:backend
 
       # - name: changing the image tag
       #   env:
