@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 5 * * *'
-  push:
-    branches:
-    - aptiv-automation
 
 jobs:
   update_nvd_and_osv:
@@ -38,4 +35,4 @@ jobs:
         run: |
           cd ./data-cve/osv/
           zip -r -0 ./osvfiles.zip ./*
-          /usr/local/bin/aws s3 cp ./osvfiles.zip s3://onsite-images0401/
+          aws s3 cp ./osvfiles.zip s3://onsite-images0401/
