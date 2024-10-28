@@ -1,0 +1,170 @@
+version: '3'
+
+services:
+  MongoDB services
+  mongo:
+    image: mongo:latest
+    container_name: vultaradb
+    restart: always
+    volumes:
+      - mongodb_data:/data/db
+
+  # NodeJS services
+  vultara-server:
+    container_name: vultara-backend
+    image: vultara-main-app:backend
+    environment:
+      ATLASTRIALDB_LOCAL: 
+      ATLASTRIALDB_NONPRODJWTUSERACCESSDB: 
+      ATLASTRIALDB_LOCALDATAANALYTICS: 
+      ATLASTRIALDB_COMPONENTREAD: 
+      ATLASTRIALDB_HELPREAD: 
+      ATLASDB_ALGOREAD: 
+      ATLASDB_CUSTOMERDIAGNOSTIC: 
+      AWS_DEPLOY: 
+      JWT_SECRET_KEY: 
+      ACCESS_TOKEN: 
+      secretAccessKey: 
+      accessKeyId: 
+      cveApiKey: 
+    expose:
+      - 4201
+    depends_on:
+      - mongo
+    volumes:
+      - vultara_uploaded_files:/local_upload_folder
+
+  authentication-server:
+    image: authentication-server:backend
+    container_name: authentication-server
+    environment:
+      ATLASTRIALDB_NONPRODJWTUSERACCESSDB: 
+      AWS_DEPLOY: 
+      SERVER_PORT: 
+      JWT_SECRET_KEY: 
+      JWT_ACCESS_TOKEN_SECRET:  
+      JWT_REFRESH_TOKEN_SECRET: 
+      secretAccessKey: 
+      accessKeyId: 
+    expose:
+      - 4321
+    depends_on:
+      - mongo
+
+  soc-server:
+    image: soc-app:backend
+    container_name: soc-backend
+    environment:
+      ATLASTRIALDB_LOCAL: 
+      ATLASTRIALDB_NONPRODJWTUSERACCESSDB: 
+      ATLASTRIALDB_LOCALDATAANALYTICS: 
+      ATLASTRIALDB_COMPONENTREAD: 
+      ATLASTRIALDB_HELPREAD: 
+      ATLASDB_ALGOREAD: 
+      ATLASDB_CUSTOMERDIAGNOSTIC: 
+      AWS_DEPLOY: 
+      JWT_SECRET_KEY: 
+      secretAccessKey: 
+      accessKeyId: 
+      cveApiKey: 
+    expose:
+      - 4205
+    depends_on:
+      - mongo
+
+  # Angular services
+  vultara-client:
+    container_name: vultara-frontend
+    expose:
+      - 4200
+    environment:
+      TARGET_WEBSITE: http://localhost:4203 #add the url for soc-app
+    image: vultara-main-app:frontend
+    depends_on:
+      - mongo
+      - authentication-server
+      - vultara-server
+
+  soc-client:
+    container_name: soc-frontend
+    image: soc-app:frontend
+    expose:
+      - 4203
+    environment:
+      TARGET_WEBSITE: http://localhost:4200 #add the url for vultara-app
+    depends_on:
+      - mongo
+      - authentication-server
+      - soc-server
+
+  #additional services
+  report-generator:
+    container_name: report-generator
+    image: report-generator:onprem
+    environment:
+      AWS_DEPLOY: onPrem
+    expose:
+      - 4202
+    depends_on:
+      - mongo
+
+  scheduler:
+    container_name: scheduler
+    image: scheduler:onprem
+    environment:
+      AWS_DEPLOY: onPrem
+      ATLAS_ON_PREM_LOCAL: 
+      ATLAS_ON_PREM_USER: 
+      ATLAS_ON_PREM_MONITORING: 
+      ACCESS_TOKEN: 
+      ATLAS_ON_PREM_DATAANALYTICS: "MongoDB Atlas VultaraDB onPrem collections"
+      ATLAS_ON_PREM_USERACCESS: "MongoDB Atlas librariesCustomer onPrem collections"
+      secretAccessKey: 
+      accessKeyId: 
+      #ENCRYPTION_KEY_ARN: 
+    expose:
+      - 3000
+    depends_on:
+      - mongo
+    volumes:
+      - assets:/schedulerServer/assets
+      - osv:/schedulerServer/assets/osvdb
+      - backup:/schedulerServer/local_backUp_folder
+
+  nvd-sync:
+    container_name: nvd-sync
+    image: datasync:backend
+    environment:
+      DEPLOYMENT_TYPE: onPrem
+      SERVER_PORT: 4040
+    expose:
+      - 4040
+    depends_on:
+      - mongo
+    volumes:
+      - assets:/nvdDatabase
+      - osv:/osvDatabase
+
+  proxy:
+    container_name: proxy
+    image: vultara-main-app:proxy
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      vultara_app: localhost:4200 #add vultara-app url
+      soc_app: localhost:4203 #add soc-app url
+    volumes:
+      - ./cert/vultara:/etc/nginx/vultara
+      - ./cert/soc:/etc/nginx/soc
+    depends_on:
+      - mongo
+      - soc-client
+      - vultara-client
+
+volumes:
+  mongodb_data:
+  assets:
+  osv:
+  backup:
+  vultara_uploaded_files:
