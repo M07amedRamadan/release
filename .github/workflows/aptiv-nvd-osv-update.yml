@@ -18,7 +18,6 @@ jobs:
           aws-region: us-east-1
 
       - name: down nvd and osv from s3
-        id: nvdosvFiles
         run: |
           mkdir -p ./data-cve/osv ./data-cve/nvd
           aws s3 cp s3://vultara-nvdsync-data/nvd-api-feed/ ./data-cve/nvd/ --recursive
