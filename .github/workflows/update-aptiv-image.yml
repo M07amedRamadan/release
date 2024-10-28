@@ -27,7 +27,7 @@ jobs:
 
       - name: pull docker images from Amazon ECR
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           report_sha=$(aws ecr describe-images --repository-name report-generator --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
           scheduler_sha=$(aws ecr describe-images --repository-name scheduler --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
@@ -41,36 +41,36 @@ jobs:
           docker pull $ECR_REGISTRY/soc-app:backend
           docker pull $ECR_REGISTRY/authentication-server:backend
 
-      # - name: changing the image tag
-      #   env:
-      #     REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #   run: |
-      #     report_sha=$(aws ecr describe-images --repository-name report-generator --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
-      #     scheduler_sha=$(aws ecr describe-images --repository-name scheduler --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
-      #     docker tag $REGISTRY/report-generator:$report_sha report-generator:onprem
-      #     docker tag $REGISTRY/scheduler:$scheduler_sha scheduler:onprem
-      #     docker tag $REGISTRY/vultara-main-app:frontend vultara-main-app:frontend
-      #     docker tag $REGISTRY/vultara-main-app:backend vultara-main-app:backend
-      #     docker tag $REGISTRY/soc-app:frontend soc-app:frontend
-      #     docker tag $REGISTRY/soc-app:backend soc-app:backend
-      #     docker tag $REGISTRY/authentication-server:backend authentication-server:backend
+      - name: changing the image tag
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          report_sha=$(aws ecr describe-images --repository-name report-generator --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+          scheduler_sha=$(aws ecr describe-images --repository-name scheduler --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+          docker tag $ECR_REGISTRY/report-generator:$report_sha report-generator:onprem
+          docker tag $ECR_REGISTRY/scheduler:$scheduler_sha scheduler:onprem
+          docker tag $ECR_REGISTRY/vultara-main-app:frontend vultara-main-app:frontend
+          docker tag $ECR_REGISTRY/vultara-main-app:backend vultara-main-app:backend
+          docker tag $ECR_REGISTRY/soc-app:frontend soc-app:frontend
+          docker tag $ECR_REGISTRY/soc-app:backend soc-app:backend
+          docker tag $ECR_REGISTRY/authentication-server:backend authentication-server:backend
 
-      # - name: creating images.tar files
-      #   run: |
-      #     docker save authentication-server:backend -o ./authentication-server.tar
-      #     docker save report-generator:onprem -o ./report-generator.tar
-      #     docker save scheduler:onprem -o ./scheduler.tar
-      #     docker save soc-app:backend -o ./soc-app-backend.tar
-      #     docker save soc-app:frontend -o ./soc-app-frontend.tar
-      #     docker save vultara-main-app:frontend -o ./vultara-main-app-frontend.tar
-      #     docker save vultara-main-app:backend -o ./vultara-main-app-backend.tar
+      - name: creating images.tar files
+        run: |
+          docker save authentication-server:backend -o ./authentication-server.tar
+          docker save report-generator:onprem -o ./report-generator.tar
+          docker save scheduler:onprem -o ./scheduler.tar
+          docker save soc-app:backend -o ./soc-app-backend.tar
+          docker save soc-app:frontend -o ./soc-app-frontend.tar
+          docker save vultara-main-app:frontend -o ./vultara-main-app-frontend.tar
+          docker save vultara-main-app:backend -o ./vultara-main-app-backend.tar
 
-      # - name: uploading aptiv images
-      #   run: |
-      #     aws s3 cp ./vultara-main-app-frontend.tar s3://onsite-images0401/
-      #     aws s3 cp ./vultara-main-app-backend.tar s3://onsite-images0401/
-      #     aws s3 cp ./soc-app-frontend.tar s3://onsite-images0401/
-      #     aws s3 cp ./soc-app-backend.tar s3://onsite-images0401/
-      #     aws s3 cp ./scheduler.tar s3://onsite-images0401/
-      #     aws s3 cp ./report-generator.tar s3://onsite-images0401/
-      #     aws s3 cp ./authentication-server.tar s3://onsite-images0401/
+      - name: uploading aptiv images
+        run: |
+          aws s3 cp ./vultara-main-app-frontend.tar s3://onsite-images0401/
+          aws s3 cp ./vultara-main-app-backend.tar s3://onsite-images0401/
+          aws s3 cp ./soc-app-frontend.tar s3://onsite-images0401/
+          aws s3 cp ./soc-app-backend.tar s3://onsite-images0401/
+          aws s3 cp ./scheduler.tar s3://onsite-images0401/
+          aws s3 cp ./report-generator.tar s3://onsite-images0401/
+          aws s3 cp ./authentication-server.tar s3://onsite-images0401/
