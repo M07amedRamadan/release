@@ -74,7 +74,7 @@ docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/soc-app:frontend soc-app
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/soc-app:backend soc-app:backend
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/authentication-server:backend authentication-server:backend
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/datasync:backend datasync:backend
-docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultaradb:prod mongo:latest
+docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultaradb:prod vultaradb:data
 
 #running the docker containers and adding the data
 docker compose up -d

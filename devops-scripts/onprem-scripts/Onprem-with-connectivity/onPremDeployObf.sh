@@ -2,28 +2,6 @@
 
 yum update -y
 
-#creating the keys
-if [ ! -f ".docker-compose.yml" ]; then
-  mkdir ./.key
-  openssl rand -base64 32 > ./.key/keyfile
-  chmod 600 ./.key/keyfile
-else
-   echo "already encrypted"
-fi
-
-if [ ! -f ".docker-compose.yml" ]; then
-  gpg --batch --yes --passphrase-file "./.key/keyfile" -c -o ./.docker-compose.yml docker-compose.yml
-  multiline_code="vultara_up() {
-    gpg --batch --yes --passphrase-file "$PWD/.key/keyfile" -d "$PWD/.docker-compose.yml" > "$PWD/docker-compose.yml"
-    sudo docker compose -f $PWD/docker-compose.yml up -d
-    rm $PWD/docker-compose.yml
-  }"
-  echo "$multiline_code" >> /etc/bashrc
-  source /etc/bashrc
-else
-   echo "docker compose file is already created"
-fi
-
 if [ ! -f "awscliv2.zip" ]; then
    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
    yum install unzip -y
@@ -59,7 +37,7 @@ docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/scheduler:backend-obf sc
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultara-main-app:frontend vultara-main-app:frontend
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultara-main-app:backend-obf vultara-main-app:backend 
 docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/authentication-server:backend-obf authentication-server:backend
-docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultaradb:prod mongo:latest
+docker tag 837491041518.dkr.ecr.us-east-1.amazonaws.com/vultaradb:data-prod vultaradb:data
 
 #running the docker containers and adding the data
 DECRYPTED_CONTENT=$(/usr/local/bin/aws kms decrypt \
