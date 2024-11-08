@@ -4,7 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 5 * * *'
-
+  push:
+    branches:
+    - aptiv-automation
 jobs:
   update_nvd_and_osv:
     runs-on: ubuntu-latest
