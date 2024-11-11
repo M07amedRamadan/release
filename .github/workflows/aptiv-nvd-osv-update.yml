@@ -1,0 +1,37 @@
+name: update nvd and osv for aptiv
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  update_nvd_and_osv:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: down nvd and osv from s3
+        run: |
+          mkdir -p ./data-cve/osv ./data-cve/nvd
+          aws s3 cp s3://vultara-nvdsync-data/nvd-api-feed/ ./data-cve/nvd/ --recursive
+          aws s3 cp s3://vultara-nvdsync-data/osv-api-feed/osvDatabase/ ./data-cve/osv/ --recursive
+
+
+      - name: zip and upload nvd
+        run: |
+          cd ./data-cve/nvd/
+          zip -r ./nvdcve_jsons.zip ./*
+          aws s3 cp ./nvdcve_jsons.zip s3://onsite-images0401/
+
+      - name: zip and upload osv
+        run: |
+          cd ./data-cve/osv/
+          zip -r -0 ./osvfiles.zip ./*
+          aws s3 cp ./osvfiles.zip s3://onsite-images0401/
