@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  MongoDB services
+  # MongoDB services
   mongo:
-    image: mongo:latest
+    image: vultaradb:data
     container_name: vultaradb
     restart: always
     volumes:
