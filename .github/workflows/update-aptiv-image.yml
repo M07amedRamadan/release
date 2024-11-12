@@ -2,8 +2,8 @@ name: update images for aptiv
 
 on:
   schedule:
-    - cron: '0 4 * * 0'
-    - cron: '0 4 * * 3'
+    - cron: '0 3 * * 0'
+    - cron: '0 3 * * 3'
   workflow_dispatch:
     inputs:
       image_version:
