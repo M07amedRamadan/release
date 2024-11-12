@@ -88,3 +88,4 @@ jobs:
           aws s3 cp ./report-generator.tar s3://onsite-images0401/
           aws s3 cp ./authentication-server.tar s3://onsite-images0401/
           aws s3 cp ./vultaradb-aptiv.tar s3://onsite-images0401/
+          aws s3 cp ./vultara-main-app-proxy.tar s3://onsite-images0401/
