@@ -1,0 +1,36 @@
+name: Test Action
+on:
+  push:
+    branches:
+      - createDeleteECR
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Copy files via SCP
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SINGAPORE_VPC_UBUNTU_EC2_SSH_PRIVATE_KEY }}" > key.pem
+        chmod 600 ./key.pem
+        ssh-keyscan -p 40382 162.191.2.78 >> ~/.ssh/known_hosts
+        cat >> ~/.ssh/config <<END
+        Host 162.191.2.78
+          port 40382
+          IdentityFile ./key.pem
+          User user
+          IdentitiesOnly yes
+          StrictHostKeyChecking no
+          ForwardAgent yes
+        END
+        eval $(ssh-agent -s)
+        ssh-add ./key.pem
+        ssh-add -L
+        echo "after key scan"
+        echo "new file to test" >> new.txt
+        ls -la
+        ssh -p 40382 user@162.191.2.78 "del "C:\\Users\\User\\Desktop\\text.txt""
