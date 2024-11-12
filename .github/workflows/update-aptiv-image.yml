@@ -1,9 +1,6 @@
 name: update images for aptiv
 
 on:
-  push:
-    branches:
-    - adding-two-images-for-aptiv
   schedule:
     - cron: '0 4 * * 0'
     - cron: '0 4 * * 3'
