@@ -2,7 +2,7 @@ name: Test Action
 on:
   push:
     branches:
-      - createDeleteECR
+      - main
   workflow_dispatch:
 
 jobs:
