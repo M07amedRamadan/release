@@ -1,10 +1,15 @@
 name: update nvd and osv for aptiv
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 4 * * 0'
     - cron: '0 4 * * 3'
+  workflow_dispatch:
+    inputs:
+      image_version:
+        description: 'Specify MongoDB Docker image version'
+        required: true
+        default: 'latest'
 
 jobs:
   update_aptiv_image:
@@ -18,6 +23,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Run a one-line script
+        run: docker pull mongo:${{ github.event.inputs.image_version || '8' }}
+        
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -38,7 +46,6 @@ jobs:
           docker pull $ECR_REGISTRY/soc-app:frontend
           docker pull $ECR_REGISTRY/soc-app:backend
           docker pull $ECR_REGISTRY/authentication-server:backend
-          docker pull $ECR_REGISTRY/vultaradb:aptiv803
 
       - name: changing the image tag
         env:
@@ -54,7 +61,7 @@ jobs:
           docker tag $ECR_REGISTRY/soc-app:frontend soc-app:frontend
           docker tag $ECR_REGISTRY/soc-app:backend soc-app:backend
           docker tag $ECR_REGISTRY/authentication-server:backend authentication-server:backend
-          docker tag $ECR_REGISTRY/vultaradb:aptiv803 vultaradb:aptiv803
+          docker tag mongo:${{ github.event.inputs.image_version || '8' }} vultaradb:aptiv${{ github.event.inputs.image_version || '8' }}
 
       - name: creating images.tar files
         run: |
@@ -66,7 +73,7 @@ jobs:
           docker save vultara-main-app:frontend -o ./vultara-main-app-proxy.tar
           docker save vultara-main-app:frontend -o ./vultara-main-app-frontend.tar
           docker save vultara-main-app:backend -o ./vultara-main-app-backend.tar
-          docker save vultaradb:aptiv803 -o ./vultaradb-aptiv803.tar
+          docker save vultaradb:aptiv${{ github.event.inputs.image_version || '8' }} -o ./vultaradb-aptiv${{ github.event.inputs.image_version || '8' }}.tar
 
       - name: uploading aptiv images
         run: |
@@ -78,4 +85,4 @@ jobs:
           aws s3 cp ./report-generator.tar s3://onsite-images0401/
           aws s3 cp ./authentication-server.tar s3://onsite-images0401/
           aws s3 cp ./vultaradb-aptiv803.tar s3://onsite-images0401/
-          aws s3 cp ./vultara-main-app-proxy.tar s3://onsite-images0401/
+          aws s3 cp ./vultaradb-aptiv${{ github.event.inputs.image_version || '8' }}.tar s3://onsite-images0401/
