@@ -26,7 +26,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Run a one-line script
+      - name: pull mongo image
         run: docker pull mongo:${{ github.event.inputs.image_version || '8' }}
         
       - name: Login to Amazon ECR
@@ -64,7 +64,7 @@ jobs:
           docker tag $ECR_REGISTRY/soc-app:frontend soc-app:frontend
           docker tag $ECR_REGISTRY/soc-app:backend soc-app:backend
           docker tag $ECR_REGISTRY/authentication-server:backend authentication-server:backend
-          docker tag mongo:${{ github.event.inputs.image_version || '8' }} vultaradb:aptiv${{ github.event.inputs.image_version || '8' }}
+          docker tag mongo:${{ github.event.inputs.image_version || '8' }} vultaradb:aptiv
 
       - name: creating images.tar files
         run: |
@@ -76,7 +76,7 @@ jobs:
           docker save vultara-main-app:frontend -o ./vultara-main-app-proxy.tar
           docker save vultara-main-app:frontend -o ./vultara-main-app-frontend.tar
           docker save vultara-main-app:backend -o ./vultara-main-app-backend.tar
-          docker save vultaradb:aptiv${{ github.event.inputs.image_version || '8' }} -o ./vultaradb-aptiv${{ github.event.inputs.image_version || '8' }}.tar
+          docker save vultaradb:aptiv -o ./vultaradb-aptiv.tar
 
       - name: uploading aptiv images
         run: |
@@ -87,5 +87,4 @@ jobs:
           aws s3 cp ./scheduler.tar s3://onsite-images0401/
           aws s3 cp ./report-generator.tar s3://onsite-images0401/
           aws s3 cp ./authentication-server.tar s3://onsite-images0401/
-          aws s3 cp ./vultaradb-aptiv803.tar s3://onsite-images0401/
-          aws s3 cp ./vultaradb-aptiv${{ github.event.inputs.image_version || '8' }}.tar s3://onsite-images0401/
+          aws s3 cp ./vultaradb-aptiv.tar s3://onsite-images0401/
