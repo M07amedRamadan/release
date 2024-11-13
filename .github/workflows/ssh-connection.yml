@@ -34,7 +34,7 @@ jobs:
         echo "after key scan"
         echo "new file to test" >> new.txt
         ls -la
-        ssh -p 40382 user@162.191.2.78 "del "C:\\Users\\User\\Desktop\\text.txt""
+        scp  -P 40382 ./new.txt user@162.191.2.78:C:\\Users\\User\\Desktop
 
    
 
