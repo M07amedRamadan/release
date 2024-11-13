@@ -44,7 +44,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           
           # Configure SSH settings
-          echo "Host remote-server" > ~/.ssh/config
+          echo "Host 162.191.2.78" > ~/.ssh/config
           echo "  HostName 162.191.2.78" >> ~/.ssh/config          # Replace with actual IP/hostname
           echo "  User user" >> ~/.ssh/config                    # Replace with actual username
           echo "  Port 40382" >> ~/.ssh/config                      # Replace with actual SSH port
