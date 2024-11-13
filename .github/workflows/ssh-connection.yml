@@ -14,28 +14,29 @@ jobs:
 
     - name: Copy files via SCP
       run: |
+        mkdir -p ~/.ssh
+
+        ssh-keyscan -p 40382 162.191.2.78 >> ~/.ssh/known_hosts
+        cat >> ~/.ssh/config <<END
+        Host 162.191.2.78
+          port 40382
+          User user
+          IdentitiesOnly yes
+          StrictHostKeyChecking no
+          ForwardAgent yes
+        END
 
         echo "after key scan"
         echo "new file to test" >> new.txt
         ls -la
         sshpass -p "VultaraTest222" scp -P 40382 ./new.txt user@162.191.2.78:C:\\Users\\User\\Desktop
 
-   
+#IdentityFile ./key.pem
 
-    # mkdir -p ~/.ssh
-    # echo "${{ secrets.SINGAPORE_VPC_UBUNTU_EC2_SSH_PRIVATE_KEY }}" > key.pem
-    # cat key.pem
-    # chmod 700 ./key.pem
-    # ssh-keyscan -p 40382 162.191.2.78 >> ~/.ssh/known_hosts
-    # cat >> ~/.ssh/config <<END
-    # Host 162.191.2.78
-    #   port 40382
-    #   IdentityFile ./key.pem
-    #   User user
-    #   IdentitiesOnly yes
-    #   StrictHostKeyChecking no
-    #   ForwardAgent yes
-    # END
-    # eval $(ssh-agent -s)
-    # ssh-add ./key.pem
-    # ssh-add -L
+  #eval $(ssh-agent -s)
+  #ssh-add ./key.pem
+  #ssh-add -L
+          #echo "${{ secrets.SINGAPORE_VPC_UBUNTU_EC2_SSH_PRIVATE_KEY }}" > key.pem
+        #cat key.pem
+        #chmod 700 ./key.pem
+    
