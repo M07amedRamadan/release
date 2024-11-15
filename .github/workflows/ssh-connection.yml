@@ -29,7 +29,7 @@ jobs:
         echo "after key scan"
         echo "new file to test" >> new.txt
         ls -la
-        sshpass -p "VultaraTest222" scp -P 40382 ./new.txt user@162.191.2.78:C:\\Users\\User\\Desktop
+        scp -P 40382 ./new.txt user@162.191.2.78:C:\\Users\\User\\Desktop
 
 #IdentityFile ./key.pem
 
