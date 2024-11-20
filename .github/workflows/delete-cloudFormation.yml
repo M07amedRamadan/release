@@ -17,5 +17,5 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          aws cloudformation delete-stack --stack-name automate-destroy-test
-          aws cloudformation wait stack-delete-complete --stack-name automate-destroy-test
+          aws cloudformation delete-stack --stack-name automate-deletion-test
+          aws cloudformation wait stack-delete-complete --stack-name automate-deletion-test
