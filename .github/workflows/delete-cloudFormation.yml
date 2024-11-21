@@ -34,7 +34,7 @@ jobs:
             echo "validation done... "
             echo "update Stack"
             echo "delete Stack"
-            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }} --deletion-mode FORCE_DELETE_STACK
+            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
             echo "wait delete Stack"
             aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
             
