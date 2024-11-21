@@ -33,28 +33,13 @@ jobs:
             aws cloudformation validate-template --template-body file://current-template.yaml
             echo "validation done... "
             echo "update Stack"
-            aws cloudformation update-stack --stack-name ${{ github.event.inputs.Stack_Name }} --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
             echo "delete Stack"
             aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }} 
             echo "wait delete Stack"
             aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
             
             
-        #echo "after update"
+        #echo "after update"             aws cloudformation update-stack --stack-name ${{ github.event.inputs.Stack_Name }} --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
+
         #aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}
 
-            
-
-
-        # cat ./template.yml
-        # sed -i 's/"Retain"/"Delete"/g' ./template.yml
-        # cat ./template.yml            aws cloudformation update-stack --stack-name automate-destroy-test --template-body current-template.yaml
-
-        #  aws cloudformation get-template --stack-name automate-destroy-test  --output template.json
-
-            
-        #cat template.json
-
-        
-          #aws cloudformation delete-stack --stack-name automate-deletion-test
-          #aws cloudformation wait stack-delete-complete --stack-name automate-deletion-test
