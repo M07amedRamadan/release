@@ -23,10 +23,9 @@ jobs:
             aws cloudformation get-template --stack-name automate-destroy-test --query TemplateBody --output text > current-template.yaml
             chmod +w current-template.yaml
             ls -la
-            sed -i 's/"Retain"/"Delete"/g' current-template.yaml
+            sudo sed -i 's/"Retain"/"Delete"/g' current-template.yaml
             cat current-template.yaml
             aws cloudformation validate-template --template-body file://current-template.yaml
-            aws cloudformation update-stack --stack-name automate-destroy-test --template-body file://current-template.yaml
 
 
         # cat ./template.yml
