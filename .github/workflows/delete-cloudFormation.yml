@@ -20,7 +20,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation get-template --stack-name automate-destroy-test
+            aws cloudformation get-template --stack-name automate-destroy-test | sed -i 's/"Retain"/"Delete"/g'
         # cat ./template.yml
         # sed -i 's/"Retain"/"Delete"/g' ./template.yml
         # cat ./template.yml
