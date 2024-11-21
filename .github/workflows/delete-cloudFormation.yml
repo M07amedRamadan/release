@@ -24,11 +24,9 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          
+            fdgfdd
             echo "delete Stack"
-            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
-            echo "wait delete Stack"
-            aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
+            echo "sleep"
             sleep 45
             
         #   aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > current-template.yaml
@@ -56,7 +54,6 @@ jobs:
         run: |
           
             echo "delete Stack"
-            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
             echo "wait delete Stack"
-            aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
+            
             
