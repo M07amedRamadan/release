@@ -26,6 +26,7 @@ jobs:
             sed -i'' -e 's/Retain/Delete/g' current-template.yaml            
             cat current-template.yaml
             aws cloudformation validate-template --template-body file://current-template.yaml
+            aws cloudformation update-stack --stack-name automate-destroy-test --template-body current-template.yaml
 
 
         # cat ./template.yml
