@@ -1,6 +1,9 @@
 name: Destroy CloudFormation Stack
 
 on:
+  push:
+    branches:
+     - main
   workflow_dispatch:
 
 jobs:
@@ -17,5 +20,8 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          aws cloudformation delete-stack --stack-name automate-deletion-test
-          aws cloudformation wait stack-delete-complete --stack-name automate-deletion-test
+            aws cloudformation get-template --stack-name vultara-server-trial
+
+        
+          #aws cloudformation delete-stack --stack-name automate-deletion-test
+          #aws cloudformation wait stack-delete-complete --stack-name automate-deletion-test
