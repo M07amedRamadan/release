@@ -1,10 +1,14 @@
 name: Destroy CloudFormation Stack
 
 on:
-  push:
-    branches:
-     - main
+  # push:
+  #   branches:
+  #    - main
   workflow_dispatch:
+   inputs:
+      Stack_Name:
+        description: 'AWS CloudFormation stack name'
+        required: true
 
 jobs:
   destroy-stack:
@@ -20,7 +24,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation get-template --stack-name automate-destroy-test --query TemplateBody --output text > current-template.yaml
+            aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}  --query TemplateBody --output text > current-template.yaml
             chmod +w current-template.yaml
             ls -la
             sed -i'' -e 's/Retain/Delete/g' current-template.yaml            
@@ -28,9 +32,16 @@ jobs:
             echo "validating... "
             aws cloudformation validate-template --template-body file://current-template.yaml
             echo "validation done... "
-            aws cloudformation update-stack --stack-name automate-destroy-test --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
-            echo "after update"
-            aws cloudformation get-template --stack-name automate-destroy-test
+            echo "update Stack"
+            aws cloudformation update-stack --stack-name ${{ github.event.inputs.Stack_Name }} --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
+            echo "delete Stack"
+            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }} 
+            echo "wait delete Stack"
+            aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
+            
+            
+        #echo "after update"
+        #aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}
 
             
 
