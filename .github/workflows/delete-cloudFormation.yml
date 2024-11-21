@@ -29,6 +29,8 @@ jobs:
             aws cloudformation validate-template --template-body file://current-template.yaml
             echo "validation done... "
             aws cloudformation update-stack --stack-name automate-destroy-test --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
+            echo "after update"
+            aws cloudformation get-template --stack-name automate-destroy-test
 
             
 
