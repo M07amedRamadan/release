@@ -24,6 +24,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
+            sleep 40
             fdgfdd
             echo "delete Stack"
             echo "sleep"
