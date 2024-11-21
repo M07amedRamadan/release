@@ -27,7 +27,6 @@ jobs:
             fdgfdd
             echo "delete Stack"
             echo "sleep"
-            sleep 45
             
         #   aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > current-template.yaml
         # chmod +w current-template.yaml
@@ -39,8 +38,8 @@ jobs:
 
         #aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}
   second-stack:
-    needs: destroy-stack
     runs-on: ubuntu-latest
+    needs: destroy-stack
 
     steps:
       - name: Configure AWS Credentials
