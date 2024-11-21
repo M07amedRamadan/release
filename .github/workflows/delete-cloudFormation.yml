@@ -21,7 +21,9 @@ jobs:
       - name: Delete CloudFormation Stack
         run: |
             aws cloudformation get-template --stack-name vultara-server-trial >> template.json
-            cat template.json
+            
+            
+        #cat template.json
 
         
           #aws cloudformation delete-stack --stack-name automate-deletion-test
