@@ -23,11 +23,12 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          if [ -n "${{ github.event.inputs.Stack_Name }}"]; then
-            echo "Start deletion Stack"
-            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
+          Stack_name = ${{ github.event.inputs.Stack_Name }}
+          if [ -n "$Stack_name"]; then
+              echo "Start deletion Stack"
+              aws cloudformation delete-stack --stack-name Stack_name
           else:
-            echo "The user not using SOC App" 
+              echo "The user not using SOC App" 
           fi
         #   aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > current-template.yaml
         # chmod +w current-template.yaml
