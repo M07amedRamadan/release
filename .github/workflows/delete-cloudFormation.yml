@@ -1,9 +1,9 @@
 name: Destroy CloudFormation Stack
 
 on:
-  push:
-    branches:
-     - main
+  # push:
+  #   branches:
+  #    - main
   workflow_dispatch:
    inputs:
       Stack_Name:
@@ -26,6 +26,7 @@ jobs:
           if [ -n "${{ github.event.inputs.Stack_Name }}" ]; then
               echo "Start deletion Stack"
               aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
+              aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }} 
           else
               echo "The user not using SOC App" 
           fi
