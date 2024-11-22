@@ -23,7 +23,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          if [ -n "${{ github.event.inputs.Stack_Name }}"]; then
+          if [ -n ${{ github.event.inputs.Stack_Name }} ]; then
               echo "Start deletion Stack"
               aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
           else:
