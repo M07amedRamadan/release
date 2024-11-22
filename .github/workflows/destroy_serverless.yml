@@ -1,0 +1,63 @@
+name: "Destroy Customer Serverless Deployment"
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      Vultara_Stack_Name:
+        description: 'AWS CloudFormation stack name'
+        required: true
+        
+      Authentication_Stack_Name:
+        description: 'AWS CloudFormation stack name'
+        required: true
+        
+      SOC_Stack_Name:
+        description: 'Let It Empty if not used'
+        
+      region:
+        description: 'Enter the Region for Deployment'
+        default: 'us-east-1'
+        required: true
+      
+jobs:
+  destroy-stack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ github.event.inputs.region }} # Replace with your AWS region
+
+      - name: Delete SOC Serverless Stack
+        run: |
+          if [ -n "${{ github.event.inputs.SOC_Stack_Name }}" ]; then
+              echo "Start deletion Stack"
+              aws cloudformation delete-stack --stack-name ${{ github.event.inputs.SOC_Stack_Name }}
+          else
+              echo "The user not using SOC App" 
+          fi
+
+      - name: Delete Authentication Serverless Stack
+        run: |
+            echo "Start deletion Stack"
+            aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Authentication_Stack_Name }}
+
+      - name: Delete Vultara Serverless Stack
+        run: |
+          echo "Start deletion Stack"
+          aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Vultara_Stack_Name }}
+          
+      - name: Wait until the deletion.
+        run: |
+          echo "Wait to delete Stack"
+          aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Vultara_Stack_Name }}
+          aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Authentication_Stack_Name }}
+          aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.SOC_Stack_Name }} 
+      #in case of success go to CloudFormation stack then clean the stack from Retain resources always its "AppLambdaVersionxxxxxxxxxxxxxx". 
+      #In case of failure it will be up to some Resources to have deletion policies,
+      #OR the stack status is updating so you need to wait and then rerun it.
+
