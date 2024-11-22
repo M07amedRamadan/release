@@ -23,10 +23,9 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-          Stack_name = ${{ github.event.inputs.Stack_Name }}
-          if [ -n "$Stack_name"]; then
+          if [ -n "${{ github.event.inputs.Stack_Name }}"]; then
               echo "Start deletion Stack"
-              aws cloudformation delete-stack --stack-name $Stack_name
+              aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
           else:
               echo "The user not using SOC App" 
           fi
