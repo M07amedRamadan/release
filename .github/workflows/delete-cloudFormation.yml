@@ -52,7 +52,9 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation describe-stack-resources --stack-name ${{ github.event.inputs.Stack_Name }} --query 'StackResources[*].LogicalResourceId' --output text > resources.txt
+            retained_resources=$(aws cloudformation describe-stack-resources --stack-name "$stack_name" --query 'StackResources[?DeletionPolicy == `Retain`].LogicalResourceId' --output text)
             echo "resources"
             cat resources.txt
-            
+
+      #            aws cloudformation describe-stack-resources --stack-name ${{ github.event.inputs.Stack_Name }} --query 'StackResources[*].LogicalResourceId' --output text > resources.txt
+
