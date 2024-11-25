@@ -52,7 +52,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > template.json
+            aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
             jq '.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | .key' template.json
 
             
