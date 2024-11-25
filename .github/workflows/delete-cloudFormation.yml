@@ -52,7 +52,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation describe-stack-resources --stack-name ${{ secrets.STACK_NAME }} --query 'StackResources[*].LogicalResourceId' --output text > resources.txt
+            aws cloudformation describe-stack-resources --stack-name ${{ github.event.inputs.Stack_Name }} --query 'StackResources[*].LogicalResourceId' --output text > resources.txt
             echo "resources"
             cat resources.txt
             
