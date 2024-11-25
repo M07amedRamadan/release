@@ -10,27 +10,27 @@ on:
         description: 'AWS CloudFormation stack name'
 
 jobs:
-  destroy-stack:
-    runs-on: ubuntu-latest
+  # destroy-stack:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2 # Replace with your AWS region
+  #   steps:
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-2 # Replace with your AWS region
 
-      - name: Delete CloudFormation Stack
-        run: |
-          if [ -n "${{ github.event.inputs.Stack_Name }}" ]; then
-              echo "Start deletion Stack"
-              aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
-              aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }} 
-          else
-              echo "The user not using SOC App" 
-          fi
-        #   aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > current-template.yaml
+  #     - name: Delete CloudFormation Stack
+  #       run: |
+  #         if [ -n "${{ github.event.inputs.Stack_Name }}" ]; then
+  #             echo "Start deletion Stack"
+  #             aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
+  #             aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }} 
+  #         else
+  #             echo "The user not using SOC App" 
+  #         fi
+        # aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} --query TemplateBody --output text > current-template.yaml
         # chmod +w current-template.yaml
         # ls -la
         # sed -i'' -e 's/Retain/Delete/g' current-template.yaml            
@@ -41,8 +41,6 @@ jobs:
         #aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}
   second-stack:
     runs-on: ubuntu-latest
-    needs: destroy-stack
-    if: ${{ always() }}
 
     steps:
       - name: Configure AWS Credentials
@@ -50,11 +48,11 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2 # Replace with your AWS region
+          aws-region: us-east-1 # Replace with your AWS region
 
       - name: Delete CloudFormation Stack
         run: |
-            echo "delete Stack"
-            echo "wait delete Stack"
-            
+            aws cloudformation describe-stack-resources --stack-name ${{ secrets.STACK_NAME }} --query 'StackResources[*].LogicalResourceId' --output text > resources.txt
+            echo "resources"
+            cat resources.txt
             
