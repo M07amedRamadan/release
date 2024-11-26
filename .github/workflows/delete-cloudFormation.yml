@@ -63,12 +63,7 @@ jobs:
       - name: Delete CloudFormation Stack
         run: |
             aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
-            resource=$(jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | keys[] ' template.json)
-            if [ -n "$resource" ]; then
-              echo "resource is: $resource"
-            else
-              echo "no resources"
-            fi
+            jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | keys[] ' template.json
             
       # - name: delete
       #   run: |
