@@ -50,17 +50,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1 # Replace with your AWS region
 
-      - name: Delete CloudFormation Stack
-        run: |
-            aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
-            resource=$(jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | .key' template.json)
-            if [ -n "$resource" ]; then
-              echo "resource is: $resource"
-            else
-              echo "no resources"
-            fi
+      # - name: Delete CloudFormation Stack
+      #   run: |
+      #       aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
+      #       resource=$(jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | .key' template.json)
+      #       if [ -n "$resource" ]; then
+      #         echo "resource is: $resource"
+      #       else
+      #         echo "no resources"
+      #       fi
 
-            
+      - name: delete
+        run: |
+          echo "Start deletion Stack"
+          aws cloudformation delete-stack --stack-name ${{ github.event.inputs.Stack_Name }}
+          aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.Stack_Name }}
+          
         # resources=$(aws cloudformation describe-stack-resources --stack-name ${{ github.event.inputs.Stack_Name }} --query 'StackResources[*].LogicalResourceId' --output text)
         # retained_resources=$(aws cloudformation describe-stack-resources --stack-name ${{ github.event.inputs.Stack_Name }} --query "StackResources[?ResourceType==\`$resources\`].LogicalResourceId" --output text)
         # echo "$retained_resources"
