@@ -62,7 +62,7 @@ jobs:
 
       - name: Delete CloudFormation Stack
         run: |
-            echo "${{ github.event.inputs.Stack_Name }}" > stack.txt
+            echo -e "${{ github.event.inputs.Stack_Name }}" > stack.txt
             echo "stack.txt"
             cat stack.txt
       
