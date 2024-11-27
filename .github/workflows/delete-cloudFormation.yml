@@ -8,6 +8,16 @@ on:
    inputs:
       Stack_Name:
         description: 'AWS CloudFormation stack name'
+      Vultara_Stack_Name:
+        description: 'vultaraStack \n authStack'
+        required: true
+        
+      SOC_Stack_Name:
+        description: 'Let It Empty if not used'
+        
+      destroy_region:
+        description: 'Enter the Region for destroying'
+        required: true
 
 jobs:
   # destroy-stack:
