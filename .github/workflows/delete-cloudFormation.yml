@@ -50,15 +50,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1 # Replace with your AWS region
 
+      # - name: Delete CloudFormation Stack
+      #   run: |
+      #       aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
+      #       resource=$(jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | .key' template.json)
+      #       if [ -n "$resource" ]; then
+      #         echo "resource is: $resource"
+      #       else
+      #         echo "no resources"
+      #       fi
+
       - name: Delete CloudFormation Stack
         run: |
-            aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }} > template.json
-            resource=$(jq '.TemplateBody.Resources | to_entries[] | select(.value.DeletionPolicy == "Retain") | .key' template.json)
-            if [ -n "$resource" ]; then
-              echo "resource is: $resource"
-            else
-              echo "no resources"
-            fi
+            ${{ github.event.inputs.Stack_Name }} > stack.txt
+            echo "stack.txt"
+            cat stack.txt
       
       # - name: Delete CloudFormation Stack
       #   run: |
