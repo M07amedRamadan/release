@@ -39,18 +39,58 @@ on:
         default: '10.1.0.192/26'
         required: true
 
-      ami-type:
-        description: 'Enter the AMI Type for EC2 Instance Scheduler'
-        default: 'ami-0fc5d935ebf8bc3bc'
+      Vultara_Stack_Name:
+        description: 'vultaraStack \n authStack'
         required: true
-        type: choice
-        options:
-          - 'ami-0fc5d935ebf8bc3bc' #Ubuntu 22.04
-          - 'ami-06878d265978313ca' #Amazon Linux 2
+        
+      SOC_Stack_Name:
+        description: 'Let It Empty if not used'
+        
+      destroy_region:
+        description: 'Enter the Region for destroying'
+        required: true
 
 jobs:
+  destroy-stack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ github.event.inputs.region }} # Replace with your AWS region
+
+      - name: Delete SOC Serverless Stack
+        run: |
+          if [ -n "${{ github.event.inputs.SOC_Stack_Name }}" ]; then
+              echo "Start deletion Stack"
+              aws cloudformation delete-stack --stack-name ${{ github.event.inputs.SOC_Stack_Name }}
+          else
+              echo "The user not using SOC App" 
+          fi
+          
+      - name: Delete Vultara and Authentication Serverless Stack
+        run: |
+            echo -e "${{ github.event.inputs.Vultara_Stack_Name }}" > stackNames.txt
+            vultara=$(sed -n '1p' stackNames.txt)
+            auth=$(sed -n '2p' stackNames.txt)
+            echo "Start deletion Stacks"
+            aws cloudformation delete-stack --stack-name $vultara 
+            aws cloudformation delete-stack --stack-name $auth
+          
+            echo "Wait until the deletion"
+            aws cloudformation wait stack-delete-complete --stack-name $vultara
+            aws cloudformation wait stack-delete-complete --stack-name $auth
+            aws cloudformation wait stack-delete-complete --stack-name ${{ github.event.inputs.SOC_Stack_Name }}
+        continue-on-error: true
+
+      
   terraform:
     name: "Terraform"
+    needs: destroy-stack
+    if: ${{ always() }}  # to delete resources in case of failure
     runs-on: ubuntu-latest
     environment:
       name: Dev
