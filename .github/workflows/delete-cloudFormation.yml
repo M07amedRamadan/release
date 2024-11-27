@@ -63,8 +63,11 @@ jobs:
       - name: Delete CloudFormation Stack
         run: |
             echo -e "${{ github.event.inputs.Stack_Name }}" > stack.txt
-            echo "stack.txt"
-            cat stack.txt
+            vultara=$(sed -n '1p' stack.txt)
+            auth=$(sed -n '2p' stack.txt)
+            echo "$vultara"
+            echo "auth is $auth"
+
       
       # - name: Delete CloudFormation Stack
       #   run: |
