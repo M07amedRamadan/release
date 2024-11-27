@@ -26,7 +26,7 @@ jobs:
           StrictHostKeyChecking no
           ForwardAgent yes
         END
-        sshpass -p "VultaraTest" scp -P 40382 -r ./test.txt user@162.191.2.78:C:\\Users\\User\\Desktop
+        sshpass -p "VultaraTest222" scp -P 40382 -r ./test.txt user@162.191.2.78:C:\\Users\\User\\Desktop
 
 #IdentityFile ./key.pem
 
