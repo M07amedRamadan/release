@@ -38,7 +38,6 @@ jobs:
         # aws cloudformation validate-template --template-body file://current-template.yaml
         #echo "after update"             aws cloudformation update-stack --stack-name ${{ github.event.inputs.Stack_Name }} --template-body file://current-template.yaml --capabilities CAPABILITY_IAM
 
-        #aws cloudformation get-template --stack-name ${{ github.event.inputs.Stack_Name }}
   second-stack:
     runs-on: ubuntu-latest
 
@@ -67,6 +66,8 @@ jobs:
             auth=$(sed -n '2p' stack.txt)
             echo "$vultara"
             echo "auth is $auth"
+            sdsd
+        continue-on-error: true
 
       
       # - name: Delete CloudFormation Stack
