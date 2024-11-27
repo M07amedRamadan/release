@@ -14,6 +14,7 @@ jobs:
 
     - name: Copy files via SCP
       run: |
+        mkdir -p ~/.ssh
         ssh-keyscan -p 40382 162.191.2.78 >> ~/.ssh/known_hosts
         cat >> ~/.ssh/config <<END
         Host 162.191.2.78
@@ -22,7 +23,6 @@ jobs:
           IdentitiesOnly yes
           StrictHostKeyChecking no
           ForwardAgent yes
-        END
         sshpass -p "VultaraTest222" scp -P 40382 -r ./test.txt user@162.191.2.78:C:\\Users\\User\\Desktop
 
 #IdentityFile ./key.pem
