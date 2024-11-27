@@ -13,7 +13,7 @@ on:
         required: true
         
       SOC_Stack_Name:
-        description: 'Let It Empty if not used'
+        description: ' SocStack, Let It Empty if not used'
         
       destroy_region:
         description: 'Enter the Region for destroying'
