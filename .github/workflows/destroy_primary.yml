@@ -39,12 +39,12 @@ on:
         default: '10.1.0.192/26'
         required: true
 
-      Vultara_Stack_Name:
-        description: 'vultaraStack \n authStack'
+      Vultara_Stack_Name: 
+        description: 'Please enter Vultara and Authentication server stack names as this sequence: vultaraStack \n authStack'
         required: true
         
-      SOC_Stack_Name:
-        description: 'Let It Empty if not used'
+      SOC_Stack_Name: #If the user not using the SOC app, ignore this box.
+        description: 'Please enter SOC stack name SOC Stack name, Let It Empty if SOC not used'
         
       destroy_region:
         description: 'Enter the Region for destroying'
