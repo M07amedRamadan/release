@@ -28,6 +28,7 @@ variable "private_subnet_2" {
 
 variable "ami" {
   type = string
+  default     = "ami-0fc5d935ebf8bc3bc"
 }
 
 variable "CUSTOMER_NAME" {
