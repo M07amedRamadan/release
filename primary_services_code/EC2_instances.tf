@@ -3,8 +3,30 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Fetch the latest Ubuntu AMI, works for all regions
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-*-amd64-server-*"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["amazon"]
+}
+
 resource "aws_instance" "report_generator" {
-  ami                    = var.ami  
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
   key_name               = data.aws_key_pair.report_key.key_name  #for the key in a different region but not worked yet 
   vpc_security_group_ids = [aws_security_group.reportGenerator_SG.id]
@@ -18,7 +40,7 @@ tags = {
 }
 
 resource "aws_instance" "vultara_scheduler" {
-  ami                    = var.ami
+  ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.small"
   key_name               = data.aws_key_pair.scheduler_key.key_name  #for the key in a different region but not worked yet 
   vpc_security_group_ids = [aws_security_group.schedulerServer_SG.id]
