@@ -26,11 +26,6 @@ variable "private_subnet_2" {
   description = "Public Subnet CIDR values"
 }
 
-variable "ami" {
-  type = string
-  default     = "ami-0fc5d935ebf8bc3bc"
-}
-
 variable "CUSTOMER_NAME" {
   type = string
 }
