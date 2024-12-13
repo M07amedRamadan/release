@@ -35,13 +35,10 @@ jobs:
           MONGO_ATLAS_PRIVATE_KEY: ${{ github.event.inputs.private_key }}
           PROJECT_ID: "5f9c8a6299d4cd0727f9a4b7"
         run: |
-          echo "Public Key: $MONGO_ATLAS_PUBLIC_KEY"
-          echo "Private Key: $MONGO_ATLAS_PRIVATE_KEY"
-          echo "Project ID: $PROJECT_ID"
           curl --user "$MONGO_ATLAS_PUBLIC_KEY:$MONGO_ATLAS_PRIVATE_KEY" \
             --digest \
             --header "Content-Type: application/json" \
-            --request POST \
+            --request PUT \
             --data '{
               "collection": "test_collection",
               "database": "test_db",
