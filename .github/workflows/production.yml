@@ -1,20 +1,54 @@
-name: Deploy Production
+name: Test sending mail
+on: 
+   # push:
+   #  branches:
+   #    - createDeleteECR
+   workflow_dispatch:
+    inputs:
 
-on:
-  push:
-    branches:
-    - master
-  workflow_dispatch:
+      public_key:
+        description: 'Enter public_key'
+        # default: 'xrrhwdng'
+
+      private_key:
+        description: 'Enter private_key'
+        # default: 'af9423b5-62c1-4f0e-88f6-016256594cc0'
+        
 jobs:
-  prod-deploy:
+  Terraform:
+    # Run only if this is the latest pull request.
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Production.
-      run: |
-        echo "Production"
-
-   
+      - name: Create a New Database via MongoDB Atlas API
+        env:
+          MONGO_ATLAS_PUBLIC_KEY: ${{ github.event.inputs.public_key }}
+          MONGO_ATLAS_PRIVATE_KEY: ${{ github.event.inputs.private_key }}
+          PROJECT_ID: "5f9c8a6299d4cd0727f9a4b7"
+        run: |
+          echo "Public Key: $MONGO_ATLAS_PUBLIC_KEY"
+          echo "Private Key: $MONGO_ATLAS_PRIVATE_KEY"
+          echo "Project ID: $PROJECT_ID"
+          curl --user "$MONGO_ATLAS_PUBLIC_KEY:$MONGO_ATLAS_PRIVATE_KEY" \
+            --digest \
+            --header "Content-Type: application/json" \
+            --request POST \
+            --data '{
+              "collection": "test_collection",
+              "database": "test_db",
+              "clusterName": "Cluster0",
+              "action": "create"
+            }' \
+            "https://cloud.mongodb.com/api/atlas/v1.0/groups/$PROJECT_ID/clusters/Cluster0/collections"
+      
+    
+  
