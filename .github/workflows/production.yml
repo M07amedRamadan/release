@@ -46,7 +46,13 @@ jobs:
              "roles": [{"roleName": "readWrite", "databaseName": "test_db"}]
            }' \
            "https://cloud.mongodb.com/api/atlas/v1.0/groups/$PROJECT_ID/databaseUsers"
-
       
-    
+      - name: create DB
+        run: |
+               mongosh "mongodb+srv://test_user:dsfdsgdfsgsddfgaerdf@dfvc@cluster0.mongodb.net/test_db" <<EOF
+               use test_db  
+               db.test_collection.insertOne({ name: "test" })  # Insert a document into test_collection
+               EOF
+
+
   
