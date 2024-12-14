@@ -41,7 +41,7 @@ jobs:
            --request POST \
            --data '{
              "username": "test_user",
-             "password": "password123",
+             "password": "dsfdsgdfsgsddfgaerdf@dfvc",
              "databaseName": "admin",
              "roles": [{"roleName": "readWrite", "databaseName": "test_db"}]
            }' \
