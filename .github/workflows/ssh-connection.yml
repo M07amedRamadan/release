@@ -1,8 +1,8 @@
 name: Test Deploy 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   security_bulletin_to_onprem_pc:
@@ -23,9 +23,4 @@ jobs:
               IdentitiesOnly yes
               StrictHostKeyChecking no
               ForwardAgent yes
-        - name: Copy files via SCP
-          run: |
-            echo "🔥🔥🚒🚒👩‍🚒👩‍🚒👨‍🚒" > ./test.txt
-            export SSHPASS="${{ secrets.TROY_OFFICE_DESKTOP_1_SSH_USER_PASSWORD }}"
-            sshpass -e -p 40382 user@162.191.2.78 "del "C:\\Users\\User\\Desktop\\new.pub""
-            sshpass -e scp -P 40382 -r ./test.txt user@162.191.2.78:C:\\Users\\User\\Desktop
+
