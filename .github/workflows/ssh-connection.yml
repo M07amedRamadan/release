@@ -4,6 +4,7 @@ on:
   #   branches:
   #     - main
 
+  workflow_dispatch:
 jobs:
   security_bulletin_to_onprem_pc:
     runs-on: ubuntu-latest
