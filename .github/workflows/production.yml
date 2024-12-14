@@ -36,16 +36,17 @@ jobs:
           PROJECT_ID: "5f9c8a6299d4cd0727f9a4b7"
         run: |
           curl --user "$MONGO_ATLAS_PUBLIC_KEY:$MONGO_ATLAS_PRIVATE_KEY" \
-            --digest \
-            --header "Content-Type: application/json" \
-            --request PUT \
-            --data '{
-              "collection": "test_collection",
-              "database": "test_db",
-              "clusterName": "Cluster0",
-              "action": "create"
-            }' \
-            "https://cloud.mongodb.com/api/atlas/v1.0/groups/$PROJECT_ID/clusters/Cluster0/collections"
+           --digest \
+           --header "Content-Type: application/json" \
+           --request POST \
+           --data '{
+             "username": "test_user",
+             "password": "password123",
+             "databaseName": "admin",
+             "roles": [{"roleName": "readWrite", "databaseName": "test_db"}]
+           }' \
+           "https://cloud.mongodb.com/api/atlas/v1.0/groups/$PROJECT_ID/databaseUsers"
+
       
     
   
