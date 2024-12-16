@@ -51,12 +51,10 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    environment:
-      name: Dev
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+      NEW_CUSTOMER_DB_NAME: "peeringDatabase"
+      NEW_CUSTOMER_COLLECTION_NAME: "testCollection"
+  
     steps:
 
       - name: Checkout
@@ -91,6 +89,19 @@ jobs:
           chmod 777 ./report_script.sh
           chmod 777 ./scheduler_script.sh
           terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_key=${{ github.event.inputs.public_key }}" -var="private_key=${{ github.event.inputs.private_key }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
+          echo "dbuser=$(terraform output -raw dbuser)" >> $GITHUB_ENV
+          echo "dbpass=$(terraform output -raw dbpass)" >> $GITHUB_ENV
 
+      - name: Install MongoDB Shell (mongosh)
+        run: |
+            wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+            sudo apt-get update
+            sudo apt-get install -y mongodb-mongosh
+            mongosh --version
 
-    
+      - name: Set up MongoDB Atlas Connection Details and Check/Create Database
+        run: |
+          connection_string="mongodb+srv://${{env.dbuser}}:${{env.dbpass}}@cluster0.ghbhwuc.mongodb.net"
+          mongosh "${connection_string}/${NEW_CUSTOMER_DB_NAME}?retryWrites=true&w=majority" --eval "db.${NEW_CUSTOMER_COLLECTION_NAME}.insertOne({ Test: 'testCollection' });"
+  
