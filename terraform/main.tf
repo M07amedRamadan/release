@@ -20,9 +20,16 @@ locals {
   # Update specific values in the secret
   {
     "CVE_API_KEY" = lookup(local.existing_secret, "CVE_API_KEY", null),
-    "ATLASDB_ALGOREAD" = lookup(local.existing_secret, "CVE_API_KEY", null),
-    "ACCESS_TOKEN" = contains(keys(local.existing_secret), "${random_password.access_token.result}") ? "${random_password.access_token.result}" : "${random_password.access_token.result}",
-    "JWT_SECRET_KEY" = contains(keys(local.existing_secret), "${random_password.JWT_SECRET_KEY.result}") ? "${random_password.JWT_SECRET_KEY.result}" : "${random_password.JWT_SECRET_KEY.result}",
+    "ATLASDB_ALGOREAD" = lookup(local.existing_secret, "ATLASDB_ALGOREAD", null),
+    "ATLASDB_CUSTOMERLICENSE" = lookup(local.existing_secret, "ATLASDB_CUSTOMERLICENSE", null),
+    "ATLASDB_CUSTOMERDIAGNOSTIC" = lookup(local.existing_secret, "ATLASDB_CUSTOMERDIAGNOSTIC", null),
+    "ATLASDB_MONITORING_PROD" = lookup(local.existing_secret, "ATLASDB_MONITORING_PROD", null),
+    "ATLASDB_HELPREAD" = lookup(local.existing_secret, "ATLASDB_HELPREAD", null),
+    "ATLASDB_USERACCESS" = lookup(local.existing_secret, "ATLASDB_USERACCESS", null),
+    "ATLASDB_DATAANALYTICS" = lookup(local.existing_secret, "ATLASDB_DATAANALYTICS", null),
+    "ATLASDB_COMPONENTREAD" = lookup(local.existing_secret, "ATLASDB_COMPONENTREAD", null),
+    "ACCESS_TOKEN" = "${random_password.access_token.result}",
+    "JWT_SECRET_KEY" = "${random_password.JWT_SECRET_KEY.result}",
     "JWT_ACCESS_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
     "JWT_REFRESH_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
   }
