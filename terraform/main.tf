@@ -18,16 +18,16 @@ locals {
 
   # Update specific values in the secret
   updated_secret = {
-    "ACCESS_TOKEN" = "${local.existing_secret[random_password.access_token.result]} new_value_to_append",
-    "JWT_SECRET_KEY" = "${local.existing_secret[random_password.JWT_SECRET_KEY.result]} new_value_to_append",
-    "JWT_ACCESS_TOKEN_SECRET" = "${local.existing_secret[random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result]} new_value_to_append",
-    "JWT_REFRESH_TOKEN_SECRET" = "${local.existing_secret[random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result]} new_value_to_append",
+    "ACCESS_TOKEN" = "${local.existing_secret["ACCESS_TOKEN"]} random_password.access_token.result",
+    "JWT_SECRET_KEY" = "${local.existing_secret["JWT_SECRET_KEY"]} random_password.JWT_SECRET_KEY.result",
+    "JWT_ACCESS_TOKEN_SECRET" = "${local.existing_secret["JWT_ACCESS_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
+    "JWT_REFRESH_TOKEN_SECRET" = "${local.existing_secret["JWT_REFRESH_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
 
     # for key, value in local.existing_secret :
     # key => (
     #   key == "ACCESS_TOKEN"    ? random_password.access_token.result :
     #   key == "JWT_SECRET_KEY"      ? random_password.JWT_SECRET_KEY.result  :
-    #   key == "JWT_ACCESS_TOKEN_SECRET"    ? c :
+    #   key == "JWT_ACCESS_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
     #   key == "JWT_REFRESH_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
     #   value
     # )
