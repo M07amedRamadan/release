@@ -15,14 +15,16 @@ resource "aws_secretsmanager_secret_version" "new_secret_version" {
 # Decode the existing secret JSON
 locals {
   existing_secret = jsondecode(data.aws_secretsmanager_secret_version.old_secret.secret_string)
-
+  updated_secret = merge(
+    local.existing_secret,
   # Update specific values in the secret
-  updated_secret = {
+  {
     "ACCESS_TOKEN" = "${local.existing_secret["ACCESS_TOKEN"]} random_password.access_token.result",
     "JWT_SECRET_KEY" = "${local.existing_secret["JWT_SECRET_KEY"]} random_password.JWT_SECRET_KEY.result",
     "JWT_ACCESS_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
     "JWT_REFRESH_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
   }
+  )
 }
 
 # locals {
