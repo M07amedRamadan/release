@@ -63,10 +63,3 @@ resource "random_password" "JWT_ACCESS_REFRESH_TOKEN_SECRET" {
   numeric = true
 }
 
-resource "random_password" "db_password" {
-  length  = 16
-  special = false
-  upper   = true
-  lower   = true
-  numeric = true
-}

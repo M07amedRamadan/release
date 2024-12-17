@@ -6,6 +6,6 @@ variable "region" {
 }
 
 variable "CustomerName" {
-  default     = "User"
+  default     = "hundy"
   type        = string
 }
