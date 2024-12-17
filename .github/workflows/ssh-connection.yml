@@ -1,0 +1,27 @@
+name: Test Deploy 
+on:
+  # push:
+  #   branches:
+  #     - main
+
+  workflow_dispatch:
+jobs:
+  security_bulletin_to_onprem_pc:
+    runs-on: ubuntu-latest
+    steps:
+
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Setup SSH connection
+          run: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -p 40382 162.191.2.78 >> ~/.ssh/known_hosts
+            cat >> ~/.ssh/config <<END
+            Host 162.191.2.78
+              port 40382
+              User user
+              IdentitiesOnly yes
+              StrictHostKeyChecking no
+              ForwardAgent yes
+

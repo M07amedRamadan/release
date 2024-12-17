@@ -1,0 +1,30 @@
+name: "CodeQL Analysis for JavaScript"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    name: Analyze JavaScript
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write 
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: javascript, typescript, python  # Only scanning for JavaScript
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+    - name: Upload SARIF report
+      uses: actions/upload-artifact@v3
+      with:
+        name: codeql-sarif-report
+        path: codeql-results/javascript.sarif  # Path to SARIF report

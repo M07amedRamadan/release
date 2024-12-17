@@ -1,0 +1,21 @@
+name: Deploy Trial
+
+on:
+  # push:
+  #   branches:
+  #   - master
+  workflow_dispatch:
+  
+jobs:
+  prod-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkoutd
+      uses: actions/checkout@v3
+    - name: Trial
+      run: |
+        echo "Trial"
+        sleep 3
+
+   
