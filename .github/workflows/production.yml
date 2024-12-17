@@ -1,31 +1,28 @@
 name: Test sending mail
 on: 
-   # push:
-   #  branches:
-   #    - createDeleteECR
+   push:
+    branches:
+      - main
+
    workflow_dispatch:
     inputs:
 
       public_key:
         description: 'Enter public_key'
-        # default: 'xrrhwdng'
+        
 
       private_key:
         description: 'Enter private_key'
-        # default: 'af9423b5-62c1-4f0e-88f6-016256594cc0'
         
 jobs:
   Terraform:
-    # Run only if this is the latest pull request.
-    runs-on: ubuntu-latest
+
+
+    runs-on: ubuntu-latest 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.11.0
-        with:
-          mongodb-version: '8.0'
-          
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -33,30 +30,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Create a New Database via MongoDB Atlas API
-        env:
-          MONGO_ATLAS_PUBLIC_KEY: ${{ github.event.inputs.public_key }}
-          MONGO_ATLAS_PRIVATE_KEY: ${{ github.event.inputs.private_key }}
-          PROJECT_ID: "5f9c8a6299d4cd0727f9a4b7"
+      - name: Terraform
         run: |
-          curl --user "$MONGO_ATLAS_PUBLIC_KEY:$MONGO_ATLAS_PRIVATE_KEY" \
-           --digest \
-           --header "Content-Type: application/json" \
-           --request POST \
-           --data '{
-             "username": "test_user",
-             "password": "dsfdsgdfsgsddfgaerdf@dfvc",
-             "databaseName": "admin",
-             "roles": [{"roleName": "readWrite", "databaseName": "test_db"}]
-           }' \
-           "https://cloud.mongodb.com/api/atlas/v1.0/groups/$PROJECT_ID/databaseUsers"
-      
-      - name: create DB
-        run: |
-               mongosh "mongodb+srv://test_user:dsfdsgdfsgsddfgaerdf@dfvc@cluster0.mongodb.net/test_db" <<EOF
-               use test_db  
-               db.test_collection.insertOne({ name: "test" })  # Insert a document into test_collection
-               EOF
-
-
-  
+          cd ./terraform
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=secretManager" -backend-config="region=us-east-1"
+          terraform plan 
+          terraform apply -auto-approve
+        
