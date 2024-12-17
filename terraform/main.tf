@@ -31,7 +31,7 @@ locals {
 #Random secrets generator 
 resource "random_password" "access_token" {
   length  = 32
-  special = false
+  special = true
   upper   = true
   lower   = true
   numeric = true
@@ -39,7 +39,7 @@ resource "random_password" "access_token" {
 
 resource "random_password" "JWT_SECRET_KEY" {
   length  = 256
-  special = false
+  special = true
   upper   = true
   lower   = true
   numeric = true
@@ -47,7 +47,7 @@ resource "random_password" "JWT_SECRET_KEY" {
 
 resource "random_password" "JWT_ACCESS_REFRESH_TOKEN_SECRET" {
   length  = 256
-  special = false
+  special = true
   upper   = true
   lower   = true
   numeric = true
