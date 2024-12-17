@@ -52,7 +52,6 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     env:
-      NEW_CUSTOMER_DB_NAME: "peeringDatabase"
       NEW_CUSTOMER_COLLECTION_NAME: "testCollection"
   
     steps:
@@ -102,6 +101,7 @@ jobs:
 
       - name: Set up MongoDB Atlas Connection Details and Check/Create Database
         run: |
+          echo "NEW_CUSTOMER_DB_NAME=${{ github.event.inputs.name }}_DB" >> $GITHUB_ENV
           connection_string="mongodb+srv://${{env.dbuser}}:${{env.dbpass}}@cluster0.ghbhwuc.mongodb.net"
           mongosh "${connection_string}/${NEW_CUSTOMER_DB_NAME}?retryWrites=true&w=majority" --eval "db.${NEW_CUSTOMER_COLLECTION_NAME}.insertOne({ Test: 'testCollection' });"
   
