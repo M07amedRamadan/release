@@ -5,10 +5,6 @@ on:
       - main
 
    workflow_dispatch:
-    inputs:
-
-      public_key:
-        description: 'Enter public_key'
 
 jobs:
   Terraform:
