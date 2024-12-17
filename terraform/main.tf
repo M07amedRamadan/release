@@ -20,9 +20,10 @@ locals {
   updated_secret = {
     "ACCESS_TOKEN" = "${local.existing_secret["ACCESS_TOKEN"]} random_password.access_token.result",
     "JWT_SECRET_KEY" = "${local.existing_secret["JWT_SECRET_KEY"]} random_password.JWT_SECRET_KEY.result",
-    "JWT_ACCESS_TOKEN_SECRET" = "${local.existing_secret["JWT_ACCESS_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
-    "JWT_REFRESH_TOKEN_SECRET" = "${local.existing_secret["JWT_REFRESH_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
-
+    # "JWT_ACCESS_TOKEN_SECRET" = "${local.existing_secret["JWT_ACCESS_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
+    # "JWT_REFRESH_TOKEN_SECRET" = "${local.existing_secret["JWT_REFRESH_TOKEN_SECRET"]} random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result",
+    "NEW_KEY_1" = contains(keys(local.existing_secret), "${random_password.access_token.result}") ? "${random_password.access_token.result}" : "${random_password.access_token.result}",
+    
     # for key, value in local.existing_secret :
     # key => (
     #   key == "ACCESS_TOKEN"    ? random_password.access_token.result :
