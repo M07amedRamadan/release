@@ -20,10 +20,10 @@ locals {
   updated_secret = {
     for key, value in local.existing_secret :
     key => (
-      key == "ACCESS_TOKEN"    ? "random_password.access_token.result" :
-      key == "JWT_SECRET_KEY"      ? "random_password.JWT_SECRET_KEY.result"  :
-      key == "JWT_ACCESS_TOKEN_SECRET"    ? "random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result" :
-      key == "JWT_REFRESH_TOKEN_SECRET"    ? "random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result" :
+      key == "ACCESS_TOKEN"    ? random_password.access_token.result :
+      key == "JWT_SECRET_KEY"      ? random_password.JWT_SECRET_KEY.result  :
+      key == "JWT_ACCESS_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
+      key == "JWT_REFRESH_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
       value
     )
   }
