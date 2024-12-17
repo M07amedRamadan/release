@@ -34,5 +34,5 @@ jobs:
           cd ./terraform
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=secret-manager" -backend-config="region=us-east-1"
           terraform plan 
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
         
