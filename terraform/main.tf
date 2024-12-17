@@ -18,16 +18,40 @@ locals {
 
   # Update specific values in the secret
   updated_secret = {
-    for key, value in local.existing_secret :
-    key => (
-      key == "ACCESS_TOKEN"    ? random_password.access_token.result :
-      key == "JWT_SECRET_KEY"      ? random_password.JWT_SECRET_KEY.result  :
-      key == "JWT_ACCESS_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
-      key == "JWT_REFRESH_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
-      value
-    )
+    "ACCESS_TOKEN" = "${local.existing_secret[random_password.access_token.result]} new_value_to_append",
+    "JWT_SECRET_KEY" = "${local.existing_secret[random_password.JWT_SECRET_KEY.result]} new_value_to_append",
+    "JWT_ACCESS_TOKEN_SECRET" = "${local.existing_secret[random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result]} new_value_to_append",
+    "JWT_REFRESH_TOKEN_SECRET" = "${local.existing_secret[random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result]} new_value_to_append",
+
+    # for key, value in local.existing_secret :
+    # key => (
+    #   key == "ACCESS_TOKEN"    ? random_password.access_token.result :
+    #   key == "JWT_SECRET_KEY"      ? random_password.JWT_SECRET_KEY.result  :
+    #   key == "JWT_ACCESS_TOKEN_SECRET"    ? c :
+    #   key == "JWT_REFRESH_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
+    #   value
+    # )
   }
 }
+
+# locals {
+#   existing_secret = jsondecode(data.aws_secretsmanager_secret_version.old_secret.secret_string)
+
+#   # Update specific values in the secret
+#   updated_secret = {
+#     "EXISTING_STRING_KEY" = "${local.existing_secret["EXISTING_STRING_KEY"]} new_value_to_append",
+
+#     for key, value in local.existing_secret :
+#     key => (
+#       key == "ACCESS_TOKEN"    ? random_password.access_token.result :
+#       key == "JWT_SECRET_KEY"      ? random_password.JWT_SECRET_KEY.result  :
+#       key == "JWT_ACCESS_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
+#       key == "JWT_REFRESH_TOKEN_SECRET"    ? random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result :
+#       value
+#     )
+#   }
+# }
+
 
 # resource "aws_secretsmanager_secret_version" "secret_version" {
 #   secret_id = aws_secretsmanager_secret.secret.id
