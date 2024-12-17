@@ -19,8 +19,8 @@ locals {
     local.existing_secret,
   # Update specific values in the secret
   {
-    "ACCESS_TOKEN" = "${local.existing_secret["ACCESS_TOKEN"]} random_password.access_token.result",
-    "JWT_SECRET_KEY" = "${local.existing_secret["JWT_SECRET_KEY"]} random_password.JWT_SECRET_KEY.result",
+    "ACCESS_TOKEN" = contains(keys(local.existing_secret), "${random_password.access_token.result}") ? "${random_password.access_token.result}" : "${random_password.access_token.result}",
+    "JWT_SECRET_KEY" = contains(keys(local.existing_secret), "${random_password.JWT_SECRET_KEY.result}") ? "${random_password.JWT_SECRET_KEY.result}" : "${random_password.JWT_SECRET_KEY.result}",
     "JWT_ACCESS_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
     "JWT_REFRESH_TOKEN_SECRET" = contains(keys(local.existing_secret), "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}") ? "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}" : "${random_password.JWT_ACCESS_REFRESH_TOKEN_SECRET.result}",
   }
