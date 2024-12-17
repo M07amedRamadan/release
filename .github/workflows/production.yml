@@ -9,14 +9,9 @@ on:
 
       public_key:
         description: 'Enter public_key'
-        
 
-      private_key:
-        description: 'Enter private_key'
-        
 jobs:
   Terraform:
-
 
     runs-on: ubuntu-latest 
     steps:
@@ -32,7 +27,11 @@ jobs:
 
       - name: Terraform
         run: |
+          pwd
+          ls
           cd ./terraform
+          pwd
+          ls
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=secret-manager" -backend-config="region=us-east-1"
           terraform plan 
           terraform apply -auto-approve
