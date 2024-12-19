@@ -51,16 +51,16 @@ jobs:
       - name: Terraform Init
         id: init
         run: |
-          cd primary_services_code
+          cd terraform
           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
           
       - name: Terraform Plan
         id: plan
         run: |
-          cd primary_services_code
+          cd terraform
           terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}"  -var="region=${{ github.event.inputs.region }}" 
 
       - name: Terraform Apply
         run: |
-          cd primary_services_code
+          cd terraform
           terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="region=${{ github.event.inputs.region }}" 
