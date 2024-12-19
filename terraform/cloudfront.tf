@@ -1,12 +1,15 @@
 resource "aws_cloudfront_origin_access_identity" "legacy_oai" {
+  for_each = toset(local.resources)
   comment = "Legacy OAI for ${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
 }
 
 resource "aws_cloudfront_origin_access_identity" "new_oai" {
+  for_each = toset(local.resources)
   comment = "OAI for ${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
+  for_each = toset(local.resources)
   origin {
     domain_name = "${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
     origin_id   = "${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
