@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "New_Customer_Bucket" {
 
 #Public Access
 resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Block" {
-  bucket = aws_s3_bucket.New_Customer_Bucket.bucket
+  bucket = aws_s3_bucket.New_Customer_Bucket[each.key]
 
   block_public_acls       = true
   block_public_policy     = true
