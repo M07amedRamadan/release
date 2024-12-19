@@ -1,6 +1,9 @@
-name: "New Customer IaC Deployment"
+name: "Test-vultara-SOC-deployment"
 
 on:
+  push:
+    branches:
+      - test-vultara-SOC-deployment
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
