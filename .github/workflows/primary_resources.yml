@@ -9,7 +9,7 @@ on:
     inputs:
       name:
         description: 'Enter Customer Name'
-        default: 'App'
+        default: 'app'
         required: true
 
       Application_type:
