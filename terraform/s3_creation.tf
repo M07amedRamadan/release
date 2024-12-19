@@ -1,18 +1,13 @@
 # No change required in this file
 
 resource "aws_s3_bucket" "New_Customer_Bucket" {
-  for_each = toset(
-    var.Application_type == "Vultara" ? ["${var.CUSTOMER_NAME}.vultara.test.com"] :
-    var.Application_type == "SOC" ? ["${var.CUSTOMER_NAME}.soc.vultara.test.com"] : 
-    ["${var.CUSTOMER_NAME}.vultara.test.com","${var.CUSTOMER_NAME}.soc.vultara.test.com"]
-  )
-  bucket = each.value
+  for_each = toset(local.resources)
+  bucket = "${each.value}.vultara.com"
   force_destroy = true
 }
 
 #Public Access
 resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Block" {
-  # bucket = aws_s3_bucket.New_Customer_Bucket[each.value]
   for_each = aws_s3_bucket.New_Customer_Bucket
   bucket = each.key
 
