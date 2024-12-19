@@ -9,42 +9,9 @@ on:
         default: 'automation'
         required: true
 
-      vpc-cidr:
-        description: 'Enter the VPC CIDR'
-        default: '10.1.0.0/24'
-        required: true
-
       region:
         description: 'Enter the Region for Deployment'
         default: 'us-east-1'
-        required: true
-
-      public_key:
-        description: 'Enter MongoDB Public Key'
-        required: true
-
-      private_key:
-        description: 'Enter MongoDB Private Key '
-        required: true
-  
-      public_subnet-1:
-        description: 'Enter the CIDRs for Public Subnet 1'
-        default: '10.1.0.0/26'
-        required: true
-
-      public_subnet-2:
-        description: 'Enter the CIDRs for Public Subnet 2'
-        default: '10.1.0.64/26'
-        required: true
-
-      private_subnet-1:
-        description: 'Enter the CIDRs for Private Subnet 1'
-        default: '10.1.0.128/26'
-        required: true
-
-      private_subnet-2:
-        description: 'Enter the CIDRs for Private Subnet 2'
-        default: '10.1.0.192/26'
         required: true
 
       Vultara_Stack_Name: 
