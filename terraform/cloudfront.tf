@@ -11,7 +11,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     domain_name = "${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
     origin_id   = "${each.value}.vultara.com.s3.${var.region}.amazonaws.com"
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.new_oai.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.new_oai[each.value].cloudfront_access_identity_path
     }
   }
 
