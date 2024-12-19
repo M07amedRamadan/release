@@ -1,7 +1,12 @@
 # No change required in this file
 
 resource "aws_s3_bucket" "New_Customer_Bucket" {
-  for_each = toset(local.resource_names)
+  for_each = toset(
+      var.Application_type == "Vultara" ? ["${var.CUSTOMER_NAME}"] :
+       var.Application_type == "SOC" ? ["${var.CUSTOMER_NAME}.soc"] : 
+       [["${var.CUSTOMER_NAME}"],"${var.CUSTOMER_NAME}.soc"]
+
+  )
   #bucket = "${var.CUSTOMER_NAME}.vultara.com"
   force_destroy = true
 }

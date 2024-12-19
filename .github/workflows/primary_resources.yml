@@ -1,9 +1,9 @@
-name: "New Customer IaC Deployment"
+name: "Test-vultara-SOC-deployment"
 
 on:
-  push:
-    branches:
-      - test-vultara-SOC-deployment
+  # push:
+  #   branches:
+  #     - test-vultara-SOC-deployment 
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
@@ -22,7 +22,6 @@ on:
         - SOC          
         - Vultara and SOC
         
-
       region:
         description: 'Enter the Region for Deployment'
         default: 'us-east-1'
