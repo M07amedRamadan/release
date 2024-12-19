@@ -1,4 +1,4 @@
-name: "Test-vultara-SOC-deployment"
+name: "New Customer IaC Deployment"
 
 on:
   push:
