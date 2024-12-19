@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "New_Customer_Bucket" {
   for_each = toset(
     var.Application_type == "Vultara" ? ["${var.CUSTOMER_NAME}.vultara.test.com"] :
     var.Application_type == "SOC" ? ["${var.CUSTOMER_NAME}.soc.vultara.test.com"] : 
-    [["${var.CUSTOMER_NAME}.vultara.test.com"],"${var.CUSTOMER_NAME}.soc.vultara.test.com"]
+    ["${var.CUSTOMER_NAME}.vultara.test.com","${var.CUSTOMER_NAME}.soc.vultara.test.com"]
   )
   bucket = each.value
   force_destroy = true
