@@ -6,53 +6,30 @@ on:
     inputs:
       name:
         description: 'Enter Customer Name'
-        default: 'automation'
+        default: 'App'
         required: true
 
-      vpc-cidr:
-        description: 'Enter the VPC CIDR'
-        default: '10.1.0.0/24'
+      Application_type:
+        description: 'Please Select Which Applications You Need To Deploy'
+        default: 'Vultara'
         required: true
+        type: choice
+        options: 
+        - Vultara
+        - SOC          
+        - Vultara and SOC
+        
 
       region:
         description: 'Enter the Region for Deployment'
         default: 'us-east-1'
         required: true
       
-      public_key:
-        description: 'Enter MongoDB Public Key'
-        required: true
-
-      private_key:
-        description: 'Enter MongoDB Private Key '
-        required: true
-
-      public_subnet-1:
-        description: 'Enter the CIDRs for Public Subnet 1'
-        default: '10.1.0.0/26'
-        required: true
-
-      public_subnet-2:
-        description: 'Enter the CIDRs for Public Subnet 2'
-        default: '10.1.0.64/26'
-        required: true
-
-      private_subnet-1:
-        description: 'Enter the CIDRs for Private Subnet 1'
-        default: '10.1.0.128/26'
-        required: true
-
-      private_subnet-2:
-        description: 'Enter the CIDRs for Private Subnet 2'
-        default: '10.1.0.192/26'
-        required: true
 
 jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    env:
-      NEW_CUSTOMER_COLLECTION_NAME: "testCollection"
   
     steps:
 
@@ -79,29 +56,11 @@ jobs:
         id: plan
         run: |
           cd primary_services_code
-          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_key=${{ github.event.inputs.public_key }}" -var="private_key=${{ github.event.inputs.private_key }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-
+          terraform plan -var="CUSTOMER_NAME=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}"  -var="region=${{ github.event.inputs.region }}" 
 
       - name: Terraform Apply
         run: |
           cd primary_services_code
-          chmod 777 ./report_script.sh
-          chmod 777 ./scheduler_script.sh
-          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="cidr=${{ github.event.inputs.vpc-cidr }}" -var="region=${{ github.event.inputs.region }}" -var="public_key=${{ github.event.inputs.public_key }}" -var="private_key=${{ github.event.inputs.private_key }}" -var="public_subnet_1=${{ github.event.inputs.public_subnet-1 }}" -var="public_subnet_2=${{ github.event.inputs.public_subnet-2 }}" -var="private_subnet_1=${{ github.event.inputs.private_subnet-1 }}" -var="private_subnet_2=${{ github.event.inputs.private_subnet-2 }}"
-          echo "dbuser=$(terraform output -raw dbuser)" >> $GITHUB_ENV
-          echo "dbpass=$(terraform output -raw dbpass)" >> $GITHUB_ENV
+          terraform apply -auto-approve -var="CUSTOMER_NAME=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="region=${{ github.event.inputs.region }}" 
 
-      - name: Install MongoDB Shell (mongosh)
-        run: |
-            wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-            echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
-            sudo apt-get update
-            sudo apt-get install -y mongodb-mongosh
-            mongosh --version
 
-      - name: Set up MongoDB Atlas Connection Details and Check/Create Database
-        run: |
-          echo "NEW_CUSTOMER_DB_NAME=${{ github.event.inputs.name }}_DB" >> $GITHUB_ENV
-          connection_string="mongodb+srv://${{env.dbuser}}:${{env.dbpass}}@cluster0.ghbhwuc.mongodb.net"
-          mongosh "${connection_string}/${NEW_CUSTOMER_DB_NAME}?retryWrites=true&w=majority" --eval "db.${NEW_CUSTOMER_COLLECTION_NAME}.insertOne({ Test: 'testCollection' });"
-  
