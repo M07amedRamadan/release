@@ -1,13 +1,13 @@
 # name: update nvd and osv for aptiv
 
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 #   schedule:
 #     - cron: '0 3 * * *'
 
-# jobs:
-#   update_nvd_and_osv:
-#     runs-on: ubuntu-latest
+jobs:
+  update_nvd_and_osv:
+    runs-on: ubuntu-latest
 
 #     steps:
 #       - name: Configure AWS Credentials

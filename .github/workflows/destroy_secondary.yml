@@ -1,7 +1,7 @@
 # name: "Destroy IAC Secondary Resources Deployment"
 
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 #     # Inputs the workflow accepts.
 #     inputs:
 #       region:
@@ -25,10 +25,10 @@
 #         description: 'Enter Service Name 4'
 #         required: true
 
-# jobs:
-#   terraform:
-#     name: "terraform"
-#     runs-on: ubuntu-latest
+jobs:
+  terraform:
+    name: "terraform"
+    runs-on: ubuntu-latest
 #     environment:
 #       name: Dev
 #     env:

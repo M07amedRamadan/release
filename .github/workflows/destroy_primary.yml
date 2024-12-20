@@ -1,7 +1,7 @@
-# name: "Destroy New Customer IaC Deployment"
+name: "Destroy New Customer IaC Deployment"
 
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 #     # Inputs the workflow accepts.
 #     inputs:
 #       name:
@@ -25,9 +25,9 @@
 #         description: 'Enter the Region for destroying'
 #         required: true
 
-# jobs:
-#   destroy-stack:
-#     runs-on: ubuntu-latest
+jobs:
+  destroy-stack:
+    runs-on: ubuntu-latest
 
 #     steps:
 #       - name: Configure AWS Credentials

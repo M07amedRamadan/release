@@ -1,7 +1,7 @@
 # name: "view_aws_recourses"
 
-# on:
-#   workflow_dispatch:
+on:
+  workflow_dispatch:
 #     # Inputs the workflow accepts.
 #     inputs:
 #       name_primary:
@@ -22,10 +22,10 @@
 #         required: true
 
 
-# jobs:
-#   terraform:
-#     name: "Terraform"
-#     runs-on: ubuntu-latest
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
 #     environment:
 #       name: Dev
 #     env:

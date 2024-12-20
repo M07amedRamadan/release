@@ -1,17 +1,16 @@
 # name: nvdtools-nvdsync
-# on:
-#   workflow_dispatch:
-#     branches:
-#     - main
+on:
+  workflow_dispatch:
+
 #   schedule:
 #     - cron: '20 2 * * *'
 #     - cron: '20 3 * * *'
 
-# jobs:
-#   # Run unit and integration tests
-#   nvd-db:
-#     runs-on: ubuntu-latest
-#     steps:
+jobs:
+  # Run unit and integration tests
+  nvd-db:
+    runs-on: ubuntu-latest
+    # steps:
 #     - name: Get git output names
 #       shell: bash
 #       run: |
