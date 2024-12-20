@@ -41,5 +41,5 @@ resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
       }
     ]
   })
-  depends_on = [aws_s3_bucket_public_access_block.New_Customer_Bucket_Permissions_Block]
+  # depends_on = [aws_s3_bucket_public_access_block.New_Customer_Bucket_Permissions_Block]
 }
