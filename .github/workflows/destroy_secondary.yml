@@ -1,63 +1,63 @@
-name: "Destroy IAC Secondary Resources Deployment"
+# name: "Destroy IAC Secondary Resources Deployment"
 
-on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      region:
-        description: 'Enter Region'
-        default: 'us-east-1'
-        required: true
+# on:
+#   workflow_dispatch:
+#     # Inputs the workflow accepts.
+#     inputs:
+#       region:
+#         description: 'Enter Region'
+#         default: 'us-east-1'
+#         required: true
 
-      service_name_1:
-        description: 'Enter Service Name 1'
-        required: true
+#       service_name_1:
+#         description: 'Enter Service Name 1'
+#         required: true
 
-      service_name_2:
-        description: 'Enter Service Name 2'
-        required: true
+#       service_name_2:
+#         description: 'Enter Service Name 2'
+#         required: true
 
-      service_name_3:
-        description: 'Enter Service Name 3'
-        required: true
+#       service_name_3:
+#         description: 'Enter Service Name 3'
+#         required: true
 
-      service_name_4:
-        description: 'Enter Service Name 4'
-        required: true
+#       service_name_4:
+#         description: 'Enter Service Name 4'
+#         required: true
 
-jobs:
-  terraform:
-    name: "terraform"
-    runs-on: ubuntu-latest
-    environment:
-      name: Dev
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+# jobs:
+#   terraform:
+#     name: "terraform"
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: Dev
+#     env:
+#       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
-    steps:
+#     steps:
 
-      - name: Checkout
-        uses: actions/checkout@v4
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Init
-        id: init
-        run: |
-          cd secondary_services_code
-          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.service_name_1 }}" -backend-config="region=us-east-1"
+#       - name: Terraform Init
+#         id: init
+#         run: |
+#           cd secondary_services_code
+#           terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.service_name_1 }}" -backend-config="region=us-east-1"
 
 
-      - name: Terraform Plan
-        id: plan
-        run: |
-          cd secondary_services_code
-          terraform plan -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
+#       - name: Terraform Plan
+#         id: plan
+#         run: |
+#           cd secondary_services_code
+#           terraform plan -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
 
-      - name: Terraform Destroy
-        run: |
-          cd secondary_services_code
-          terraform destroy -auto-approve -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
+#       - name: Terraform Destroy
+#         run: |
+#           cd secondary_services_code
+#           terraform destroy -auto-approve -var="region=${{ github.event.inputs.region }}" -var="SERVICE_NAME_1=${{ github.event.inputs.service_name_1 }}" -var="SERVICE_NAME_2=${{ github.event.inputs.service_name_2 }}" -var="SERVICE_NAME_3=${{ github.event.inputs.service_name_3 }}" -var="SERVICE_NAME_4=${{ github.event.inputs.service_name_4 }}"
     
