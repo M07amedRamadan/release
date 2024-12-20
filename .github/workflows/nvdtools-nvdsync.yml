@@ -1,0 +1,88 @@
+# name: nvdtools-nvdsync
+# on:
+#   workflow_dispatch:
+#     branches:
+#     - main
+#   schedule:
+#     - cron: '20 2 * * *'
+#     - cron: '20 3 * * *'
+
+# jobs:
+#   # Run unit and integration tests
+#   nvd-db:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Get git output names
+#       shell: bash
+#       run: |
+#         if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+#           if [[ ${{ github.event_name }} == 'pull_request' ]]; then
+#             echo "name=current_branch=$HEAD_REF" >> $GITHUB_OUTPUT
+#           else
+#             echo "current_branch=$REF_BRANCH" >> $GITHUB_OUTPUT
+#           fi
+#         else
+#           REF=$(printf "%q" "${{ github.ref }}")
+#           REF_BRANCH=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
+#           echo "current_branch=$(eval printf "%s" "$REF_BRANCH")" >> $GITHUB_OUTPUT
+#         fi
+        
+#     - name: Checkout
+#       uses: actions/checkout@v4
+
+#     - name: Install Go
+#       uses: actions/setup-go@v4
+#       with:
+#         go-version: 1.13.x
+
+#     - name: Configure AWS Credentials
+#       uses: aws-actions/configure-aws-credentials@v4
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: us-east-1
+
+#     - name: cloning the repo
+#       run: git clone https://github.com/facebookincubator/nvdtools.git
+
+#     - name: installing nvdtools
+#       run: |
+#         cd ./nvdtools/cmd
+#         go install ./...
+#         cd nvdsync
+#         go build
+
+#     - name: sync s3 bucket
+#       run: |
+#         cd ./nvdtools/cmd/nvdsync
+#         aws s3 sync s3://vultara-nvdsync-data/downloadedCveFeed downloadedCveFeed
+#         ls -la
+#         cd downloadedCveFeed
+#         ls -la
+
+#     - name: changing ownership
+#       run: |
+#         sudo chown -R root:root ./nvdtools/cmd/nvdsync
+#         sudo chmod +x ./nvdtools/cmd/nvdsync
+#         sudo chown -R root:root ./nvdtools/cmd/nvdsync/downloadedCveFeed
+#         sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
+
+#     - name: run nvd on the database
+#       run: |
+#         #!bin/bash
+#         cd ./nvdtools/cmd/nvdsync
+#         sudo ./nvdsync -cve_feed cve-1.1.json.gz downloadedCveFeed/
+#         cd ./downloadedCveFeed
+#         ls -la
+
+#     - name: changing ownership
+#       run: |
+#         sudo chown -R runner:docker ./nvdtools/cmd/nvdsync
+#         sudo chmod +x ./nvdtools/cmd/nvdsync
+#         sudo chown -R runner:docker ./nvdtools/cmd/nvdsync/downloadedCveFeed
+#         sudo chmod +x ./nvdtools/cmd/nvdsync/downloadedCveFeed/*
+
+#     - name: sync upload to bucket
+#       run: |
+#         cd ./nvdtools/cmd/nvdsync
+#         aws s3 sync ./downloadedCveFeed s3://vultara-nvdsync-data/downloadedCveFeed --delete

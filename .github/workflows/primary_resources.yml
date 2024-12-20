@@ -1,0 +1,65 @@
+name: "Test-vultara-SOC-deployment"
+
+on:
+  # push:
+  #   branches:
+  #     - test-vultara-SOC-deployment 
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        description: 'Enter Customer Name'
+        default: 'app'
+        required: true
+
+      Application_type:
+        description: 'Please Select Which Applications You Need To Deploy'
+        default: 'Vultara'
+        required: true
+        type: choice
+        options: 
+        - Vultara
+        - SOC          
+        - Vultara and SOC
+        
+      region:
+        description: 'Enter the Region for Deployment'
+        default: 'us-east-1'
+        required: true
+      
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+  
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ github.event.inputs.region }}
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd terraform
+          terraform init -reconfigure -backend-config="bucket=vultara-terraform.tfstate-bucket" -backend-config="key=${{ github.event.inputs.name }}" -backend-config="region=us-east-1"
+          
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd terraform
+          terraform plan -var="Application_type=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}"  -var="region=${{ github.event.inputs.region }}" 
+
+      - name: Terraform Apply
+        run: |
+          cd terraform
+          terraform apply -auto-approve -var="Application_type=${{ github.event.inputs.Application_type }}" -var="CUSTOMER_NAME=${{ github.event.inputs.name }}" -var="region=${{ github.event.inputs.region }}" 
