@@ -1,4 +1,4 @@
-name: "Test-vultara-SOC-deployment"
+name: "destroy Test-vultara-SOC-deployment"
 
 on:
   # push:
