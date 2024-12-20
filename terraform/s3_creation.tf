@@ -7,15 +7,15 @@ resource "aws_s3_bucket" "New_Customer_Bucket" {
 }
 
 #Public Access
-resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Block" {
-  for_each = toset(local.resources)
-  bucket = each.key
+# resource "aws_s3_bucket_public_access_block" "New_Customer_Bucket_Permissions_Block" {
+#   for_each = toset(local.resources)
+#   bucket = each.key
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+#   block_public_acls       = true
+#   block_public_policy     = true
+#   ignore_public_acls      = true
+#   restrict_public_buckets = true
+# }
 
 resource "aws_s3_bucket_policy" "hosting_bucket_policy" {
   for_each = toset(local.resources)
