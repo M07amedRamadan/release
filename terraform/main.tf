@@ -12,7 +12,7 @@ resource "aws_vpc" "New_Customer_VPC" {
 }
 
 resource "aws_subnet" "public_1" {
-  #count         = var.Application_type == "Vultara" ? 1 : 0
+  count                = length(aws_vpc.New_Customer_VPC)
   vpc_id        = aws_vpc.New_Customer_VPC[count.index].id
   cidr_block    = cidrsubnet(aws_vpc.New_Customer_VPC[count.index].cidr_block, 3, 0) # Index 0
   availability_zone = "${var.region}c"
