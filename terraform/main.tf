@@ -1,6 +1,7 @@
 # No change required in this file
 
 resource "aws_vpc" "New_Customer_VPC" {
+  count = local.countNum
   cidr_block           = "10.33.0.0/24"
   instance_tenancy     = "default"
   enable_dns_hostnames = true
