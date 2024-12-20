@@ -1,7 +1,7 @@
 # No change required in this file
 
 resource "aws_vpc" "New_Customer_VPC" {
-  count         = var.Application_type == "Vultara" ? 1 : 0
+  count         = var.Application_type == "Vultara" ? 1 : var.Application_type == "Vultara and SOC" ? 1 : 0
   cidr_block           = "10.33.0.0/24"
   instance_tenancy     = "default"
   enable_dns_hostnames = true
